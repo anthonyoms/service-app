@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import Topbar from "../components/topbar/Topbar";
 import { Home } from "../pages/home/Home";
+import UserList from "../pages/userList/UserList";
 
 export const DashboardRoutes = () => {
   return (
@@ -12,7 +13,9 @@ export const DashboardRoutes = () => {
         <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="*" element={<Navigate to="/home" />} />
+          <Route path="/users" element={<UserList />} />
+
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
     </>
