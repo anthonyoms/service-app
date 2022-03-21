@@ -1,14 +1,20 @@
 import React from "react";
-import { DeleteOutline } from "@material-ui/icons";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { useState } from "react";
+import { Fab } from "@mui/material";
+import { DeleteOutline, Add } from "@material-ui/icons";
 
-import { userRows } from "../../dummyData";
 import "./userList.css";
+import { userRows } from "../../dummyData";
 
 export default function UserList() {
   const [data, setData] = useState(userRows);
+  const fabStyle = {
+    position: "absolute",
+    bottom: 70,
+    right: 30,
+  };
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -65,12 +71,16 @@ export default function UserList() {
 
   return (
     <div className="userList">
-      {" "}
+      <Link to="/newuser">
+        <Fab sx={fabStyle} color="primary" aria-label="add">
+          <Add />
+        </Fab>
+      </Link>
       <DataGrid
         rows={data}
         columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
+        pageSize={8}
+        rowsPerPageOptions={[8]}
         checkboxSelection
       />
     </div>
