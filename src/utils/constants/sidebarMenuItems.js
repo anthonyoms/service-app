@@ -11,6 +11,7 @@ import {
   ChatBubbleOutline,
   WorkOutline,
   Report,
+  AccountCircle
 } from "@material-ui/icons";
 
 export const dashboard = {
@@ -26,6 +27,7 @@ export const quickMenu = {
   listItem: [
     { link: "/users", Icon: PermIdentity, sidebarItemName: "Usuarios" },
     { link: "/products", Icon: Storefront, sidebarItemName: "Products" },
+    { link: "/customers", Icon: AccountCircle, sidebarItemName: "Clientes" },
     { link: "/", Icon: AttachMoney, sidebarItemName: "Transactions" },
     { link: "/", Icon: BarChart, sidebarItemName: "Reports" },
   ],

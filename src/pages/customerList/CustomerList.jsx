@@ -5,10 +5,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Fab } from "@mui/material";
 import { DeleteOutline, Add } from "@material-ui/icons";
 
-import "./userList.css";
+import "./customerList.css";
 import { userRows } from "../../dummyData";
 
-export default function UserList() {
+export default function CustomerList() {
   const [data, setData] = useState(userRows);
   const fabStyle = {
     position: "absolute",
@@ -29,8 +29,8 @@ export default function UserList() {
       width: 200,
       renderCell: (params) => {
         return (
-          <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
+          <div className="customerListUser">
+            <img className="customerListImg" src={params.row.avatar} alt="" />
             {params.row.username}
           </div>
         );
@@ -56,11 +56,11 @@ export default function UserList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Editar</button>
+            <Link to={"/customer/" + params.row.id}>
+              <button className="customerListEdit">Editar</button>
             </Link>
             <DeleteOutline
-              className="userListDelete"
+              className="customerListDelete"
               onClick={() => handleDelete(params.row.id)}
             />
           </>
@@ -70,8 +70,8 @@ export default function UserList() {
   ];
 
   return (
-    <div className="userList">
-      <Link to="/newuser">
+    <div className="customerList">
+      <Link to="/newcustomer">
         <Fab sx={fabStyle} color="primary" aria-label="add">
           <Add />
         </Fab>
