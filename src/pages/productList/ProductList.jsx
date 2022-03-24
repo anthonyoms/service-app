@@ -1,10 +1,15 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { DeleteOutline } from "@material-ui/icons";
+import { Add, DeleteOutline } from "@material-ui/icons";
 import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./productList.css";
-
+import { Fab } from "@mui/material";
+const fabStyle = {
+  position: "absolute",
+  bottom: 70,
+  right: 30,
+};
 export default function ProductList() {
   const [data, setData] = useState(productRows);
 
@@ -16,7 +21,7 @@ export default function ProductList() {
     { field: "id", headerName: "ID", width: 90 },
     {
       field: "product",
-      headerName: "Product",
+      headerName: "Producto",
       width: 200,
       renderCell: (params) => {
         return (
@@ -30,23 +35,23 @@ export default function ProductList() {
     { field: "stock", headerName: "Stock", width: 200 },
     {
       field: "status",
-      headerName: "Status",
+      headerName: "Estatus",
       width: 120,
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: "Precio",
       width: 160,
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Acciones",
       width: 150,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/product/" + params.row.id}>
-              <button className="productListEdit">Edit</button>
+              <button className="productListEdit">Editar</button>
             </Link>
             <DeleteOutline
               className="productListDelete"
@@ -60,6 +65,11 @@ export default function ProductList() {
 
   return (
     <div className="productList">
+      <Link to="/newproduct">
+        <Fab sx={fabStyle} color="primary" aria-label="add">
+          <Add />
+        </Fab>
+      </Link>
       <DataGrid
         rows={data}
         disableSelectionOnClick

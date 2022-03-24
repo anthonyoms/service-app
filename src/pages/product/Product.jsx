@@ -8,9 +8,9 @@ export default function Product() {
   return (
     <div className="product">
       <div className="productTitleContainer">
-        <h1 className="productTitle">Product</h1>
+        <h1 className="productTitle">Productos</h1>
         <Link to="/newproduct">
-          <button className="productAddButton">Create</button>
+          <button className="productAddButton">Crear</button>
         </Link>
       </div>
       <div className="productTop">
@@ -49,14 +49,16 @@ export default function Product() {
       <div className="productBottom">
         <form className="productForm">
           <div className="productFormLeft">
-            <label>Product Name</label>
+            <label>Nombre del producto</label>
             <input type="text" placeholder="Apple AirPod" />
-            <label>In Stock</label>
+            <label>Precio</label>
+            <input type="text" placeholder="$123.20" />
+            <label>En Stock</label>
             <select name="inStock" id="idStock">
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
-            <label>Active</label>
+            <label>Activo</label>
             <select name="active" id="active">
               <option value="yes">Yes</option>
               <option value="no">No</option>
@@ -74,7 +76,7 @@ export default function Product() {
               </label>
               <input type="file" id="file" style={{ display: "none" }} />
             </div>
-            <button className="productButton">Update</button>
+            <button className="productButton">Actualizar</button>
           </div>
         </form>
       </div>

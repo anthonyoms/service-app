@@ -1,10 +1,11 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+
 import { Sidebar } from "../components/sidebar/Sidebar";
+import { Home } from "../pages/home/Home";
 import Topbar from "../components/topbar/Topbar";
 import Customer from "../pages/customer/Customer";
 import CustomerList from "../pages/customerList/CustomerList";
-import { Home } from "../pages/home/Home";
 import NewCustomer from "../pages/newCustomer/NewCustomer";
 import NewProduct from "../pages/newProduct/NewProduct";
 import NewUser from "../pages/newUser/NewUser";

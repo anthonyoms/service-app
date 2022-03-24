@@ -8,14 +8,14 @@ import { DeleteOutline, Add } from "@material-ui/icons";
 import "./userList.css";
 import { userRows } from "../../dummyData";
 
+const fabStyle = {
+  position: "absolute",
+  bottom: 70,
+  right: 30,
+};
+
 export default function UserList() {
   const [data, setData] = useState(userRows);
-  const fabStyle = {
-    position: "absolute",
-    bottom: 70,
-    right: 30,
-  };
-
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
   };
