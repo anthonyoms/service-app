@@ -58,6 +58,11 @@ export default function Product() {
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
+            <label>Categoria</label>
+            <select name="active" id="active">
+              <option value="">Router</option>
+              <option value="">Teléfono</option>
+            </select>
             <label>Activo</label>
             <select name="active" id="active">
               <option value="yes">Yes</option>

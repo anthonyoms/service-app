@@ -13,6 +13,9 @@ import Product from "../pages/product/Product";
 import ProductList from "../pages/productList/ProductList";
 import User from "../pages/user/User";
 import UserList from "../pages/userList/UserList";
+import CategoryList from "../pages/categoryList/CategoryList";
+import NewCategory from "../pages/newCategory/NewCategory";
+import Category from "../pages/category/Category";
 
 export const DashboardRoutes = () => {
   return (
@@ -35,6 +38,10 @@ export const DashboardRoutes = () => {
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/customer/:userId" element={<Customer />} />
           <Route path="/newcustomer" element={<NewCustomer />} />
+          {/*Categories routes */}
+          <Route path="/categories" element={<CategoryList />} />
+          <Route path="/category/:categoryId" element={<Category />} />
+          <Route path="/newcategory" element={<NewCategory />} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
