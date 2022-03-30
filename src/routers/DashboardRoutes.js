@@ -16,6 +16,9 @@ import UserList from "../pages/userList/UserList";
 import CategoryList from "../pages/categoryList/CategoryList";
 import NewCategory from "../pages/newCategory/NewCategory";
 import Category from "../pages/category/Category";
+import SupplierList from "../pages/supplierList/SupplierList";
+import NewSupplier from "../pages/newSupplier/NewSupplier";
+import Supplier from "../pages/supplier/Supplier";
 
 export const DashboardRoutes = () => {
   return (
@@ -42,6 +45,10 @@ export const DashboardRoutes = () => {
           <Route path="/categories" element={<CategoryList />} />
           <Route path="/category/:categoryId" element={<Category />} />
           <Route path="/newcategory" element={<NewCategory />} />
+          {/*Suppliers routes */}
+          <Route path="/suppliers" element={<SupplierList />} />
+          <Route path="/supplier/:supplierId" element={<Supplier />} />
+          <Route path="/newsupplier" element={<NewSupplier />} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

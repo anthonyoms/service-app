@@ -18,6 +18,10 @@ export default function NewProduct() {
           <input type="text" placeholder="123" />
         </div>
         <div className="addProductItem">
+          <label>Existencias</label>
+          <input type="text" placeholder="0" />
+        </div>
+        <div className="addProductItem">
           <label>Categoria</label>
           <select name="active" id="active">
             <option value="">Router</option>
