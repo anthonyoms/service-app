@@ -83,7 +83,7 @@ export default function CustomerList() {
           <Add />
         </Fab>
       </Link>
-      <div className="DataGrid">
+      <div className="dataGrid">
         <DataGrid
           rows={data}
           columns={columns}

@@ -75,7 +75,7 @@ export default function CategoryList() {
           <Add />
         </Fab>
       </Link>
-      <div className="DataGrid">
+      <div className="dataGrid">
         <DataGrid
           rows={data}
           disableSelectionOnClick

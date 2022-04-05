@@ -86,7 +86,7 @@ export default function SupplierList() {
           <Add />
         </Fab>
       </Link>
-      <div className="DataGrid">
+      <div className="dataGrid">
         <DataGrid
           rows={data}
           columns={columns}
