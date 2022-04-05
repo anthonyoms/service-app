@@ -4,7 +4,7 @@ import { categoryRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./categoryList.css";
-import { Fab } from "@mui/material";
+import { Fab, TextField } from "@mui/material";
 const fabStyle = {
   position: "absolute",
   bottom: 70,
@@ -40,7 +40,7 @@ export default function CategoryList() {
     {
       field: "descripcion",
       headerName: "Descripción",
-      width:250,
+      width: 250,
     },
     {
       field: "action",
@@ -64,19 +64,27 @@ export default function CategoryList() {
 
   return (
     <div className="categoryList">
+      <TextField
+        id="outlined-search"
+        label="Search field"
+        type="search"
+        sx={{ mb: 1 }}
+      />
       <Link to="/newcategory">
         <Fab sx={fabStyle} color="primary" aria-label="add">
           <Add />
         </Fab>
       </Link>
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={8}
-        rowsPerPageOptions={[8]}
-        checkboxSelection
-      />
+      <div className="DataGrid">
+        <DataGrid
+          rows={data}
+          disableSelectionOnClick
+          columns={columns}
+          pageSize={8}
+          rowsPerPageOptions={[8]}
+          checkboxSelection
+        />
+      </div>
     </div>
   );
 }

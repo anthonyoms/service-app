@@ -1,21 +1,17 @@
-import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
+import { Add, DeleteOutline } from "@material-ui/icons";
+import { productRows } from "../../dummyData";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./serviceList.css";
 import { Fab, TextField } from "@mui/material";
-import { DeleteOutline, Add } from "@material-ui/icons";
-
-import "./customerList.css";
-import { userRows } from "../../dummyData";
-
 const fabStyle = {
   position: "absolute",
   bottom: 70,
   right: 30,
 };
-
-export default function CustomerList() {
-  const [data, setData] = useState(userRows);
+export default function ServiceList() {
+  const [data, setData] = useState(productRows);
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -23,31 +19,28 @@ export default function CustomerList() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "username", headerName: "Nombre de usuario", width: 200 },
     {
-      field: "user",
-      headerName: "Usuario",
+      field: "product",
+      headerName: "Servicio",
       width: 200,
       renderCell: (params) => {
         return (
-          <div className="customerListUser">
-            <img className="customerListImg" src={params.row.avatar} alt="" />
-            {params.row.username}
+          <div className="serviceListItem">
+            <img className="serviceListImg" src={params.row.img} alt="" />
+            {params.row.name}
           </div>
         );
       },
     },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "stock", headerName: "Stock", width: 200 },
     {
       field: "status",
       headerName: "Estatus",
-      type: "number",
       width: 120,
     },
     {
-      field: "transaction",
-      headerName: "Transction Volumen",
-      type: "number",
+      field: "price",
+      headerName: "Precio",
       width: 160,
     },
     {
@@ -57,11 +50,11 @@ export default function CustomerList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/customer/" + params.row.id}>
-              <button className="customerListEdit">Editar</button>
+            <Link to={"/service/" + params.row.id}>
+              <button className="serviceListEdit">Editar</button>
             </Link>
             <DeleteOutline
-              className="customerListDelete"
+              className="serviceListDelete"
               onClick={() => handleDelete(params.row.id)}
             />
           </>
@@ -71,14 +64,14 @@ export default function CustomerList() {
   ];
 
   return (
-    <div className="customerList">
+    <div className="serviceList">
       <TextField
         id="outlined-search"
         label="Search field"
         type="search"
         sx={{ mb: 1 }}
       />
-      <Link to="/newcustomer">
+      <Link to="/newservice">
         <Fab sx={fabStyle} color="primary" aria-label="add">
           <Add />
         </Fab>
@@ -86,6 +79,7 @@ export default function CustomerList() {
       <div className="DataGrid">
         <DataGrid
           rows={data}
+          disableSelectionOnClick
           columns={columns}
           pageSize={8}
           rowsPerPageOptions={[8]}

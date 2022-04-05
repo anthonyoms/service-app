@@ -4,7 +4,6 @@ import {
   TrendingUp,
   PermIdentity,
   Storefront,
-  AttachMoney,
   BarChart,
   MailOutline,
   DynamicFeed,
@@ -14,6 +13,7 @@ import {
   AccountCircle,
   Category,
   BusinessCenter,
+  SimCard,
 } from "@material-ui/icons";
 
 export const dashboard = {
@@ -36,7 +36,7 @@ export const quickMenu = {
       sidebarItemName: "Categorias de productos",
     },
     { link: "/suppliers", Icon: BusinessCenter, sidebarItemName: "Suplidores" },
-    { link: "/", Icon: AttachMoney, sidebarItemName: "Transactions" },
+    { link: "/services", Icon: SimCard, sidebarItemName: "Servicios" },
     { link: "/", Icon: BarChart, sidebarItemName: "Reports" },
   ],
 };

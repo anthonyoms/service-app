@@ -19,6 +19,9 @@ import Category from "../pages/category/Category";
 import SupplierList from "../pages/supplierList/SupplierList";
 import NewSupplier from "../pages/newSupplier/NewSupplier";
 import Supplier from "../pages/supplier/Supplier";
+import ServiceList from "../pages/serviceList/ServiceList";
+import Service from "../pages/productService/Service";
+import NewService from "../pages/newService/NewService";
 
 export const DashboardRoutes = () => {
   return (
@@ -49,6 +52,11 @@ export const DashboardRoutes = () => {
           <Route path="/suppliers" element={<SupplierList />} />
           <Route path="/supplier/:supplierId" element={<Supplier />} />
           <Route path="/newsupplier" element={<NewSupplier />} />
+
+          {/*Service routes */}
+          <Route path="/services" element={<ServiceList />} />
+          <Route path="/service/:serviceId" element={<Service />} />
+          <Route path="/newservice" element={<NewService />} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -7,3 +7,9 @@
   text-decoration: none;
   color: inherit;
 }
+
+/* TODO: Unificar todo el diseño comun antes de continuar */
+.DataGrid {
+  width: 100%;
+  height: 629px;
+}

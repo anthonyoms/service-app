@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Fab } from "@mui/material";
+import { Fab, TextField } from "@mui/material";
 import { DeleteOutline, Add } from "@material-ui/icons";
 
 import "./userList.css";
@@ -10,7 +10,7 @@ import { userRows } from "../../dummyData";
 
 const fabStyle = {
   position: "absolute",
-  bottom: 70,
+  bottom: 75,
   right: 30,
 };
 
@@ -71,18 +71,26 @@ export default function UserList() {
 
   return (
     <div className="userList">
+      <TextField
+        id="outlined-search"
+        label="Search field"
+        type="search"
+        sx={{ mb: 1 }}
+      />
       <Link to="/newuser">
         <Fab sx={fabStyle} color="primary" aria-label="add">
           <Add />
         </Fab>
       </Link>
-      <DataGrid
-        rows={data}
-        columns={columns}
-        pageSize={8}
-        rowsPerPageOptions={[8]}
-        checkboxSelection
-      />
+      <div className="DataGrid">
+        <DataGrid
+          rows={data}
+          columns={columns}
+          pageSize={8}
+          rowsPerPageOptions={[8]}
+          checkboxSelection
+        />
+      </div>
     </div>
   );
 }

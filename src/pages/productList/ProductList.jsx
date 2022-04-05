@@ -4,7 +4,7 @@ import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./productList.css";
-import { Fab } from "@mui/material";
+import { Fab, TextField } from "@mui/material";
 const fabStyle = {
   position: "absolute",
   bottom: 70,
@@ -65,19 +65,27 @@ export default function ProductList() {
 
   return (
     <div className="productList">
+      <TextField
+        id="outlined-search"
+        label="Search field"
+        type="search"
+        sx={{ mb: 1 }}
+      />
       <Link to="/newproduct">
         <Fab sx={fabStyle} color="primary" aria-label="add">
           <Add />
         </Fab>
       </Link>
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={8}
-        rowsPerPageOptions={[8]}
-        checkboxSelection
-      />
+      <div className="DataGrid">
+        <DataGrid
+          rows={data}
+          disableSelectionOnClick
+          columns={columns}
+          pageSize={8}
+          rowsPerPageOptions={[8]}
+          checkboxSelection
+        />
+      </div>
     </div>
   );
 }
