@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import SignIn from "../pages/login/Login";
 import { DashboardRoutes } from "./DashboardRoutes";
 export const AppRouter = () => {
-  const logged = false;
+  const logged = true;
   return (
     <Router>
       <Routes>
