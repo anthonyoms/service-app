@@ -14,6 +14,7 @@ import {
   Category,
   BusinessCenter,
   SimCard,
+  AddShoppingCart,
 } from "@material-ui/icons";
 
 export const dashboard = {
@@ -37,6 +38,7 @@ export const quickMenu = {
     },
     { link: "/suppliers", Icon: BusinessCenter, sidebarItemName: "Suplidores" },
     { link: "/services", Icon: SimCard, sidebarItemName: "Servicios" },
+    { link: "/sales", Icon: AddShoppingCart, sidebarItemName: "Facturación" },
     { link: "/", Icon: BarChart, sidebarItemName: "Reports" },
   ],
 };
