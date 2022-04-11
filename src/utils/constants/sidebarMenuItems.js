@@ -15,14 +15,15 @@ import {
   BusinessCenter,
   SimCard,
   AddShoppingCart,
+  SignalCellularAltRounded,
 } from "@material-ui/icons";
 
 export const dashboard = {
   title: "Dashboard",
   listItem: [
     { link: "/", Icon: LineStyle, sidebarItemName: "Home" },
-    { link: "/", Icon: Timeline, sidebarItemName: "Analytics" },
-    { link: "/", Icon: TrendingUp, sidebarItemName: "Sales" },
+    { link: "/", Icon: Timeline, sidebarItemName: "Gestion de facturación" },
+    { link: "/", Icon: TrendingUp, sidebarItemName: "Gestion de servicios" },
   ],
 };
 export const quickMenu = {
@@ -38,6 +39,11 @@ export const quickMenu = {
     },
     { link: "/suppliers", Icon: BusinessCenter, sidebarItemName: "Suplidores" },
     { link: "/services", Icon: SimCard, sidebarItemName: "Servicios" },
+    {
+      link: "/servicesales",
+      Icon: SignalCellularAltRounded,
+      sidebarItemName: "Ventas de servicios",
+    },
     { link: "/sales", Icon: AddShoppingCart, sidebarItemName: "Facturación" },
     { link: "/", Icon: BarChart, sidebarItemName: "Reports" },
   ],

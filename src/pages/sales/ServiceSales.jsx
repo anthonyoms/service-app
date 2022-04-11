@@ -1,17 +1,18 @@
+import React from "react";
+import { Service } from "../../components/dataGridColumns/Service";
 import SalesWidgetLg from "../../components/sales/SalesWidgetLg";
 import SalesWidgetSm from "../../components/sales/SalesWidgetSm";
 import { productRows } from "../../dummyData";
-import { Product } from "../../components/dataGridColumns/Product";
 import "./sales.css";
 
-const Sales = () => {
+const ServiceSales = () => {
   return (
     <div className="sales">
       <div className="salesWidgets">
         <SalesWidgetLg
           data={productRows}
-          title={"Agregar Producto"}
-          columns={Product}
+          title={"Agregar Servicio"}
+          columns={Service}
         />
         <SalesWidgetSm />
       </div>
@@ -19,4 +20,4 @@ const Sales = () => {
   );
 };
 
-export default Sales;
+export default ServiceSales;
