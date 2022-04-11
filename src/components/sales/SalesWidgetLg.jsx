@@ -74,13 +74,6 @@ const SalesWidgetLg = ({ title }) => {
         </Grid>
       </Grid>
       <h3 className="title">Agregar {title}</h3>
-      <TextField
-        id="outlined-search"
-        label="Search field"
-        type="search"
-        size="small"
-        sx={{ mb: 1 }}
-      />
       <div className="salesDataGrid">
         {title === "Servicio" ? <ServiceDataGrid /> : <ProductDataGrid />}
       </div>

@@ -42,13 +42,23 @@ const ProductDataGrid = () => {
     },
   ];
   return (
-    <DataGrid
-      rows={productRows}
-      disableSelectionOnClick
-      columns={columns}
-      pageSize={5}
-      rowsPerPageOptions={[5]}
-    />
+    <>
+      <TextField
+        id="outlined-search"
+        label="Search field"
+        type="search"
+        size="small"
+        autoComplete="false"
+        sx={{ mb: 1 }}
+      />
+      <DataGrid
+        rows={productRows}
+        disableSelectionOnClick
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+      />
+    </>
   );
 };
 
