@@ -3,11 +3,13 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { Print, CreditCardSharp } from "@material-ui/icons";
-import { DataGrid } from "@mui/x-data-grid";
+
+import ServiceDataGrid from "../../components/dataGrid/ServiceDataGrid";
+import ProductDataGrid from "../../components/dataGrid/ProductDataGrid";
 
 import "./salesWidgetLg.css";
 
-const SalesWidgetLg = ({ data = [], title, columns }) => {
+const SalesWidgetLg = ({ title }) => {
   return (
     <div className="widgetLg">
       <h3 className="widgetTitle">Datos Factura</h3>
@@ -71,7 +73,7 @@ const SalesWidgetLg = ({ data = [], title, columns }) => {
           </Button>
         </Grid>
       </Grid>
-      <h3 className="title">{title}</h3>
+      <h3 className="title">Agregar {title}</h3>
       <TextField
         id="outlined-search"
         label="Search field"
@@ -80,13 +82,7 @@ const SalesWidgetLg = ({ data = [], title, columns }) => {
         sx={{ mb: 1 }}
       />
       <div className="salesDataGrid">
-        <DataGrid
-          rows={data}
-          disableSelectionOnClick
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-        />
+        {title === "Servicio" ? <ServiceDataGrid /> : <ProductDataGrid />}
       </div>
     </div>
   );

@@ -1,18 +1,13 @@
 import SalesWidgetLg from "../../components/sales/SalesWidgetLg";
 import SalesWidgetSm from "../../components/sales/SalesWidgetSm";
-import { productRows } from "../../dummyData";
-import { Product } from "../../components/dataGridColumns/Product";
+
 import "./sales.css";
 
 const Sales = () => {
   return (
     <div className="sales">
       <div className="salesWidgets">
-        <SalesWidgetLg
-          data={productRows}
-          title={"Agregar Producto"}
-          columns={Product}
-        />
+        <SalesWidgetLg title={"Producto"} />
         <SalesWidgetSm />
       </div>
     </div>
