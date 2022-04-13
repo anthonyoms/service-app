@@ -76,9 +76,7 @@ const SalesWidgetLg = ({ title }) => {
         </Grid>
       </Grid>
       <h3 className="title">Agregar {title}</h3>
-      <div className="salesDataGrid">
-        {title === "Servicio" ? <ServiceDataGrid /> : <ProductDataGrid />}
-      </div>
+      {title === "Servicio" ? <ServiceDataGrid /> : <ProductDataGrid />}
     </div>
   );
 };

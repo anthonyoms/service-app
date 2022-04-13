@@ -52,13 +52,15 @@ const ServiceDataGrid = () => {
         autoComplete="false"
         sx={{ mb: 1 }}
       />
-      <DataGrid
-        rows={productRows}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-      />
+      <div style={{ height: "45vh" }}>
+        <DataGrid
+          rows={productRows}
+          disableSelectionOnClick
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+        />
+      </div>
     </>
   );
 };
