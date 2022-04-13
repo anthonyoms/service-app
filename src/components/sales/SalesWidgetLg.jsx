@@ -8,6 +8,7 @@ import ServiceDataGrid from "../../components/dataGrid/ServiceDataGrid";
 import ProductDataGrid from "../../components/dataGrid/ProductDataGrid";
 
 import "./salesWidgetLg.css";
+import { ButtonGroup } from "@mui/material";
 
 const SalesWidgetLg = ({ title }) => {
   return (
@@ -49,28 +50,29 @@ const SalesWidgetLg = ({ title }) => {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Button
-            sx={{ mt: 2, ml: 3, mr: 3 }}
+          <ButtonGroup
             variant="contained"
-            endIcon={<Print />}
+            aria-label="outlined primary button group"
+            sx={{ mt: 2 }}
           >
-            Imprimir
-          </Button>
-          <Button
-            sx={{
-              mt: 2,
-              backgroundColor: "#008080",
-              borderColor: "#008080",
-              "&:hover": {
-                backgroundColor: "#027071",
-                borderColor: "#027071",
-              },
-            }}
-            variant="contained"
-            endIcon={<CreditCardSharp />}
-          >
-            Facturar
-          </Button>
+            <Button variant="contained" endIcon={<Print />}>
+              Imprimir
+            </Button>
+            <Button
+              sx={{
+                backgroundColor: "#008080",
+                borderColor: "#008080",
+                "&:hover": {
+                  backgroundColor: "#027071",
+                  borderColor: "#027071",
+                },
+              }}
+              variant="contained"
+              endIcon={<CreditCardSharp />}
+            >
+              Facturar
+            </Button>
+          </ButtonGroup>
         </Grid>
       </Grid>
       <h3 className="title">Agregar {title}</h3>
