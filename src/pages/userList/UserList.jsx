@@ -10,8 +10,8 @@ import { userRows } from "../../dummyData";
 
 const fabStyle = {
   position: "absolute",
-  bottom: 70,
-  right: 30,
+  bottom: "15%",
+  right: "5%",
 };
 
 export default function UserList() {
