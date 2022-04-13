@@ -43,9 +43,9 @@ const SalesWidgetLg = ({ title }) => {
               id="demo-simple-select"
               label="Age"
             >
-              <MenuItem value = '1'  >Tarjeta</MenuItem>
-              <MenuItem value = '2' >Efectivo</MenuItem>
-              <MenuItem value = '3' >Crédito</MenuItem>
+              <MenuItem value="1">Tarjeta</MenuItem>
+              <MenuItem value="2">Efectivo</MenuItem>
+              <MenuItem value="3">Crédito</MenuItem>
             </Select>
           </FormControl>
         </Grid>
