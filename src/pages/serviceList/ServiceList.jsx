@@ -1,15 +1,12 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Add, DeleteOutline } from "@material-ui/icons";
+import { DeleteOutline } from "@material-ui/icons";
 import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./serviceList.css";
-import { Fab, TextField } from "@mui/material";
-const fabStyle = {
-  position: "absolute",
-  bottom: 70,
-  right: 30,
-};
+import { TextField } from "@mui/material";
+import MyFab from "../../components/fab/MyFab";
+
 export default function ServiceList() {
   const [data, setData] = useState(productRows);
 
@@ -71,11 +68,7 @@ export default function ServiceList() {
         type="search"
         sx={{ mb: 1 }}
       />
-      <Link to="/newservice">
-        <Fab sx={fabStyle} color="primary" aria-label="add">
-          <Add />
-        </Fab>
-      </Link>
+      <MyFab route="/newservice" />
       <div className="dataGrid">
         <DataGrid
           rows={data}

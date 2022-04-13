@@ -2,17 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Fab, TextField } from "@mui/material";
-import { DeleteOutline, Add } from "@material-ui/icons";
+import { TextField } from "@mui/material";
+import { DeleteOutline } from "@material-ui/icons";
 
 import "./customerList.css";
 import { userRows } from "../../dummyData";
-
-const fabStyle = {
-  position: "absolute",
-  bottom: 70,
-  right: 30,
-};
+import MyFab from "../../components/fab/MyFab";
 
 export default function CustomerList() {
   const [data, setData] = useState(userRows);
@@ -78,11 +73,8 @@ export default function CustomerList() {
         type="search"
         sx={{ mb: 1 }}
       />
-      <Link to="/newcustomer">
-        <Fab sx={fabStyle} color="primary" aria-label="add">
-          <Add />
-        </Fab>
-      </Link>
+
+      <MyFab route="/newcustomer" />
       <div className="dataGrid">
         <DataGrid
           rows={data}

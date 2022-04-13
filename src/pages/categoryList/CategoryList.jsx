@@ -1,15 +1,12 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Add, DeleteOutline } from "@material-ui/icons";
+import { DeleteOutline } from "@material-ui/icons";
 import { categoryRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./categoryList.css";
-import { Fab, TextField } from "@mui/material";
-const fabStyle = {
-  position: "absolute",
-  bottom: 70,
-  right: 30,
-};
+import { TextField } from "@mui/material";
+import MyFab from "../../components/fab/MyFab";
+
 export default function CategoryList() {
   const [data, setData] = useState(categoryRows);
 
@@ -70,11 +67,7 @@ export default function CategoryList() {
         type="search"
         sx={{ mb: 1 }}
       />
-      <Link to="/newcategory">
-        <Fab sx={fabStyle} color="primary" aria-label="add">
-          <Add />
-        </Fab>
-      </Link>
+      <MyFab route="/newcategory" />
       <div className="dataGrid">
         <DataGrid
           rows={data}
