@@ -10,7 +10,7 @@ import { userRows } from "../../dummyData";
 
 const fabStyle = {
   position: "absolute",
-  bottom: "15%",
+  bottom: "10%",
   right: "5%",
 };
 
