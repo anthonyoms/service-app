@@ -52,7 +52,7 @@ const ServiceDataGrid = () => {
         autoComplete="false"
         sx={{ mb: 1 }}
       />
-      <div style={{ height: "45vh" }}>
+      <div style={{ height: "48vh" }}>
         <DataGrid
           rows={productRows}
           disableSelectionOnClick
