@@ -19,7 +19,7 @@ const ProductDataGrid = () => {
         );
       },
     },
-    { field: "stock", headerName: "Stock", width: 150 },
+    { field: "stock", headerName: "Stock", width: 90 },
     {
       field: "price",
       headerName: "Precio",

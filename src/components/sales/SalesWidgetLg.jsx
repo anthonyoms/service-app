@@ -43,9 +43,9 @@ const SalesWidgetLg = ({ title }) => {
               id="demo-simple-select"
               label="Age"
             >
-              <MenuItem>Tarjeta</MenuItem>
-              <MenuItem>Efectivo</MenuItem>
-              <MenuItem>Crédito</MenuItem>
+              <MenuItem value = '1'  >Tarjeta</MenuItem>
+              <MenuItem value = '2' >Efectivo</MenuItem>
+              <MenuItem value = '3' >Crédito</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -53,7 +53,7 @@ const SalesWidgetLg = ({ title }) => {
           <ButtonGroup
             variant="contained"
             aria-label="outlined primary button group"
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, ml: 5 }}
           >
             <Button variant="contained" endIcon={<Print />}>
               Imprimir
