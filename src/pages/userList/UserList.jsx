@@ -7,7 +7,7 @@ import { DeleteOutline } from "@material-ui/icons";
 
 import "./userList.css";
 import { userRows } from "../../dummyData";
-import Fab from "../../components/fab/Fab";
+import MyFab from "../../components/fab/MyFab";
 
 export default function UserList() {
   const [data, setData] = useState(userRows);
@@ -72,9 +72,9 @@ export default function UserList() {
         type="search"
         sx={{ mb: 1 }}
       />
-      <Link to="/newuser">
-        <Fab />
-      </Link>
+
+      <MyFab route="/newuser" />
+
       <div className="dataGrid">
         <DataGrid
           rows={data}
