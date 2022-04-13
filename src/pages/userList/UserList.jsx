@@ -9,9 +9,8 @@ import "./userList.css";
 import { userRows } from "../../dummyData";
 
 const fabStyle = {
-  position: "absolute",
-  bottom: "10%",
-  right: "5%",
+  bottom: "-80%",
+  right: "-75%",
 };
 
 export default function UserList() {
