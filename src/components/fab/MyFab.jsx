@@ -9,7 +9,7 @@ const MyFab = ({ route }) => {
     margin: 0,
     top: "auto",
     right: 20,
-    bottom: 60,
+    bottom: 90,
     left: "auto",
     position: "fixed",
   };
