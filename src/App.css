@@ -10,5 +10,6 @@
 
 /* TODO: Unificar todo el diseño comun antes de continuar */
 .dataGrid {
-  height: 82vh;
+  display: flex;
+  height: 89%;
 }

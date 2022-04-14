@@ -70,13 +70,15 @@ export default function UserList() {
       <MyFab route="/newuser" />
 
       <div className="dataGrid">
-        <DataGrid
-          rows={data}
-          columns={columns}
-          pageSize={8}
-          rowsPerPageOptions={[8]}
-          checkboxSelection
-        />
+        <div style={{ flexGrow: 1 }}>
+          <DataGrid
+            rows={data}
+            columns={columns}
+            pageSize={8}
+            rowsPerPageOptions={[8]}
+            checkboxSelection
+          />
+        </div>
       </div>
     </div>
   );
