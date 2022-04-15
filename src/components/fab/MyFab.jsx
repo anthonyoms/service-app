@@ -8,8 +8,8 @@ const MyFab = ({ route }) => {
   const style = {
     margin: 0,
     top: "auto",
-    right: 30,
-    bottom: 110,
+    right: '2em',
+    bottom: "6em",
     left: "auto",
     position: "fixed",
   };
