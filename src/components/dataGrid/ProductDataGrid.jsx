@@ -29,7 +29,7 @@ const ProductDataGrid = () => {
       field: "action",
       headerName: "Acciones",
       width: 150,
-      renderCell: () => {
+      renderCell: (params) => {
         return (
           <>
             <TextField id="bill" label="Cant." type="search" size="small" />

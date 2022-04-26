@@ -1,12 +1,29 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { startChecking } from "../actions/auth";
 import SignIn from "../pages/login/Login";
 import { DashboardRoutes } from "./DashboardRoutes";
 export const AppRouter = () => {
-  const logged = true;
+  const dispatch = useDispatch();
+  const { checking, uid } = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(startChecking());
+  }, [dispatch]);
+
+  if (checking) {
+    return <h5>Espere...</h5>;
+  }
+
   return (
     <Router>
       <Routes>
-        {logged ? (
+        {!!uid ? (
           <Route path="/*" element={<DashboardRoutes />} />
         ) : (
           <>

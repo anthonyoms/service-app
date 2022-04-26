@@ -1,8 +1,12 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { NotificationsNone, Settings, ExitToApp } from "@material-ui/icons";
 import "./topbar.css";
-import { NotificationsNone, Language, Settings } from "@material-ui/icons";
+import { startLogout } from "../../actions/auth";
 
 export default function Topbar() {
+  const dispatch = useDispatch();
+  const { nombre } = useSelector((state) => state.auth);
   return (
     <div className="topbar">
       <div className="topbarWrapper">
@@ -15,17 +19,21 @@ export default function Topbar() {
             <span className="topIconBadge">2</span>
           </div>
           <div className="topbarIconContainer">
-            <Language />
+            <Settings />
             <span className="topIconBadge">2</span>
           </div>
-          <div className="topbarIconContainer">
-            <Settings />
+          <div
+            onClick={() => dispatch(startLogout())}
+            className="topbarIconContainer"
+          >
+            <ExitToApp />
           </div>
-          <img
+          {/* <img
             src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
             alt=""
             className="topAvatar"
-          />
+          /> */}
+          {nombre}
         </div>
       </div>
     </div>

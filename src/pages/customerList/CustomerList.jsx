@@ -36,7 +36,6 @@ export default function CustomerList() {
     {
       field: "status",
       headerName: "Estatus",
-      type: "number",
       width: 120,
     },
     {

@@ -24,6 +24,8 @@ import Service from "../pages/productService/Service";
 import NewService from "../pages/newService/NewService";
 import Sales from "../pages/sales/Sales";
 import ServiceSales from "../pages/sales/ServiceSales";
+import ServiceManagementList from "../pages/serviceManagementList/ServiceManagementList";
+import SalesManagementList from "../pages/salesManagementList/SalesManagementList";
 
 export const DashboardRoutes = () => {
   return (
@@ -34,22 +36,27 @@ export const DashboardRoutes = () => {
         <Routes>
           {/*Home */}
           <Route path="/" element={<Home />} />
+
           {/*User routes */}
           <Route path="/users" element={<UserList />} />
           <Route path="/user/:userId" element={<User />} />
           <Route path="/newuser" element={<NewUser />} />
-          {/*products routes */}
+
+          {/*Products routes */}
           <Route path="/products" element={<ProductList />} />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/newproduct" element={<NewProduct />} />
+
           {/*Customers routes */}
           <Route path="/customers" element={<CustomerList />} />
           <Route path="/customer/:userId" element={<Customer />} />
           <Route path="/newcustomer" element={<NewCustomer />} />
+
           {/*Categories routes */}
           <Route path="/categories" element={<CategoryList />} />
           <Route path="/category/:categoryId" element={<Category />} />
           <Route path="/newcategory" element={<NewCategory />} />
+
           {/*Suppliers routes */}
           <Route path="/suppliers" element={<SupplierList />} />
           <Route path="/supplier/:supplierId" element={<Supplier />} />
@@ -63,7 +70,16 @@ export const DashboardRoutes = () => {
           {/*Sales routes */}
           <Route path="/sales" element={<Sales />} />
           <Route path="/servicesales" element={<ServiceSales />} />
+          <Route
+            path="/servicemanagement"
+            element={<ServiceManagementList />}
+          />
+          <Route
+            path="/salesmanagementlist"
+            element={<SalesManagementList />}
+          />
 
+          {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

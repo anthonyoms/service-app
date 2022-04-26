@@ -12,6 +12,8 @@ import { LockOutlined } from "@material-ui/icons";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { StartLogin } from "../../actions/auth";
 
 function Copyright(props) {
   return (
@@ -34,13 +36,15 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const dispatch = useDispatch();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
+      corero: data.get("corero"),
       password: data.get("password"),
     });
+    dispatch(StartLogin(data.get("corero"), data.get("password")));
   };
 
   return (
@@ -71,10 +75,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="corero"
               label="Nombre de usuario"
-              name="email"
-              autoComplete="email"
+              name="corero"
+              autoComplete="corero"
               autoFocus
             />
             <TextField

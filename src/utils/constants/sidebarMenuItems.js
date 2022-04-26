@@ -22,8 +22,8 @@ export const dashboard = {
   title: "Dashboard",
   listItem: [
     { link: "/", Icon: LineStyle, sidebarItemName: "Home" },
-    { link: "/", Icon: Timeline, sidebarItemName: "Gestion de facturación" },
-    { link: "/", Icon: TrendingUp, sidebarItemName: "Gestion de servicios" },
+    { link: "/salesmanagementlist", Icon: Timeline, sidebarItemName: "Gestion de facturación" },
+    { link: "servicemanagement", Icon: TrendingUp, sidebarItemName: "Gestion de servicios" },
   ],
 };
 export const quickMenu = {

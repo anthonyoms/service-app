@@ -1,14 +1,13 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { productRows } from "../../dummyData";
-import { Link } from "react-router-dom";
+import { serviceManagementRows } from "../../dummyData";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import MyFab from "../../components/fab/MyFab";
-import "./productList.css";
+import "./serviceManagementList.css";
 
-export default function ProductList() {
-  const [data, setData] = useState(productRows);
+export default function ServiceManagementList() {
+  const [data, setData] = useState(serviceManagementRows);
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -17,28 +16,22 @@ export default function ProductList() {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "product",
-      headerName: "Producto",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="" />
-            {params.row.name}
-          </div>
-        );
-      },
+      field: "date",
+      headerName: "Fecha Corte",
+      width: 100,
     },
-    { field: "stock", headerName: "Stock", width: 200 },
+    { field: "customer", headerName: "Cliente", width: 150 },
+    { field: "teller", headerName: "Cajero", width: 150 },
+    { field: "description", headerName: "Descripción", width: 200 },
     {
       field: "status",
       headerName: "Estatus",
       width: 120,
     },
     {
-      field: "price",
-      headerName: "Precio",
-      width: 160,
+      field: "amount",
+      headerName: "Total",
+      width: 150,
     },
     {
       field: "action",
@@ -46,22 +39,17 @@ export default function ProductList() {
       width: 150,
       renderCell: (params) => {
         return (
-          <>
-            <Link to={"/product/" + params.row.id}>
-              <button className="productListEdit">Editar</button>
-            </Link>
-            <DeleteOutline
-              className="productListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
-          </>
+          <DeleteOutline
+            className="serviceManagementListDelete"
+            onClick={() => handleDelete(params.row.id)}
+          />
         );
       },
     },
   ];
 
   return (
-    <div className="productList">
+    <div className="serviceManagementList">
       <TextField
         id="outlined-search"
         label="Search field"
@@ -69,7 +57,7 @@ export default function ProductList() {
         sx={{ mb: 1 }}
       />
 
-      <MyFab route="/newproduct" />
+      <MyFab route="/servicesales" />
       <div className="dataGrid">
         <DataGrid
           rows={data}
