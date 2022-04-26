@@ -4,16 +4,33 @@ import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { TextField } from "@mui/material";
 import { DeleteOutline } from "@material-ui/icons";
-import { getUsers } from "../../service/auth";
+import { getUsers } from "../../service/users";
 import MyFab from "../../components/fab/MyFab";
 import "./userList.css";
+import { searchUsers } from "../../service/search";
 
 export default function UserList() {
   const [data, setData] = useState([]);
+  const [termino, setTermino] = useState("");
 
   useEffect(() => {
-    getUsers().then((result) => setData(result));
-  }, []);
+    if (termino.length === 0) {
+      loadUsers();
+    }
+  }, [termino]);
+
+  const handleInput = async ({ target }) => {
+    setTermino(target.value);
+    if (target.value.length > 0) {
+      const data = await searchUsers(target.value.trim());
+      setData(data);
+    }
+  };
+
+  const loadUsers = async () => {
+    const users = await getUsers();
+    setData(users);
+  };
 
   const handleDelete = (uid) => {
     setData(data.filter((item) => item.uid !== uid));
@@ -75,6 +92,9 @@ export default function UserList() {
         id="outlined-search"
         label="Search field"
         type="search"
+        name="termino"
+        value={termino}
+        onChange={handleInput}
         sx={{ mb: 1 }}
       />
 
@@ -84,8 +104,8 @@ export default function UserList() {
         <DataGrid
           rows={data}
           columns={columns}
-          pageSize={8}
-          rowsPerPageOptions={[8]}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
           checkboxSelection
           getRowId={(e) => e.uid}
         />

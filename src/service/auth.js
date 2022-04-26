@@ -1,14 +1,5 @@
+import Swal from "sweetalert2";
 import { serviceApp } from "./serviceApp";
-
-export const getUsers = async () => {
-  //call the api
-  try {
-    const { data } = await serviceApp.get("/usuarios");
-    return data.usuarios;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 export const Login = async (correo, password) => {
   //call the api
@@ -19,7 +10,13 @@ export const Login = async (correo, password) => {
     });
     return data;
   } catch (error) {
-    console.log(error);
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: error.response.data.msg,
+    });
+    console.log(error.response.data);
+    return error.response.data;
   }
 };
 

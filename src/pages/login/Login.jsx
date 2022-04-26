@@ -40,10 +40,6 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      corero: data.get("corero"),
-      password: data.get("password"),
-    });
     dispatch(StartLogin(data.get("corero"), data.get("password")));
   };
 
