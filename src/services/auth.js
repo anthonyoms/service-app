@@ -23,11 +23,7 @@ export const Login = async (correo, password) => {
 export const revalidarToken = async () => {
   //call the api
   try {
-    const { data } = await serviceApp.get("/auth/renew", {
-      headers: {
-        "x-token": localStorage.getItem("token") || "",
-      },
-    });
+    const { data } = await serviceApp.get("/auth/renew");
     return data;
   } catch (error) {
     console.log(error.response.data);

@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { types } from "../utils/constants/types";
-import { Login, revalidarToken } from "../service/auth";
+import { Login, revalidarToken } from "../services/auth";
 
 export const StartLogin = (correo, password) => {
   return async (dispatch) => {

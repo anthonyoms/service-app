@@ -4,36 +4,40 @@ import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { TextField } from "@mui/material";
 import { DeleteOutline } from "@material-ui/icons";
-import { getUsers } from "../../service/users";
-import MyFab from "../../components/fab/MyFab";
 import "./userList.css";
-import { searchUsers } from "../../service/search";
+import { getUsers } from "../../services/users";
+import MyFab from "../../components/fab/MyFab";
+import { searchUsers } from "../../services/search";
 
 export default function UserList() {
   const [data, setData] = useState([]);
-  const [termino, setTermino] = useState("");
+  const [searchParam, setSearchParam] = useState("");
 
   useEffect(() => {
-    if (termino.length === 0) {
+    if (searchParam.trim().length === 0) {
       loadUsers();
+    } else {
+      getUserByParam(searchParam);
     }
-  }, [termino]);
+  }, [searchParam]);
 
   const handleInput = async ({ target }) => {
-    setTermino(target.value);
-    if (target.value.length > 0) {
-      const data = await searchUsers(target.value.trim());
-      setData(data);
-    }
+    const onlyLetterValue = target.value.replace(/[^[a-zA-Z0-9]*$/g, "");
+    setSearchParam(onlyLetterValue);
+  };
+
+  const handleDelete = (uid) => {
+    setData(data.filter((item) => item.uid !== uid));
+  };
+
+  const getUserByParam = async (param) => {
+    const data = await searchUsers(param);
+    setData(data);
   };
 
   const loadUsers = async () => {
     const users = await getUsers();
     setData(users);
-  };
-
-  const handleDelete = (uid) => {
-    setData(data.filter((item) => item.uid !== uid));
   };
 
   const columns = [
@@ -73,7 +77,7 @@ export default function UserList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/user/" + params.row.uid}>
+            <Link to={`/user/${params.row.uid}`}>
               <button className="userListEdit">Editar</button>
             </Link>
             <DeleteOutline
@@ -92,8 +96,8 @@ export default function UserList() {
         id="outlined-search"
         label="Search field"
         type="search"
-        name="termino"
-        value={termino}
+        name="searchParam"
+        value={searchParam}
         onChange={handleInput}
         sx={{ mb: 1 }}
       />

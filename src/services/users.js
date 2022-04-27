@@ -4,20 +4,26 @@ import { serviceApp } from "./serviceApp";
 export const getUsers = async () => {
   //call the api
   try {
-    const { data } = await serviceApp.get("/usuarios?limite=150");
+    const { data } = await serviceApp.get("/usuarios?limite=200");
     return data.usuarios;
   } catch (error) {
     console.log(error);
   }
 };
-export const postUsers = async (data = {}) => {
+export const getUsersById = async (Id) => {
   //call the api
   try {
-    const { data: response } = await serviceApp.post("/usuarios", data, {
-      headers: {
-        "x-token": localStorage.getItem("token") || "",
-      },
-    });
+    const { data } = await serviceApp.get(`/usuarios/${Id}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const postUser = async (data = {}) => {
+  //call the api
+  try {
+    const { data: response } = await serviceApp.post("/usuarios", data);
+
     if (response.ok) {
       Swal.fire(
         "Operación completada!",

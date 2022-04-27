@@ -4,12 +4,13 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./newUser.css";
 import useForm from "../../hooks/useForm";
-import { postUsers } from "../../service/users";
+import { postUser } from "../../services/users";
 
 export default function NewUser() {
   const [
     { usuario, nombre, correo, password, telefono, direccion, genero, rol },
     handleInputChange,
+    reset,
   ] = useForm({
     usuario: "",
     nombre: "",
@@ -23,7 +24,7 @@ export default function NewUser() {
 
   const handleSubmitChange = async (e) => {
     e.preventDefault();
-    await postUsers({
+    const userData = {
       usuario,
       nombre,
       correo,
@@ -32,7 +33,9 @@ export default function NewUser() {
       direccion,
       genero,
       rol,
-    });
+    };
+    await postUser(userData);
+    reset();
   };
 
   return (
