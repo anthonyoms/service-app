@@ -34,10 +34,48 @@ export const postUser = async (data = {}) => {
     return response;
   } catch (error) {
     Swal.fire(
-      "Operación completada!",
+      "Operación no completada!",
       error.response.data.errors[0].msg,
       "error"
     );
     console.log(error.response.data.errors[0]);
+  }
+};
+export const putUser = async (uid, data = {}) => {
+  try {
+    const { data: response } = await serviceApp.put(`/usuarios/${uid}`, data);
+
+    if (response.ok) {
+      Swal.fire(
+        "Operación completada!",
+        "Usuario actualizado de forma correcta!",
+        "success"
+      );
+    }
+    return response;
+  } catch (error) {
+    Swal.fire(
+      "Operación no completada!",
+      error.response.data.errors[0].msg,
+      "error"
+    );
+    console.log(error.response.data.errors[0]);
+  }
+};
+export const deleteUser = async (uid) => {
+  try {
+    const { data: response } = await serviceApp.delete(`/usuarios/${uid}`);
+
+    if (response.ok) {
+      Swal.fire(
+        "Operación completada!",
+        "Usuario desactivado de forma correcta!",
+        "success"
+      );
+    }
+    return response;
+  } catch (error) {
+    Swal.fire("Operación no completada!", error.response.data.msg, "error");
+    console.log(error.response.data);
   }
 };

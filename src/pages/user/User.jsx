@@ -10,15 +10,12 @@ import {
 } from "@material-ui/icons";
 
 import "./user.css";
-import { getUsersById } from "../../services/users";
+import { getUsersById, putUser } from "../../services/users";
 import useForm from "../../hooks/useForm";
 
 export default function User() {
   const { pathname } = useLocation();
-  const [
-    { uid, usuario, nombre, correo, telefono, direccion, genero, rol },
-    setData,
-  ] = useState({
+  const [data, setData] = useState({
     uid: "",
     usuario: "",
     nombre: "",
@@ -30,25 +27,36 @@ export default function User() {
     rol: "",
   });
 
-  const [{ nombreNew, telefonoNew, direccionNew }, handleInputChange] = useForm(
-    {
-      nombreNew: "",
-      telefonoNew: "",
-      direccionNew: "",
-      generoNew: "",
-      rolNew: "",
-    }
-  );
+  const [{ nombre, telefono, direccion }, handleInputChange, reset] = useForm({
+    nombre: "",
+    telefono: "",
+    direccion: "",
+    generoNew: "",
+    rolNew: "",
+  });
+
   useEffect(() => {
-    if (usuario.length === 0) {
+    if (data.usuario.length === 0) {
       loadUser();
     }
   });
 
   const loadUser = async () => {
     const userId = pathname.split("/")[2];
-    const data = await getUsersById(userId);
-    setData(data);
+    const userData = await getUsersById(userId);
+    setData(userData);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setData({ ...data, nombre, telefono, direccion });
+    await putUser(data.uid, {
+      nombre,
+      telefono,
+      direccion,
+      rol: data.rol,
+    });
+    reset();
   };
 
   return (
@@ -65,32 +73,32 @@ export default function User() {
               className="userShowImg"
             />
             <div className="userShowTopTitle">
-              <span className="userShowUsername">{nombre}</span>
-              <span className="userShowUserTitle">{rol}</span>
+              <span className="userShowUsername">{data.nombre}</span>
+              <span className="userShowUserTitle">{data.rol}</span>
             </div>
           </div>
           <div className="userShowBottom">
             <span className="userShowTitle">Detalles de la cuenta</span>
             <div className="userShowInfo">
               <PermIdentity className="userShowIcon" />
-              <span className="userShowInfoTitle">{usuario}</span>
+              <span className="userShowInfoTitle">{data.usuario}</span>
             </div>
             <div className="userShowInfo">
               <WcOutlined className="userShowIcon" />
-              <span className="userShowInfoTitle">{genero}</span>
+              <span className="userShowInfoTitle">{data.genero}</span>
             </div>
             <span className="userShowTitle">Detalles de contacto</span>
             <div className="userShowInfo">
               <PhoneAndroid className="userShowIcon" />
-              <span className="userShowInfoTitle">{telefono}</span>
+              <span className="userShowInfoTitle">{data.telefono}</span>
             </div>
             <div className="userShowInfo">
               <MailOutline className="userShowIcon" />
-              <span className="userShowInfoTitle">{correo}</span>
+              <span className="userShowInfoTitle">{data.correo}</span>
             </div>
             <div className="userShowInfo">
               <LocationSearching className="userShowIcon" />
-              <span className="userShowInfoTitle">{direccion}</span>
+              <span className="userShowInfoTitle">{data.direccion}</span>
             </div>
           </div>
         </div>
@@ -102,7 +110,7 @@ export default function User() {
                 <label>Nombre de usuario</label>
                 <input
                   type="text"
-                  value={usuario}
+                  value={data.usuario}
                   placeholder="annabeck99"
                   className="userUpdateInput"
                   readOnly
@@ -112,8 +120,8 @@ export default function User() {
                 <label>Nombre completo</label>
                 <input
                   type="text"
-                  name="nombreNew"
-                  value={nombreNew}
+                  name="nombre"
+                  value={nombre}
                   onChange={handleInputChange}
                   placeholder="Anna Becker"
                   className="userUpdateInput"
@@ -123,7 +131,7 @@ export default function User() {
                 <label>Email</label>
                 <input
                   type="text"
-                  value={correo}
+                  value={data.correo}
                   placeholder="annabeck99@gmail.com"
                   className="userUpdateInput"
                   readOnly
@@ -133,8 +141,8 @@ export default function User() {
                 <label>Teléfono</label>
                 <input
                   type="text"
-                  name="telefonoNew"
-                  value={telefonoNew}
+                  name="telefono"
+                  value={telefono}
                   onChange={handleInputChange}
                   placeholder="+1 123 456 67"
                   className="userUpdateInput"
@@ -144,8 +152,8 @@ export default function User() {
                 <label>Dirección</label>
                 <input
                   type="text"
-                  name="direccionNew"
-                  value={direccionNew}
+                  name="direccion"
+                  value={direccion}
                   onChange={handleInputChange}
                   placeholder="New York | USA"
                   className="userUpdateInput"
@@ -164,7 +172,9 @@ export default function User() {
                 </label>
                 <input type="file" id="file" style={{ display: "none" }} />
               </div>
-              <button className="userUpdateButton">Actualizar</button>
+              <button className="userUpdateButton" onClick={handleUpdate}>
+                Actualizar
+              </button>
             </div>
           </form>
         </div>

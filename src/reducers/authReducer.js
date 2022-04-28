@@ -4,6 +4,7 @@ const initialState = {
   checking: true,
   // uid: null,
   //name: null,
+  //rol: null
 };
 
 export const authReducer = (state = initialState, action) => {

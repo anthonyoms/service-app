@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { TextField } from "@mui/material";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
-import { getUsers } from "../../services/users";
+import { deleteUser, getUsers } from "../../services/users";
 import MyFab from "../../components/fab/MyFab";
 import { searchUsers } from "../../services/search";
 
@@ -26,8 +26,9 @@ export default function UserList() {
     setSearchParam(onlyLetterValue);
   };
 
-  const handleDelete = (uid) => {
-    setData(data.filter((item) => item.uid !== uid));
+  const handleDelete = async (uid) => {
+    await deleteUser(uid);
+    loadUsers();
   };
 
   const getUserByParam = async (param) => {
