@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { serviceApp } from "./serviceApp";
 
 export const Login = async (correo, password) => {
@@ -10,13 +9,9 @@ export const Login = async (correo, password) => {
     });
     return data;
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: error.response.data.msg,
-    });
-    console.log(error.response.data);
-    return error.response.data;
+    const errors = error.response.data.msg || error.response.data.errors[0].msg;
+    console.log(errors);
+    return errors;
   }
 };
 

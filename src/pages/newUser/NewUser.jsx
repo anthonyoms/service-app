@@ -5,13 +5,25 @@ import Select from "@mui/material/Select";
 import "./newUser.css";
 import useForm from "../../hooks/useForm";
 import { postUser } from "../../services/users";
+import { TextField } from "@mui/material";
 
 export default function NewUser() {
   const [
-    { usuario, nombre, correo, password, telefono, direccion, genero, rol },
+    {
+      cedula,
+      usuario,
+      nombre,
+      correo,
+      password,
+      telefono,
+      direccion,
+      genero,
+      rol,
+    },
     handleInputChange,
     reset,
   ] = useForm({
+    cedula: "",
     usuario: "",
     nombre: "",
     correo: "",
@@ -25,6 +37,7 @@ export default function NewUser() {
   const handleSubmitChange = async (e) => {
     e.preventDefault();
     const userData = {
+      cedula,
       usuario,
       nombre,
       correo,
@@ -43,6 +56,16 @@ export default function NewUser() {
       <h1 className="newUserTitle">Registro de usuario</h1>
       <form onSubmit={handleSubmitChange}>
         <div className="newUserForm">
+          <div className="newUserItem">
+            <label>Cedula</label>
+            <input
+              type="text"
+              name="cedula"
+              value={cedula}
+              onChange={handleInputChange}
+              placeholder="402-0045543-0"
+            />
+          </div>
           <div className="newUserItem">
             <label>Nombre de usuario</label>
             <input
@@ -94,13 +117,13 @@ export default function NewUser() {
             />
           </div>
           <div className="newUserItem">
-            <label>Dirección</label>
-            <input
-              type="text"
-              name="direccion"
+            <TextField
+              id="outlined-basic"
+              label="Dirección"
+              name="direccionsa"
               value={direccion}
               onChange={handleInputChange}
-              placeholder="New York | USA"
+              variant="outlined"
             />
           </div>
           <div className="newUserItem">

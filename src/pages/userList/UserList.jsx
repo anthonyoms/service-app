@@ -42,7 +42,8 @@ export default function UserList() {
   };
 
   const columns = [
-    { field: "uid", headerName: "ID", flex: 1 },
+    { field: "uid", headerName: "ID", flex: 1, hide: true },
+    { field: "cedula", headerName: "Cedula", flex: 1 },
     { field: "nombre", headerName: "Nomber Usuario", flex: 1 },
     { field: "usuario", headerName: "Nombre de usuario", flex: 1 },
     {

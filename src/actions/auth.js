@@ -10,7 +10,7 @@ export const StartLogin = (correo, password) => {
       localStorage.setItem("token-init-date", new Date().getTime());
       dispatch(login({ uid: body.uid, nombre: body.nombre, rol: body.rol }));
     } else {
-      Swal.fire("Error", body.msg, "error");
+      Swal.fire("Error", body, "error");
     }
   };
 };
