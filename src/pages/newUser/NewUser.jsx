@@ -3,126 +3,43 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./newUser.css";
-import useForm from "../../hooks/useForm";
-import { postUser } from "../../services/users";
 import { TextField } from "@mui/material";
 
 export default function NewUser() {
-  const [
-    {
-      cedula,
-      usuario,
-      nombre,
-      correo,
-      password,
-      telefono,
-      direccion,
-      genero,
-      rol,
-    },
-    handleInputChange,
-    reset,
-  ] = useForm({
-    cedula: "",
-    usuario: "",
-    nombre: "",
-    correo: "",
-    password: "",
-    telefono: "",
-    direccion: "",
-    genero: "",
-    rol: "",
-  });
-
-  const handleSubmitChange = async (e) => {
-    e.preventDefault();
-    const userData = {
-      cedula,
-      usuario,
-      nombre,
-      correo,
-      password,
-      telefono,
-      direccion,
-      genero,
-      rol,
-    };
-    await postUser(userData);
-    reset();
-  };
-
   return (
     <div className="newUser">
       <h1 className="newUserTitle">Registro de usuario</h1>
-      <form onSubmit={handleSubmitChange}>
+      <form>
         <div className="newUserForm">
           <div className="newUserItem">
             <label>Cedula</label>
-            <input
-              type="text"
-              name="cedula"
-              value={cedula}
-              onChange={handleInputChange}
-              placeholder="402-0045543-0"
-            />
+            <input type="text" name="cedula" placeholder="402-0045543-0" />
           </div>
           <div className="newUserItem">
             <label>Nombre de usuario</label>
-            <input
-              type="text"
-              name="usuario"
-              value={usuario}
-              onChange={handleInputChange}
-              placeholder="john"
-            />
+            <input type="text" name="usuario" placeholder="john" />
           </div>
           <div className="newUserItem">
             <label>Nombre completo</label>
-            <input
-              type="text"
-              name="nombre"
-              value={nombre}
-              onChange={handleInputChange}
-              placeholder="John Smith"
-            />
+            <input type="text" name="nombre" placeholder="John Smith" />
           </div>
           <div className="newUserItem">
             <label>Email</label>
-            <input
-              type="email"
-              name="correo"
-              value={correo}
-              onChange={handleInputChange}
-              placeholder="john@gmail.com"
-            />
+            <input type="email" name="correo" placeholder="john@gmail.com" />
           </div>
           <div className="newUserItem">
             <label>Contraseña</label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={handleInputChange}
-              placeholder="password"
-            />
+            <input type="password" name="password" placeholder="password" />
           </div>
           <div className="newUserItem">
             <label>Teléfono</label>
-            <input
-              type="text"
-              name="telefono"
-              value={telefono}
-              onChange={handleInputChange}
-              placeholder="+1 123 456 78"
-            />
+            <input type="text" name="telefono" placeholder="+1 123 456 78" />
           </div>
           <div className="newUserItem">
             <TextField
               id="outlined-basic"
               label="Dirección"
               name="direccionsa"
-              value={direccion}
-              onChange={handleInputChange}
               variant="outlined"
             />
           </div>
@@ -132,10 +49,8 @@ export default function NewUser() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={genero}
                 name="genero"
                 label="Genero"
-                onChange={handleInputChange}
               >
                 <MenuItem value={"masculino"}>Masculino</MenuItem>
                 <MenuItem value={"femenino"}>Femenino</MenuItem>
@@ -149,10 +64,8 @@ export default function NewUser() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={rol}
                 name="rol"
                 label="Rol"
-                onChange={handleInputChange}
               >
                 <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
                 <MenuItem value={"USER_ROLE"}>User</MenuItem>

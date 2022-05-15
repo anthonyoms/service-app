@@ -1,46 +1,11 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { TextField } from "@mui/material";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
-import { deleteUser, getUsers } from "../../services/users";
 import MyFab from "../../components/fab/MyFab";
-import { searchUsers } from "../../services/search";
 
 export default function UserList() {
-  const [data, setData] = useState([]);
-  const [searchParam, setSearchParam] = useState("");
-
-  useEffect(() => {
-    if (searchParam.trim().length === 0) {
-      loadUsers();
-    } else {
-      getUserByParam(searchParam);
-    }
-  }, [searchParam]);
-
-  const handleInput = async ({ target }) => {
-    const onlyLetterValue = target.value.replace(/[^[a-zA-Z0-9]*$/g, "");
-    setSearchParam(onlyLetterValue);
-  };
-
-  const handleDelete = async (uid) => {
-    await deleteUser(uid);
-    loadUsers();
-  };
-
-  const getUserByParam = async (param) => {
-    const data = await searchUsers(param);
-    setData(data);
-  };
-
-  const loadUsers = async () => {
-    const users = await getUsers();
-    setData(users);
-  };
-
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
     { field: "cedula", headerName: "Cedula", flex: 1 },
@@ -84,7 +49,7 @@ export default function UserList() {
             </Link>
             <DeleteOutline
               className="userListDelete"
-              onClick={() => handleDelete(params.row.uid)}
+              
             />
           </>
         );
@@ -99,8 +64,6 @@ export default function UserList() {
         label="Search field"
         type="search"
         name="searchParam"
-        value={searchParam}
-        onChange={handleInput}
         sx={{ mb: 1 }}
       />
 
@@ -108,7 +71,7 @@ export default function UserList() {
 
       <div className="dataGrid">
         <DataGrid
-          rows={data}
+          rows={[]}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}
