@@ -40,7 +40,7 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    dispatch(StartLogin(data.get("corero"), data.get("password")));
+    dispatch(StartLogin(data.get("correo"), data.get("password")));
   };
 
   return (
@@ -71,10 +71,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="corero"
-              label="Nombre de usuario"
-              name="corero"
-              autoComplete="corero"
+              id="correo"
+              label="Correo"
+              name="correo"
+              autoComplete="false"
               autoFocus
             />
             <TextField
