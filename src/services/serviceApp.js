@@ -10,3 +10,13 @@ serviceApp.interceptors.request.use((config) => {
 
   return config;
 });
+
+export const get = async (endpoint) => {
+  try {
+    const { data } = await serviceApp.get(endpoint);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

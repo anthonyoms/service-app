@@ -4,8 +4,29 @@ import { TextField } from "@mui/material";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
+import { useEffect, useState } from "react";
+import { get } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
+import Swal from "sweetalert2";
 
 export default function UserList() {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    const { usuarios, ok } = await get(endpoints.users);
+    if (ok) {
+      setData(usuarios);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal.",
+        text: `Por favor comunicarse con el administrador del sistema`,
+      });
+    }
+  };
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
     { field: "cedula", headerName: "Cedula", flex: 1 },
@@ -47,10 +68,7 @@ export default function UserList() {
             <Link to={`/user/${params.row.uid}`}>
               <button className="userListEdit">Editar</button>
             </Link>
-            <DeleteOutline
-              className="userListDelete"
-              
-            />
+            <DeleteOutline className="userListDelete" />
           </>
         );
       },
@@ -71,7 +89,7 @@ export default function UserList() {
 
       <div className="dataGrid">
         <DataGrid
-          rows={[]}
+          rows={data}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}

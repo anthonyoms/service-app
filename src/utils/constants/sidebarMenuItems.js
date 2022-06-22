@@ -18,12 +18,26 @@ import {
   SignalCellularAltRounded,
 } from "@material-ui/icons";
 
+export const seguridad = {
+  title: "Seguridad",
+  listItem: [
+    { link: "/users", Icon: PermIdentity, sidebarItemName: "Usuarios" },
+  ],
+};
 export const dashboard = {
   title: "Dashboard",
   listItem: [
     { link: "/", Icon: LineStyle, sidebarItemName: "Home" },
-    { link: "/salesmanagementlist", Icon: Timeline, sidebarItemName: "Gestion de facturación" },
-    { link: "servicemanagement", Icon: TrendingUp, sidebarItemName: "Gestion de servicios" },
+    {
+      link: "/salesmanagementlist",
+      Icon: Timeline,
+      sidebarItemName: "Gestion de facturación",
+    },
+    {
+      link: "servicemanagement",
+      Icon: TrendingUp,
+      sidebarItemName: "Gestion de servicios",
+    },
   ],
 };
 export const quickMenu = {
