@@ -20,3 +20,15 @@ export const get = async (endpoint) => {
     return [];
   }
 };
+
+export const post = async (endpoint, payload) => {
+  //call the api
+  try {
+    const { data } = await serviceApp.post(endpoint, payload);
+    return data;
+  } catch (error) {
+    const errors = error.response.data.msg || error.response.data.errors[0].msg;
+    console.log(errors);
+    return errors;
+  }
+};

@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import { TextField } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
 import { useEffect, useState } from "react";
 import { get } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
-import Swal from "sweetalert2";
+import { errorMsg } from "../../utils/helpers/messages";
 
 export default function UserList() {
   const [data, setData] = useState([]);
@@ -16,22 +15,19 @@ export default function UserList() {
   }, []);
 
   const loadUser = async () => {
-    const { usuarios, ok } = await get(endpoints.users);
+    const { usuarios, ok } = await get(
+      endpoints.users + "?limite=1000&desde=0"
+    );
     if (ok) {
       setData(usuarios);
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal.",
-        text: `Por favor comunicarse con el administrador del sistema`,
-      });
+      errorMsg("Por favor comunicarse con el administrador del sistema");
     }
   };
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
     { field: "cedula", headerName: "Cedula", flex: 1 },
-    { field: "nombre", headerName: "Nomber Usuario", flex: 1 },
-    { field: "usuario", headerName: "Nombre de usuario", flex: 1 },
+    { field: "nombre", headerName: "Nombre", flex: 1 },
     {
       field: "usuario",
       headerName: "Usuario",
@@ -77,24 +73,17 @@ export default function UserList() {
 
   return (
     <div className="userList">
-      <TextField
-        id="outlined-search"
-        label="Search field"
-        type="search"
-        name="searchParam"
-        sx={{ mb: 1 }}
-      />
-
       <MyFab route="/newuser" />
 
       <div className="dataGrid">
         <DataGrid
           rows={data}
           columns={columns}
+          components={{ Toolbar: GridToolbar }}
           pageSize={10}
           rowsPerPageOptions={[10]}
-          checkboxSelection
           getRowId={(e) => e.uid}
+          filterMode="client"
         />
       </div>
     </div>
