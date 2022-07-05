@@ -6,13 +6,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import "./newUser.css";
 import { TextField } from "@mui/material";
+import "./newUser.css";
 import useForm from "../../hooks/useForm";
 import { createUsername } from "../../utils/helpers/createUsername";
-import { post } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { errorMsg, successMsg } from "../../utils/helpers/messages";
+import { fetchServiceApp } from "../../services/serviceApp";
+import { httpMethods } from "../../utils/constants/httpMethods";
 
 export default function NewUser() {
   const [
@@ -69,12 +70,16 @@ export default function NewUser() {
       estadoCivil,
       rol,
     };
-    const response = await post(endpoints.users, payload);
-    if (response.ok) {
-      successMsg(response.msg);
+    const { data } = await fetchServiceApp(
+      endpoints.users,
+      payload,
+      httpMethods.Post
+    );
+    if (data.ok) {
+      successMsg(data.msg);
       reset();
     } else {
-      errorMsg(response);
+      errorMsg(data.errorMsg);
     }
   };
   return (
@@ -204,10 +209,10 @@ export default function NewUser() {
                 value={estadoCivil}
                 onChange={handleInputChange}
               >
-                <MenuItem value={"casado"}>Casado</MenuItem>
-                <MenuItem value={"soltero"}>Soltero</MenuItem>
-                <MenuItem value={"viudo"}>Viudo</MenuItem>
-                <MenuItem value={"divorciado"}>Divorciado</MenuItem>
+                <MenuItem value={"Casado"}>Casado</MenuItem>
+                <MenuItem value={"Soltero"}>Soltero</MenuItem>
+                <MenuItem value={"Viudo"}>Viudo</MenuItem>
+                <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -227,7 +232,7 @@ export default function NewUser() {
                   Técnico mesa de ayuda
                 </MenuItem>
                 <MenuItem value={"CUSTOMER_ROLE"}>Cliente</MenuItem>
-                <MenuItem value={"CAJERO"}>Cejero</MenuItem>
+                <MenuItem value={"CAJERO"}>Cajero</MenuItem>
                 <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
               </Select>
             </FormControl>

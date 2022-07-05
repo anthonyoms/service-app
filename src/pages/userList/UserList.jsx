@@ -1,27 +1,39 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
-import { useEffect, useState } from "react";
-import { get } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
-import { errorMsg } from "../../utils/helpers/messages";
+import { errorMsg, successMsg } from "../../utils/helpers/messages";
+import { fetchServiceApp } from "../../services/serviceApp";
+import { httpMethods } from "../../utils/constants/httpMethods";
 
 export default function UserList() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    loadUser();
+    loadUsers();
   }, []);
 
-  const loadUser = async () => {
-    const { usuarios, ok } = await get(
-      endpoints.users + "?limite=1000&desde=0"
-    );
-    if (ok) {
-      setData(usuarios);
+  const loadUsers = async () => {
+    const { data } = await fetchServiceApp(endpoints.users);
+    if (data.ok) {
+      setData(data.usuarios);
     } else {
-      errorMsg("Por favor comunicarse con el administrador del sistema");
+      errorMsg();
+    }
+  };
+  const handleDelete = async (id) => {
+    const { data } = await fetchServiceApp(
+      `${endpoints.users}/${id}`,
+      {},
+      httpMethods.Delete
+    );
+    if (data.ok) {
+      successMsg(data.msg);
+      loadUsers();
+    } else {
+      errorMsg(data.errorMsg);
     }
   };
   const columns = [
@@ -42,18 +54,7 @@ export default function UserList() {
       },
     },
     { field: "correo", headerName: "Email", flex: 1 },
-    {
-      field: "estado",
-      headerName: "Estado",
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <div className="userListUser">
-            {params.row.estado ? "Usuario Activo" : "Inactivo"}
-          </div>
-        );
-      },
-    },
+    { field: "rol", headerName: "Rol", flex: 1 },
     {
       field: "action",
       headerName: "Acciones",
@@ -64,7 +65,10 @@ export default function UserList() {
             <Link to={`/user/${params.row.uid}`}>
               <button className="userListEdit">Editar</button>
             </Link>
-            <DeleteOutline className="userListDelete" />
+            <DeleteOutline
+              className="userListDelete"
+              onClick={() => handleDelete(params.row.uid)}
+            />
           </>
         );
       },
