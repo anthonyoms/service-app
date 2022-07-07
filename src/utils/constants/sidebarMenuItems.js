@@ -24,6 +24,13 @@ export const seguridad = {
     { link: "/users", Icon: PermIdentity, sidebarItemName: "Usuarios" },
   ],
 };
+export const inventario = {
+  title: "Inventario",
+  listItem: [
+    { link: "/categories", Icon: Category, sidebarItemName: "Categorias" },
+  ],
+};
+
 export const dashboard = {
   title: "Dashboard",
   listItem: [

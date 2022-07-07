@@ -1,57 +1,65 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { categoryRows } from "../../dummyData";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./categoryList.css";
-import { TextField } from "@mui/material";
 import MyFab from "../../components/fab/MyFab";
+import { fetchServiceApp } from "../../services/serviceApp";
+import { errorMsg } from "../../utils/helpers/messages";
+import { endpoints } from "../../utils/constants/endpoints";
 
 export default function CategoryList() {
-  const [data, setData] = useState(categoryRows);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    const { data } = await fetchServiceApp(endpoints.categories);
+    if (data.ok) {
+      setData(data.categorias);
+    } else {
+      errorMsg();
+    }
+  };
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "uid", headerName: "ID", flex: 1, hide: true },
     {
-      field: "product",
+      field: "nombre",
       headerName: "categoria",
-      width: 250,
+      flex: 1,
       renderCell: (params) => {
         return (
           <div className="categoryListItem">
             <img className="categoryListImg" src={params.row.img} alt="" />
-            {params.row.name}
+            {params.row.nombre}
           </div>
         );
       },
     },
     {
-      field: "status",
-      headerName: "Estatus",
-      width: 240,
-    },
-    {
       field: "descripcion",
       headerName: "Descripción",
-      width: 250,
+      flex: 1,
     },
     {
       field: "action",
       headerName: "Acciones",
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/category/" + params.row.id}>
+            <Link to={"/category/" + params.row.uid}>
               <button className="categoryListEdit">Editar</button>
             </Link>
             <DeleteOutline
               className="categoryListDelete"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.uid)}
             />
           </>
         );
@@ -61,21 +69,16 @@ export default function CategoryList() {
 
   return (
     <div className="categoryList">
-      <TextField
-        id="outlined-search"
-        label="Search field"
-        type="search"
-        sx={{ mb: 1 }}
-      />
       <MyFab route="/newcategory" />
       <div className="dataGrid">
         <DataGrid
           rows={data}
-          disableSelectionOnClick
           columns={columns}
-          pageSize={8}
-          rowsPerPageOptions={[8]}
-          checkboxSelection
+          components={{ Toolbar: GridToolbar }}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          getRowId={(e) => e.uid}
+          filterMode="client"
         />
       </div>
     </div>

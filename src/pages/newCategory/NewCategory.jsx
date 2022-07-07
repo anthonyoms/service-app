@@ -1,28 +1,93 @@
+import { TextField } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import "./newCategory.css";
+import useForm from "../../hooks/useForm";
+import { httpMethods } from "../../utils/constants/httpMethods";
+import { endpoints } from "../../utils/constants/endpoints";
+import { errorMsg, successMsg } from "../../utils/helpers/messages";
+import { fetchServiceApp } from "../../services/serviceApp";
 
 export default function NewCategory() {
+  const [{ nombre, descripcion, img, estado }, handleInputChange, reset] =
+    useForm({
+      nombre: "",
+      descripcion: "",
+      img: "",
+      estado: true,
+    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      nombre,
+      descripcion,
+      img,
+      estado,
+    };
+    const { data } = await fetchServiceApp(
+      endpoints.categories,
+      payload,
+      httpMethods.Post
+    );
+    if (data.ok) {
+      successMsg(data.msg);
+      reset();
+    } else {
+      errorMsg(data.errorMsg);
+    }
+  };
   return (
     <div className="newCategory">
       <h1 className="addCategoryTitle">Nueva categoria</h1>
-      <form className="addCategoryForm">
+      <form onSubmit={handleSubmit} className="addCategoryForm">
         <div className="addCategoryItem">
-          <label>Imagen</label>
-          <input type="file" id="file" />
+          <TextField
+            id="img"
+            label="Imagen url"
+            name="img"
+            variant="outlined"
+            value={img}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addCategoryItem">
-          <label>Nombre</label>
-          <input type="text" placeholder="Apple Airpods" />
+          <TextField
+            id="nombre"
+            label="Nombre"
+            name="nombre"
+            variant="outlined"
+            value={nombre}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addCategoryItem">
-          <label>Descripción</label>
-          <textarea id="w3review" name="w3review" rows="4" cols="50" />
+          <TextField
+            id="outlined-multiline-flexible"
+            name="descripcion"
+            label="Descripción"
+            multiline
+            maxRows={5}
+            value={descripcion}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addCategoryItem">
-          <label>Activo</label>
-          <select name="active" id="active">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label-estado">Estado</InputLabel>
+            <Select
+              labelId="demo-simple-select-label-estado"
+              id="demo-simple-select-estado"
+              name="estado"
+              label="Estado"
+              value={estado}
+              onChange={handleInputChange}
+            >
+              <MenuItem value={true}>Si</MenuItem>
+              <MenuItem value={false}>No</MenuItem>
+            </Select>
+          </FormControl>
         </div>
         <button className="addCategoryButton">Crear</button>
       </form>

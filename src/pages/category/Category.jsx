@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import Chart from "../../components/chart/Chart";
-import { productData } from "../../dummyData";
 import { Publish } from "@material-ui/icons";
 import "./category.css";
 
@@ -14,9 +12,6 @@ export default function Category() {
         </Link>
       </div>
       <div className="categoryTop">
-        <div className="categoryTopLeft">
-          <Chart data={productData} dataKey="Sales" title="Sales Performance" />
-        </div>
         <div className="categoryTopRight">
           <div className="categoryInfoTop">
             <img
@@ -45,6 +40,7 @@ export default function Category() {
             </div>
           </div>
         </div>
+        <div className="categoryTopLeft"></div>
       </div>
       <div className="categoryBottom">
         <form className="categoryForm">
