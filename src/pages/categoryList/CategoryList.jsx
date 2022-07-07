@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./categoryList.css";
 import MyFab from "../../components/fab/MyFab";
-import { fetchServiceApp } from "../../services/serviceApp";
-import { errorMsg } from "../../utils/helpers/messages";
+import { getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 
 export default function CategoryList() {
@@ -15,12 +14,8 @@ export default function CategoryList() {
   }, []);
 
   const loadCategories = async () => {
-    const { data } = await fetchServiceApp(endpoints.categories);
-    if (data.ok) {
-      setData(data.categorias);
-    } else {
-      errorMsg();
-    }
+    const { categorias } = await getServiceApp(endpoints.categories);
+    setData(categorias);
   };
 
   const handleDelete = (id) => {

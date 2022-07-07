@@ -4,37 +4,27 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
+import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
-import { errorMsg, successMsg } from "../../utils/helpers/messages";
-import { fetchServiceApp } from "../../services/serviceApp";
-import { httpMethods } from "../../utils/constants/httpMethods";
 
 export default function UserList() {
-  const [data, setData] = useState([]);
+  const [{ loading, userData }, setUserData] = useState({
+    loading: true,
+    userData: null,
+  });
   useEffect(() => {
-    loadUsers();
+    loadUser();
   }, []);
 
-  const loadUsers = async () => {
-    const { data } = await fetchServiceApp(endpoints.users);
-    if (data.ok) {
-      setData(data.usuarios);
-    } else {
-      errorMsg();
-    }
+  const loadUser = async () => {
+    const { usuarios } = await getServiceApp(endpoints.users);
+    setUserData({
+      loading: false,
+      userData: usuarios,
+    });
   };
   const handleDelete = async (id) => {
-    const { data } = await fetchServiceApp(
-      `${endpoints.users}/${id}`,
-      {},
-      httpMethods.Delete
-    );
-    if (data.ok) {
-      successMsg(data.msg);
-      loadUsers();
-    } else {
-      errorMsg(data.errorMsg);
-    }
+    await deleteServiceApp(id, endpoints.users);
   };
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
@@ -81,12 +71,13 @@ export default function UserList() {
 
       <div className="dataGrid">
         <DataGrid
-          rows={data}
+          rows={userData}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(e) => e.uid}
+          loading={loading}
           filterMode="client"
         />
       </div>

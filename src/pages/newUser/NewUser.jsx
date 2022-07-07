@@ -11,9 +11,7 @@ import "./newUser.css";
 import useForm from "../../hooks/useForm";
 import { createUsername } from "../../utils/helpers/createUsername";
 import { endpoints } from "../../utils/constants/endpoints";
-import { errorMsg, successMsg } from "../../utils/helpers/messages";
-import { fetchServiceApp } from "../../services/serviceApp";
-import { httpMethods } from "../../utils/constants/httpMethods";
+import { postServiceApp } from "../../services/serviceApp";
 
 export default function NewUser() {
   const [
@@ -59,7 +57,7 @@ export default function NewUser() {
     e.preventDefault();
     const payload = {
       cedula,
-      correo,
+      correo: correo.toLowerCase(),
       usuario,
       nombre,
       password,
@@ -70,17 +68,8 @@ export default function NewUser() {
       estadoCivil,
       rol,
     };
-    const { data } = await fetchServiceApp(
-      endpoints.users,
-      payload,
-      httpMethods.Post
-    );
-    if (data.ok) {
-      successMsg(data.msg);
-      reset();
-    } else {
-      errorMsg(data.errorMsg);
-    }
+    await postServiceApp(payload, endpoints.users);
+    reset();
   };
   return (
     <div className="newUser">

@@ -5,10 +5,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./newCategory.css";
 import useForm from "../../hooks/useForm";
-import { httpMethods } from "../../utils/constants/httpMethods";
 import { endpoints } from "../../utils/constants/endpoints";
-import { errorMsg, successMsg } from "../../utils/helpers/messages";
-import { fetchServiceApp } from "../../services/serviceApp";
+import { postServiceApp } from "../../services/serviceApp";
 
 export default function NewCategory() {
   const [{ nombre, descripcion, img, estado }, handleInputChange, reset] =
@@ -26,17 +24,8 @@ export default function NewCategory() {
       img,
       estado,
     };
-    const { data } = await fetchServiceApp(
-      endpoints.categories,
-      payload,
-      httpMethods.Post
-    );
-    if (data.ok) {
-      successMsg(data.msg);
-      reset();
-    } else {
-      errorMsg(data.errorMsg);
-    }
+    await postServiceApp(payload, endpoints.categories);
+    reset();
   };
   return (
     <div className="newCategory">

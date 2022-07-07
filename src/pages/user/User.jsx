@@ -10,8 +10,10 @@ import {
   Group,
 } from "@material-ui/icons";
 import {
+  Box,
   FormControl,
   InputLabel,
+  LinearProgress,
   MenuItem,
   Select,
   TextField,
@@ -21,15 +23,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import useForm from "../../hooks/useForm";
-import { fetchServiceApp } from "../../services/serviceApp";
+import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
-import { httpMethods } from "../../utils/constants/httpMethods";
-import { errorMsg, successMsg } from "../../utils/helpers/messages";
 
 import "./user.css";
 
 export default function User() {
-  const [user, setUser] = useState(null);
+  const [{ user, loading }, setUser] = useState({ user: null, loading: true });
   const [userValues, handleInputChange, reset] = useForm({
     correo: "",
     nombre: "",
@@ -59,8 +59,8 @@ export default function User() {
 
   const loadUsers = async () => {
     const id = window.location.pathname.split("/")[2];
-    const { data } = await fetchServiceApp(`${endpoints.users}/${id}`);
-    setUser(data.usuario);
+    const { usuario } = await getServiceApp(`${endpoints.users}/${id}`);
+    setUser({ user: usuario, loading: false });
   };
 
   const handleChangeDate = (newValue) => {
@@ -79,19 +79,24 @@ export default function User() {
       estadoCivil: estadoCivil || user?.estadoCivil,
       rol: rol || user?.rol,
     };
-    const { data } = await fetchServiceApp(
-      `${endpoints.users}/${user.uid}`,
-      payload,
-      httpMethods.Put
-    );
-    if (data.ok) {
-      successMsg(data.msg);
-      reset();
-      loadUsers();
-    } else {
-      errorMsg(data.errorMsg);
-    }
+    await updateServiceApp(payload, endpoints.users, user.uid);
+    reset();
+    loadUsers();
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ flex: "4" }}>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "27%" }}
+        >
+          <Box sx={{ width: "80%" }}>
+            <LinearProgress />
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <div className="user">
@@ -224,6 +229,7 @@ export default function User() {
                   name="direccion"
                   variant="outlined"
                   size="small"
+                  autoComplete="off"
                   value={direccion}
                   onChange={handleInputChange}
                 />
