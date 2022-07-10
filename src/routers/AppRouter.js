@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { startChecking } from "../actions/auth";
+import Loading from "../components/ui/Loading";
 import SignIn from "../pages/login/Login";
 import { DashboardRoutes } from "./DashboardRoutes";
 export const AppRouter = () => {
@@ -17,7 +18,7 @@ export const AppRouter = () => {
   }, [dispatch]);
 
   if (checking) {
-    return <h5>Espere...</h5>;
+    return <Loading />;
   }
 
   return (

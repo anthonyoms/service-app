@@ -10,10 +10,8 @@ import {
   Group,
 } from "@material-ui/icons";
 import {
-  Box,
   FormControl,
   InputLabel,
-  LinearProgress,
   MenuItem,
   Select,
   TextField,
@@ -22,6 +20,7 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import Loading from "../../components/ui/Loading";
 import useForm from "../../hooks/useForm";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
@@ -54,10 +53,10 @@ export default function User() {
   } = userValues;
 
   useEffect(() => {
-    loadUsers();
+    loadUser();
   }, []);
 
-  const loadUsers = async () => {
+  const loadUser = async () => {
     const id = window.location.pathname.split("/")[2];
     const { usuario } = await getServiceApp(`${endpoints.users}/${id}`);
     setUser({ user: usuario, loading: false });
@@ -81,21 +80,11 @@ export default function User() {
     };
     await updateServiceApp(payload, endpoints.users, user.uid);
     reset();
-    loadUsers();
+    loadUser();
   };
 
   if (loading) {
-    return (
-      <Box sx={{ flex: "4" }}>
-        <Box
-          sx={{ display: "flex", justifyContent: "center", marginTop: "27%" }}
-        >
-          <Box sx={{ width: "80%" }}>
-            <LinearProgress />
-          </Box>
-        </Box>
-      </Box>
-    );
+    return <Loading />;
   }
 
   return (

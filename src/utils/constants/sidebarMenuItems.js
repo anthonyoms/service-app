@@ -28,6 +28,7 @@ export const inventario = {
   title: "Inventario",
   listItem: [
     { link: "/categories", Icon: Category, sidebarItemName: "Categorias" },
+    { link: "/products", Icon: Storefront, sidebarItemName: "Productos" },
   ],
 };
 
@@ -50,8 +51,6 @@ export const dashboard = {
 export const quickMenu = {
   title: "Quick Menu",
   listItem: [
-    { link: "/users", Icon: PermIdentity, sidebarItemName: "Usuarios" },
-    { link: "/products", Icon: Storefront, sidebarItemName: "Productos" },
     { link: "/customers", Icon: AccountCircle, sidebarItemName: "Clientes" },
     {
       link: "/categories",

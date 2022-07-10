@@ -28,6 +28,15 @@ const fetchServiceApp = async (endpoint, payload, method = httpMethods.Get) => {
   }
 };
 
+const dataValidation = (data) => {
+  if (data.ok) {
+    successMsg(data.msg);
+    return data;
+  } else {
+    errorMsg(data.errorMsg);
+  }
+};
+
 export const getServiceApp = async (endpoint) => {
   const { data } = await fetchServiceApp(endpoint);
   if (data.ok) {
@@ -43,20 +52,12 @@ export const deleteServiceApp = async (id, endpoint) => {
     {},
     httpMethods.Delete
   );
-  if (data.ok) {
-    successMsg(data.msg);
-  } else {
-    errorMsg(data.errorMsg);
-  }
+  return dataValidation(data);
 };
 
 export const postServiceApp = async (payload, endpoint) => {
   const { data } = await fetchServiceApp(endpoint, payload, httpMethods.Post);
-  if (data.ok) {
-    successMsg(data.msg);
-  } else {
-    errorMsg(data.errorMsg);
-  }
+  return dataValidation(data);
 };
 export const updateServiceApp = async (payload, endpoint, id) => {
   const { data } = await fetchServiceApp(
@@ -64,9 +65,5 @@ export const updateServiceApp = async (payload, endpoint, id) => {
     payload,
     httpMethods.Put
   );
-  if (data.ok) {
-    successMsg(data.msg);
-  } else {
-    errorMsg(data.errorMsg);
-  }
+  return dataValidation(data);
 };

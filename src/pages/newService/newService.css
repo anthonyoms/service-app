@@ -1,33 +1,33 @@
-.newProduct {
+.newService {
   flex: 4;
 }
 
-.addProductForm {
+.addServiceForm {
   margin-top: 10px;
 }
 
-.addProductItem {
+.addServiceItem {
   width: 250px;
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
 }
 
-.addProductItem > label {
+.addServiceItem > label {
   color: gray;
   font-weight: 600;
   margin-bottom: 10px;
 }
 
-.addProductItem > input {
+.addServiceItem > input {
   padding: 10px;
 }
 
-.addProductItem > select {
+.addServiceItem > select {
   padding: 10px;
 }
 
-.addProductButton {
+.addServiceButton {
   margin-top: 10px;
   padding: 7px 10px;
   border: none;

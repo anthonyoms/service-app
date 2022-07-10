@@ -10,7 +10,7 @@ import { endpoints } from "../../utils/constants/endpoints";
 export default function UserList() {
   const [{ loading, userData }, setUserData] = useState({
     loading: true,
-    userData: null,
+    userData: [],
   });
   useEffect(() => {
     loadUser();
@@ -25,6 +25,7 @@ export default function UserList() {
   };
   const handleDelete = async (id) => {
     await deleteServiceApp(id, endpoints.users);
+    loadUser();
   };
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },

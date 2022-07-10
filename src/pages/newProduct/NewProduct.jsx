@@ -1,40 +1,157 @@
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import useForm from "../../hooks/useForm";
+import { getServiceApp, postServiceApp } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
 import "./newProduct.css";
 
 export default function NewProduct() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const [
+    { img, nombre, estado, precio, categoria, disponible, descripcion },
+    handleInputChange,
+    reset,
+  ] = useForm({
+    img: "",
+    nombre: "",
+    estado: true,
+    precio: "",
+    categoria: "",
+    descripcion: "",
+    disponible: true,
+  });
+  const loadCategories = async () => {
+    const { categorias } = await getServiceApp(endpoints.categories);
+    setCategories(categorias);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      img,
+      nombre,
+      estado,
+      precio,
+      categoria,
+      disponible,
+      descripcion,
+    };
+    await postServiceApp(payload, endpoints.products);
+    reset();
+  };
   return (
     <div className="newProduct">
       <h1 className="addProductTitle">Producto Nuevo</h1>
-      <form className="addProductForm">
+      <form onSubmit={handleSubmit} className="addProductForm">
         <div className="addProductItem">
-          <label>Imagen</label>
-          <input type="file" id="file" />
+          <TextField
+            id="img"
+            label="Imagen Url"
+            name="img"
+            variant="outlined"
+            value={img}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addProductItem">
-          <label>Nombre</label>
-          <input type="text" placeholder="Apple Airpods" />
+          <TextField
+            id="nombre"
+            label="Nombre"
+            name="nombre"
+            variant="outlined"
+            value={nombre}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addProductItem">
-          <label>Precio</label>
-          <input type="text" placeholder="123" />
+          <TextField
+            id="outlined-multiline-flexible"
+            name="descripcion"
+            label="Descripción"
+            multiline
+            inputProps={{ maxLength: "50" }}
+            maxRows={5}
+            value={descripcion}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addProductItem">
-          <label>Existencias</label>
-          <input type="text" placeholder="0" />
+          <TextField
+            id="precio"
+            label="Precio"
+            name="precio"
+            variant="outlined"
+            value={precio}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="addProductItem">
-          <label>Categoria</label>
-          <select name="active" id="active">
-            <option value="">Router</option>
-            <option value="">Teléfono</option>
-            <option value="">Cableado</option>
-          </select>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label-categoria">
+              Categoria
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label-categoria"
+              id="demo-simple-select-categoria"
+              name="categoria"
+              label="Categoria"
+              value={categoria}
+              onChange={handleInputChange}
+            >
+              {categories.map((category) => {
+                return (
+                  <MenuItem key={category?.uid} value={category?.uid}>
+                    {category?.nombre}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </div>
         <div className="addProductItem">
-          <label>Activo</label>
-          <select name="active" id="active">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label-disponible">
+              Disponible
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label-disponible"
+              id="demo-simple-select-disponible"
+              name="disponible"
+              label="Disponible"
+              value={disponible}
+              onChange={handleInputChange}
+            >
+              <MenuItem value={true}>Si</MenuItem>
+              <MenuItem value={false}>No</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <div className="addProductItem">
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label-estado">Estado</InputLabel>
+            <Select
+              labelId="demo-simple-select-label-estado"
+              id="demo-simple-select-estado"
+              name="estado"
+              label="Estado"
+              value={estado}
+              onChange={handleInputChange}
+            >
+              <MenuItem value={true}>Si</MenuItem>
+              <MenuItem value={false}>No</MenuItem>
+            </Select>
+          </FormControl>
         </div>
         <button className="addProductButton">Crear</button>
       </form>

@@ -47,6 +47,7 @@ export default function NewCategory() {
             label="Nombre"
             name="nombre"
             variant="outlined"
+             inputProps={{ maxLength: "50" }}
             value={nombre}
             onChange={handleInputChange}
           />
@@ -57,6 +58,7 @@ export default function NewCategory() {
             name="descripcion"
             label="Descripción"
             multiline
+            inputProps={{ maxLength: "50" }}
             maxRows={5}
             value={descripcion}
             onChange={handleInputChange}

@@ -4,22 +4,23 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./categoryList.css";
 import MyFab from "../../components/fab/MyFab";
-import { getServiceApp } from "../../services/serviceApp";
+import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 
 export default function CategoryList() {
-  const [data, setData] = useState([]);
+  const [{ data, loading }, setData] = useState({ data: [], loading: true });
   useEffect(() => {
     loadCategories();
   }, []);
 
   const loadCategories = async () => {
     const { categorias } = await getServiceApp(endpoints.categories);
-    setData(categorias);
+    setData({ data: categorias, loading: false });
   };
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = async (id) => {
+    await deleteServiceApp(id, endpoints.categories);
+    loadCategories();
   };
 
   const columns = [
@@ -43,6 +44,18 @@ export default function CategoryList() {
       flex: 1,
     },
     {
+      field: "estado",
+      headerName: "Estado",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <div className="categoryListItem">
+            {params.row.estado ? "Activo" : "Inactivo"}
+          </div>
+        );
+      },
+    },
+    {
       field: "action",
       headerName: "Acciones",
       flex: 1,
@@ -52,10 +65,12 @@ export default function CategoryList() {
             <Link to={"/category/" + params.row.uid}>
               <button className="categoryListEdit">Editar</button>
             </Link>
-            <DeleteOutline
-              className="categoryListDelete"
-              onClick={() => handleDelete(params.row.uid)}
-            />
+            {params.row.estado && (
+              <DeleteOutline
+                className="categoryListDelete"
+                onClick={() => handleDelete(params.row.uid)}
+              />
+            )}
           </>
         );
       },
@@ -73,6 +88,7 @@ export default function CategoryList() {
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(e) => e.uid}
+          loading={loading}
           filterMode="client"
         />
       </div>
