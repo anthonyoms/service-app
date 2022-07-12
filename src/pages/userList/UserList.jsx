@@ -6,6 +6,10 @@ import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
 import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import {
+  confirmActionMessage,
+  dataValidation,
+} from "../../utils/helpers/messages";
 
 export default function UserList() {
   const [{ loading, userData }, setUserData] = useState({
@@ -17,15 +21,22 @@ export default function UserList() {
   }, []);
 
   const loadUser = async () => {
-    const { usuarios } = await getServiceApp(endpoints.users);
-    setUserData({
-      loading: false,
-      userData: usuarios,
-    });
+    const dataResponse = await getServiceApp(endpoints.users);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setUserData({
+        loading: false,
+        userData: validData.usuarios,
+      });
+    }
   };
   const handleDelete = async (id) => {
-    await deleteServiceApp(id, endpoints.users);
-    loadUser();
+    const result = await confirmActionMessage();
+    if (result.isConfirmed) {
+      const dataResponse = await deleteServiceApp(id, endpoints.users);
+      dataValidation(dataResponse);
+      loadUser();
+    }
   };
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
@@ -38,7 +49,7 @@ export default function UserList() {
       renderCell: (params) => {
         return (
           <div className="userListUser">
-            {/* <img className="userListImg" src={params.row.avatar} alt="" /> */}
+            { <img className="userListImg" src={params.row.img} alt="" /> }
             {params.row.usuario}
           </div>
         );

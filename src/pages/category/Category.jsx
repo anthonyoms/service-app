@@ -13,6 +13,7 @@ import useForm from "../../hooks/useForm";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import Loading from "../../components/ui/Loading";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function Category() {
   const [{ category, loading }, setCategory] = useState({
@@ -23,7 +24,7 @@ export default function Category() {
     img: "",
     nombre: "",
     descripcion: "",
-    estado: "",
+    estado: true,
   });
   const { img, nombre, descripcion, estado } = categoryValues;
 
@@ -33,8 +34,11 @@ export default function Category() {
 
   const loadCategory = async () => {
     const id = window.location.pathname.split("/")[2];
-    const { categoria } = await getServiceApp(`${endpoints.categories}/${id}`);
-    setCategory({ category: categoria, loading: false });
+    const dataResponse = await getServiceApp(`${endpoints.categories}/${id}`);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setCategory({ category: validData.categoria, loading: false });
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,11 +46,18 @@ export default function Category() {
       img: img || category.img,
       nombre: nombre || category.nombre,
       descripcion: descripcion || category.descripcion,
-      estado: estado || category.estado,
+      estado: estado,
     };
-    await updateServiceApp(payload, endpoints.categories, category.uid);
-    reset();
-    loadCategory();
+    const dataResponse = await updateServiceApp(
+      payload,
+      endpoints.categories,
+      category.uid
+    );
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+      loadCategory();
+    }
   };
   if (loading) {
     return <Loading />;

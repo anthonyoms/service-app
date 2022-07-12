@@ -14,6 +14,13 @@
   margin-top: 10px;
   margin-right: 20px;
 }
+.newUserItem2 {
+  width: 822px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-right: 20px;
+}
 
 .newUserItem > label {
   margin-bottom: 10px;

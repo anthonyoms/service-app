@@ -7,6 +7,7 @@ import "./newCategory.css";
 import useForm from "../../hooks/useForm";
 import { endpoints } from "../../utils/constants/endpoints";
 import { postServiceApp } from "../../services/serviceApp";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function NewCategory() {
   const [{ nombre, descripcion, img, estado }, handleInputChange, reset] =
@@ -24,8 +25,11 @@ export default function NewCategory() {
       img,
       estado,
     };
-    await postServiceApp(payload, endpoints.categories);
-    reset();
+    const dataResponse = await postServiceApp(payload, endpoints.categories);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+    }
   };
   return (
     <div className="newCategory">
@@ -47,7 +51,7 @@ export default function NewCategory() {
             label="Nombre"
             name="nombre"
             variant="outlined"
-             inputProps={{ maxLength: "50" }}
+            inputProps={{ maxLength: "50" }}
             value={nombre}
             onChange={handleInputChange}
           />
@@ -59,7 +63,6 @@ export default function NewCategory() {
             label="Descripción"
             multiline
             inputProps={{ maxLength: "50" }}
-            maxRows={5}
             value={descripcion}
             onChange={handleInputChange}
           />

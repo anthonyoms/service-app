@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import useForm from "../../hooks/useForm";
 import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
 import "./newProduct.css";
 
 export default function NewProduct() {
@@ -32,8 +33,11 @@ export default function NewProduct() {
     disponible: true,
   });
   const loadCategories = async () => {
-    const { categorias } = await getServiceApp(endpoints.categories);
-    setCategories(categorias);
+    const dataResponse = await getServiceApp(endpoints.categories);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setCategories(validData.categorias);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -47,8 +51,11 @@ export default function NewProduct() {
       disponible,
       descripcion,
     };
-    await postServiceApp(payload, endpoints.products);
-    reset();
+    const dataResponse = await postServiceApp(payload, endpoints.products);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+    }
   };
   return (
     <div className="newProduct">
@@ -82,6 +89,7 @@ export default function NewProduct() {
             multiline
             inputProps={{ maxLength: "50" }}
             maxRows={5}
+            row={5}
             value={descripcion}
             onChange={handleInputChange}
           />

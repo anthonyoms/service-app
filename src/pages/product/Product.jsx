@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/ui/Loading";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function Product() {
   const [{ product, loading }, setProducts] = useState({
@@ -50,15 +51,22 @@ export default function Product() {
     const payload = {
       img: img || product.img,
       nombre: nombre || product.nombre,
-      estado: estado || product.estado,
+      estado: estado,
       precio: precio || product.precio,
       categoria: categoria || product?.categoria?.uid,
       descripcion: descripcion || product.descripcion,
       disponible: disponible || product.disponible,
     };
-    await updateServiceApp(payload, endpoints.products, product.uid);
-    reset();
-    loadProducts();
+    const dataResponse = await updateServiceApp(
+      payload,
+      endpoints.products,
+      product.uid
+    );
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+      loadProducts();
+    }
   };
   if (loading) {
     return <Loading />;
@@ -144,6 +152,7 @@ export default function Product() {
               multiline
               inputProps={{ maxLength: "50" }}
               maxRows={5}
+              rows={5}
               sx={{ m: 1 }}
               size="small"
               value={descripcion}

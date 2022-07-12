@@ -17,3 +17,24 @@ export const errorMsg = (text = defaultErrorMsg) => {
     text,
   });
 };
+
+export const confirmActionMessage = async () => {
+  const result = await Swal.fire({
+    title: "Seguro que quieres guardar los cambios?",
+    showCancelButton: true,
+    confirmButtonText: "Guardar",
+  });
+  return result;
+};
+
+export const dataValidation = (data, isSuccessMsg = true) => {
+  if (data.ok) {
+    if (isSuccessMsg) {
+      successMsg(data.msg);
+    }
+    return data;
+  } else {
+    errorMsg(data.errorMsg);
+    return { data: { ok: false } };
+  }
+};

@@ -6,6 +6,7 @@ import "./categoryList.css";
 import MyFab from "../../components/fab/MyFab";
 import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function CategoryList() {
   const [{ data, loading }, setData] = useState({ data: [], loading: true });
@@ -14,13 +15,19 @@ export default function CategoryList() {
   }, []);
 
   const loadCategories = async () => {
-    const { categorias } = await getServiceApp(endpoints.categories);
-    setData({ data: categorias, loading: false });
+    const dataResponse = await getServiceApp(endpoints.categories);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setData({ data: validData.categorias, loading: false });
+    }
   };
 
   const handleDelete = async (id) => {
-    await deleteServiceApp(id, endpoints.categories);
-    loadCategories();
+    const dataResponse = await deleteServiceApp(id, endpoints.categories);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      loadCategories();
+    }
   };
 
   const columns = [

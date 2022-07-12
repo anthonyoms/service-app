@@ -11,7 +11,12 @@ import "./newUser.css";
 import useForm from "../../hooks/useForm";
 import { createUsername } from "../../utils/helpers/createUsername";
 import { endpoints } from "../../utils/constants/endpoints";
-import { postServiceApp } from "../../services/serviceApp";
+import {
+  postServiceApp,
+  uploadFileServiceApp,
+} from "../../services/serviceApp";
+import { dataValidation } from "../../utils/helpers/messages";
+import { useState } from "react";
 
 export default function NewUser() {
   const [
@@ -27,6 +32,7 @@ export default function NewUser() {
       genero,
       estadoCivil,
       rol,
+      img,
     },
     handleInputChange,
     reset,
@@ -42,7 +48,10 @@ export default function NewUser() {
     genero: "",
     estadoCivil: "",
     rol: "",
+    img: "",
   });
+
+  const [userImage, setUserImage] = useState(null);
 
   const handleChangeDate = (newValue) => {
     handleInputChange({ target: { name: "fechaNacimiento", value: newValue } });
@@ -68,8 +77,33 @@ export default function NewUser() {
       estadoCivil,
       rol,
     };
-    await postServiceApp(payload, endpoints.users);
-    reset();
+    const dataResponse = await postServiceApp(payload, endpoints.users);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      const data = await uploadFileServiceApp(
+        userImage,
+        endpoints.users,
+        validData.usuario.uid
+      );
+      dataValidation(data, false);
+      reset();
+    }
+  };
+  const textFieldValidation = (e, regex) => {
+    // if value is not blank, then test the regex
+
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      handleInputChange(e);
+    }
+  };
+  const handleChangeNumber = (e) => {
+    const onlyNums = e.target.value.replace(/[^0-9]/g, "");
+    if (onlyNums.length < 10) {
+      handleInputChange({ target: { name: e.target.name, value: onlyNums } });
+    } else if (onlyNums.length === 10) {
+      const number = onlyNums.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+      handleInputChange({ target: { name: e.target.name, value: number } });
+    }
   };
   return (
     <div className="newUser">
@@ -79,12 +113,13 @@ export default function NewUser() {
           <div className="newUserItem">
             <TextField
               id="cedula"
-              label="Cedula"
+              label="Cedula*"
               name="cedula"
               variant="outlined"
+              autoComplete="off"
               inputProps={{ maxLength: "11" }}
               value={cedula}
-              onChange={handleInputChange}
+              onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
             />
           </div>
           <div className="newUserItem">
@@ -94,6 +129,7 @@ export default function NewUser() {
               name="correo"
               variant="outlined"
               autoComplete="off"
+              inputProps={{ maxLength: "50" }}
               value={correo}
               onChange={handleInputChange}
               onBlur={getUsername}
@@ -118,8 +154,10 @@ export default function NewUser() {
               label="Nombre"
               name="nombre"
               variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "50" }}
               value={nombre}
-              onChange={handleInputChange}
+              onChange={(e) => textFieldValidation(e, /^[a-zA-Z ]*$/)}
             />
           </div>
           <div className="newUserItem">
@@ -128,6 +166,7 @@ export default function NewUser() {
               label="Contraseña"
               name="password"
               variant="outlined"
+              inputProps={{ maxLength: "50" }}
               type={"password"}
               autoComplete="off"
               value={password}
@@ -140,9 +179,10 @@ export default function NewUser() {
               label="Teléfono"
               name="telefono"
               variant="outlined"
+              autoComplete="off"
               inputProps={{ maxLength: "10" }}
               value={telefono}
-              onChange={handleInputChange}
+              onChange={handleChangeNumber}
             />
           </div>
           <div className="newUserItem">
@@ -152,19 +192,31 @@ export default function NewUser() {
                 inputFormat="dd/MM/yyyy"
                 value={fechaNacimiento}
                 onChange={handleChangeDate}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => (
+                  <TextField autoComplete="off" {...params} />
+                )}
               />
             </LocalizationProvider>
           </div>
           <div className="newUserItem">
-            <TextField
-              id="direccion"
-              label="Dirección"
-              name="direccion"
-              variant="outlined"
-              value={direccion}
-              onChange={handleInputChange}
-            />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Rol</InputLabel>
+              <Select
+                labelId="demo-simple-select-label-rol"
+                id="demo-simple-select-rol"
+                name="rol"
+                label="Rol"
+                value={rol}
+                onChange={handleInputChange}
+              >
+                <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
+                <MenuItem value={"TECNICO_MESA"}>
+                  Técnico mesa de ayuda
+                </MenuItem>
+                <MenuItem value={"CAJERO"}>Cajero</MenuItem>
+                <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div className="newUserItem">
             <FormControl fullWidth>
@@ -199,32 +251,37 @@ export default function NewUser() {
                 onChange={handleInputChange}
               >
                 <MenuItem value={"Casado"}>Casado</MenuItem>
+                <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
                 <MenuItem value={"Soltero"}>Soltero</MenuItem>
                 <MenuItem value={"Viudo"}>Viudo</MenuItem>
-                <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
               </Select>
             </FormControl>
           </div>
-          <div className="newUserItem">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Rol</InputLabel>
-              <Select
-                labelId="demo-simple-select-label-rol"
-                id="demo-simple-select-rol"
-                name="rol"
-                label="Rol"
-                value={rol}
-                onChange={handleInputChange}
-              >
-                <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
-                <MenuItem value={"TECNICO_MESA"}>
-                  Técnico mesa de ayuda
-                </MenuItem>
-                <MenuItem value={"CUSTOMER_ROLE"}>Cliente</MenuItem>
-                <MenuItem value={"CAJERO"}>Cajero</MenuItem>
-                <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
-              </Select>
-            </FormControl>
+          <div className="newUserItem2">
+            <TextField
+              id="direccion"
+              label="Dirección"
+              name="direccion"
+              variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "100" }}
+              value={direccion}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="newUserItem2">
+            <InputLabel htmlFor="img">Imagen de usuario</InputLabel>
+            <TextField
+              id="img"
+              name="img"
+              variant="outlined"
+              type="file"
+              value={img}
+              onChange={(e) => {
+                handleInputChange(e);
+                setUserImage(e.target.files[0]);
+              }}
+            />
           </div>
         </div>
         <button className="newUserButton">Crear</button>

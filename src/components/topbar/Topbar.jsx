@@ -6,7 +6,7 @@ import { startLogout } from "../../actions/auth";
 
 export default function Topbar() {
   const dispatch = useDispatch();
-  const { nombre } = useSelector((state) => state.auth);
+  const { nombre, img } = useSelector((state) => state.auth);
   return (
     <div className="topbar">
       <div className="topbarWrapper">
@@ -29,11 +29,7 @@ export default function Topbar() {
             <ExitToApp />
           </div>
           <div className="topbarIconContainer">{nombre}</div>
-          <img
-            src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-            alt=""
-            className="topAvatar"
-          />
+          <img src={img} alt="" className="topAvatar" />
         </div>
       </div>
     </div>

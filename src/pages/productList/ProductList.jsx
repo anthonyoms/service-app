@@ -7,6 +7,7 @@ import "./productList.css";
 import { useEffect } from "react";
 import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function ProductList() {
   const [{ loading, productData }, setProductData] = useState({
@@ -25,8 +26,11 @@ export default function ProductList() {
     });
   };
   const handleDelete = async (id) => {
-    await deleteServiceApp(id, endpoints.products);
-    loadProduct();
+    const dataResponse = await deleteServiceApp(id, endpoints.products);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      loadProduct();
+    }
   };
   const columns = [
     { field: "uid", headerName: "ID", hide: true, flex: 1 },

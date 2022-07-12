@@ -8,7 +8,14 @@ export const StartLogin = (correo, password) => {
     if (body.ok) {
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", new Date().getTime());
-      dispatch(login({ uid: body.uid, nombre: body.nombre, rol: body.rol }));
+      dispatch(
+        login({
+          uid: body.uid,
+          nombre: body.nombre,
+          rol: body.rol,
+          img: body.img,
+        })
+      );
     } else {
       Swal.fire("Error", body, "error");
     }
@@ -21,7 +28,14 @@ export const startChecking = () => {
     if (body.ok) {
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", new Date().getTime());
-      dispatch(login({ uid: body.uid, nombre: body.nombre, rol: body.rol }));
+      dispatch(
+        login({
+          uid: body.uid,
+          nombre: body.nombre,
+          rol: body.rol,
+          img: body.img,
+        })
+      );
     } else {
       dispatch(checkingFinish());
     }

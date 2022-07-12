@@ -1,6 +1,6 @@
 import axios from "axios/dist/axios";
+import { endpoints } from "../utils/constants/endpoints";
 import { httpMethods } from "../utils/constants/httpMethods";
-import { errorMsg, successMsg } from "../utils/helpers/messages";
 
 export const serviceApp = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -22,28 +22,19 @@ const fetchServiceApp = async (endpoint, payload, method = httpMethods.Get) => {
       return await serviceApp[method](endpoint, payload);
     }
   } catch (error) {
-    const errors = error.response.data.msg || error.response.data.errors[0].msg;
+    console.log(error.message);
+    const errors =
+      error.response.data.msg ||
+      (error?.response?.data?.errors && error.response.data?.errors[0]?.msg) ||
+      error.message;
     console.log(errors);
     return { data: { errorMsg: errors } };
   }
 };
 
-const dataValidation = (data) => {
-  if (data.ok) {
-    successMsg(data.msg);
-    return data;
-  } else {
-    errorMsg(data.errorMsg);
-  }
-};
-
 export const getServiceApp = async (endpoint) => {
   const { data } = await fetchServiceApp(endpoint);
-  if (data.ok) {
-    return data;
-  } else {
-    errorMsg();
-  }
+  return data;
 };
 
 export const deleteServiceApp = async (id, endpoint) => {
@@ -52,12 +43,12 @@ export const deleteServiceApp = async (id, endpoint) => {
     {},
     httpMethods.Delete
   );
-  return dataValidation(data);
+  return data;
 };
 
 export const postServiceApp = async (payload, endpoint) => {
   const { data } = await fetchServiceApp(endpoint, payload, httpMethods.Post);
-  return dataValidation(data);
+  return data;
 };
 export const updateServiceApp = async (payload, endpoint, id) => {
   const { data } = await fetchServiceApp(
@@ -65,5 +56,13 @@ export const updateServiceApp = async (payload, endpoint, id) => {
     payload,
     httpMethods.Put
   );
-  return dataValidation(data);
+  return data;
+};
+
+export const uploadFileServiceApp = async (file, coleccion, id) => {
+  const endpoint = endpoints.uploads + coleccion;
+  const formData = new FormData();
+  formData.append("archivo", file);
+  const data = await updateServiceApp(formData, endpoint, id);
+  return data;
 };

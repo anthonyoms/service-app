@@ -24,6 +24,7 @@ import Loading from "../../components/ui/Loading";
 import useForm from "../../hooks/useForm";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
 
 import "./user.css";
 
@@ -58,8 +59,11 @@ export default function User() {
 
   const loadUser = async () => {
     const id = window.location.pathname.split("/")[2];
-    const { usuario } = await getServiceApp(`${endpoints.users}/${id}`);
-    setUser({ user: usuario, loading: false });
+    const dataResponse = await getServiceApp(`${endpoints.users}/${id}`);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setUser({ user: validData.usuario, loading: false });
+    }
   };
 
   const handleChangeDate = (newValue) => {
@@ -78,9 +82,16 @@ export default function User() {
       estadoCivil: estadoCivil || user?.estadoCivil,
       rol: rol || user?.rol,
     };
-    await updateServiceApp(payload, endpoints.users, user.uid);
-    reset();
-    loadUser();
+    const dataResponse = await updateServiceApp(
+      payload,
+      endpoints.users,
+      user.uid
+    );
+    const validData = await dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+      loadUser();
+    }
   };
 
   if (loading) {
@@ -218,7 +229,10 @@ export default function User() {
                   name="direccion"
                   variant="outlined"
                   size="small"
+                  multiline
+                  rows={5}
                   autoComplete="off"
+                  inputProps={{ maxLength: "100" }}
                   value={direccion}
                   onChange={handleInputChange}
                 />
