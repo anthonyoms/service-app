@@ -34,7 +34,7 @@ export default function CategoryList() {
     { field: "uid", headerName: "ID", flex: 1, hide: true },
     {
       field: "nombre",
-      headerName: "categoria",
+      headerName: "Categoría",
       flex: 1,
       renderCell: (params) => {
         return (

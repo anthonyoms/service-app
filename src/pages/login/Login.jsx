@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { StartLogin } from "../../actions/auth";
+import Loading from "../../components/ui/Loading";
 
 function Copyright(props) {
   return (
@@ -37,12 +38,17 @@ const theme = createTheme();
 
 export default function SignIn() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = new FormData(event.currentTarget);
     dispatch(StartLogin(data.get("correo"), data.get("password")));
+    setLoading(false);
   };
-
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

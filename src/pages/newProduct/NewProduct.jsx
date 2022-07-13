@@ -7,13 +7,14 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import useForm from "../../hooks/useForm";
-import { getServiceApp, postServiceApp } from "../../services/serviceApp";
+import { getServiceApp, saveWithImage } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import "./newProduct.css";
 
 export default function NewProduct() {
   const [categories, setCategories] = useState([]);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     loadCategories();
@@ -51,10 +52,20 @@ export default function NewProduct() {
       disponible,
       descripcion,
     };
-    const dataResponse = await postServiceApp(payload, endpoints.products);
-    const validData = dataValidation(dataResponse);
-    if (validData.ok) {
+    const isSaveProduct = await saveWithImage(
+      payload,
+      image,
+      endpoints.products
+    );
+    if (isSaveProduct.ok) {
       reset();
+    }
+  };
+  const textFieldValidation = (e, regex) => {
+    // if value is not blank, then test the regex
+
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      handleInputChange(e);
     }
   };
   return (
@@ -62,13 +73,18 @@ export default function NewProduct() {
       <h1 className="addProductTitle">Producto Nuevo</h1>
       <form onSubmit={handleSubmit} className="addProductForm">
         <div className="addProductItem">
+          <InputLabel htmlFor="img">Imagen del producto</InputLabel>
           <TextField
             id="img"
-            label="Imagen Url"
             name="img"
             variant="outlined"
+            type="file"
+            autoComplete="off"
             value={img}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              handleInputChange(e);
+              setImage(e.target.files[0]);
+            }}
           />
         </div>
         <div className="addProductItem">
@@ -77,6 +93,8 @@ export default function NewProduct() {
             label="Nombre"
             name="nombre"
             variant="outlined"
+            autoComplete="off"
+            inputProps={{ maxLength: "50" }}
             value={nombre}
             onChange={handleInputChange}
           />
@@ -88,8 +106,7 @@ export default function NewProduct() {
             label="Descripción"
             multiline
             inputProps={{ maxLength: "50" }}
-            maxRows={5}
-            row={5}
+            rows={5}
             value={descripcion}
             onChange={handleInputChange}
           />
@@ -100,8 +117,10 @@ export default function NewProduct() {
             label="Precio"
             name="precio"
             variant="outlined"
+            autoComplete="off"
+            inputProps={{ maxLength: "12" }}
             value={precio}
-            onChange={handleInputChange}
+            onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
           />
         </div>
         <div className="addProductItem">
@@ -113,7 +132,7 @@ export default function NewProduct() {
               labelId="demo-simple-select-label-categoria"
               id="demo-simple-select-categoria"
               name="categoria"
-              label="Categoria"
+              label="Categoría"
               value={categoria}
               onChange={handleInputChange}
             >

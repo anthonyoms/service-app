@@ -58,7 +58,7 @@ export default function Service() {
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
-            <label>Categoria</label>
+            <label>Categoría</label>
             <select name="active" id="active">
               <option value="">Router</option>
               <option value="">Teléfono</option>

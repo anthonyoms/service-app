@@ -3,6 +3,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import InputLabel from "@mui/material/InputLabel";
+import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -11,12 +12,8 @@ import "./newUser.css";
 import useForm from "../../hooks/useForm";
 import { createUsername } from "../../utils/helpers/createUsername";
 import { endpoints } from "../../utils/constants/endpoints";
-import {
-  postServiceApp,
-  uploadFileServiceApp,
-} from "../../services/serviceApp";
-import { dataValidation } from "../../utils/helpers/messages";
-import { useState } from "react";
+import { saveWithImage } from "../../services/serviceApp";
+import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
 
 export default function NewUser() {
   const [
@@ -52,7 +49,6 @@ export default function NewUser() {
   });
 
   const [userImage, setUserImage] = useState(null);
-
   const handleChangeDate = (newValue) => {
     handleInputChange({ target: { name: "fechaNacimiento", value: newValue } });
   };
@@ -77,15 +73,8 @@ export default function NewUser() {
       estadoCivil,
       rol,
     };
-    const dataResponse = await postServiceApp(payload, endpoints.users);
-    const validData = dataValidation(dataResponse);
-    if (validData.ok) {
-      const data = await uploadFileServiceApp(
-        userImage,
-        endpoints.users,
-        validData.usuario.uid
-      );
-      dataValidation(data, false);
+    const isSaveUser = await saveWithImage(payload, userImage, endpoints.users);
+    if (isSaveUser.ok) {
       reset();
     }
   };
@@ -97,13 +86,8 @@ export default function NewUser() {
     }
   };
   const handleChangeNumber = (e) => {
-    const onlyNums = e.target.value.replace(/[^0-9]/g, "");
-    if (onlyNums.length < 10) {
-      handleInputChange({ target: { name: e.target.name, value: onlyNums } });
-    } else if (onlyNums.length === 10) {
-      const number = onlyNums.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
-      handleInputChange({ target: { name: e.target.name, value: number } });
-    }
+    const target = handleFormatNumber(e);
+    handleInputChange(target);
   };
   return (
     <div className="newUser">

@@ -47,7 +47,7 @@ export default function ProductList() {
         );
       },
     },
-    { field: "cantidad", headerName: "cantidad", flex: 1 },
+    { field: "cantidad", headerName: "Existencia", flex: 1 },
     {
       field: "estado",
       headerName: "Estado",

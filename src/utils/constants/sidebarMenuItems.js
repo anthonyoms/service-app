@@ -27,7 +27,7 @@ export const seguridad = {
 export const inventario = {
   title: "Inventario",
   listItem: [
-    { link: "/categories", Icon: Category, sidebarItemName: "Categorias" },
+    { link: "/categories", Icon: Category, sidebarItemName: "Categorías" },
     { link: "/products", Icon: Storefront, sidebarItemName: "Productos" },
   ],
 };
@@ -55,7 +55,7 @@ export const quickMenu = {
     {
       link: "/categories",
       Icon: Category,
-      sidebarItemName: "Categorias de productos",
+      sidebarItemName: "Categorías de productos",
     },
     { link: "/suppliers", Icon: BusinessCenter, sidebarItemName: "Suplidores" },
     { link: "/services", Icon: SimCard, sidebarItemName: "Servicios" },

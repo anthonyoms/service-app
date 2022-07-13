@@ -10,10 +10,14 @@ import { Publish } from "@material-ui/icons";
 import "./category.css";
 import { useEffect, useState } from "react";
 import useForm from "../../hooks/useForm";
-import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
+import {
+  getServiceApp,
+  updateServiceApp,
+  uploadFileServiceApp,
+} from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import Loading from "../../components/ui/Loading";
-import { dataValidation } from "../../utils/helpers/messages";
+import { dataValidation, swalLoading } from "../../utils/helpers/messages";
 
 export default function Category() {
   const [{ category, loading }, setCategory] = useState({
@@ -48,6 +52,7 @@ export default function Category() {
       descripcion: descripcion || category.descripcion,
       estado: estado,
     };
+    swalLoading();
     const dataResponse = await updateServiceApp(
       payload,
       endpoints.categories,
@@ -59,13 +64,31 @@ export default function Category() {
       loadCategory();
     }
   };
+  const handleUploadImage = async (e) => {
+    setCategory((category) => {
+      return { ...category, loading: true };
+    });
+    const data = await uploadFileServiceApp(
+      e.target.files[0],
+      endpoints.categories,
+      category.uid
+    );
+    const validData = dataValidation(data);
+    if (validData.ok) {
+      loadCategory();
+    } else {
+      setCategory((user) => {
+        return { ...user, loading: false };
+      });
+    }
+  };
   if (loading) {
     return <Loading />;
   }
   return (
     <div className="category">
       <div className="categoryTitleContainer">
-        <h1 className="categoryTitle">Categoria</h1>
+        <h1 className="categoryTitle">Categoría</h1>
         <Link to="/newcategory">
           <button className="categoryAddButton">Crear</button>
         </Link>
@@ -103,21 +126,13 @@ export default function Category() {
         <form onSubmit={handleSubmit} className="categoryForm">
           <div className="categoryFormLeft">
             <TextField
-              id="img"
-              label="Imagen url"
-              name="img"
-              variant="outlined"
-              sx={{ m: 1 }}
-              value={img}
-              onChange={handleInputChange}
-            />
-            <TextField
               id="nombre"
               label="Nombre"
               name="nombre"
               variant="outlined"
               sx={{ m: 1 }}
               inputProps={{ maxLength: "50" }}
+              autoComplete="off"
               value={nombre}
               onChange={handleInputChange}
             />
@@ -128,7 +143,8 @@ export default function Category() {
               multiline
               sx={{ m: 1 }}
               inputProps={{ maxLength: "50" }}
-              maxRows={5}
+              rows={5}
+              autoComplete="off"
               value={descripcion}
               onChange={handleInputChange}
             />
@@ -156,7 +172,12 @@ export default function Category() {
               <label htmlFor="file">
                 <Publish />
               </label>
-              <input type="file" id="file" style={{ display: "none" }} />
+              <input
+                type="file"
+                id="file"
+                onChange={handleUploadImage}
+                style={{ display: "none" }}
+              />
             </div>
             <button className="categoryButton">Actualizar</button>
           </div>

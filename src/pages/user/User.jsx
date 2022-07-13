@@ -22,8 +22,13 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import Loading from "../../components/ui/Loading";
 import useForm from "../../hooks/useForm";
-import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
+import {
+  getServiceApp,
+  updateServiceApp,
+  uploadFileServiceApp,
+} from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
 import { dataValidation } from "../../utils/helpers/messages";
 
 import "./user.css";
@@ -94,6 +99,28 @@ export default function User() {
     }
   };
 
+  const handleUploadImage = async (e) => {
+    setUser((user) => {
+      return { ...user, loading: true };
+    });
+    const data = await uploadFileServiceApp(
+      e.target.files[0],
+      endpoints.users,
+      user.uid
+    );
+    const validData = dataValidation(data);
+    if (validData.ok) {
+      loadUser();
+    } else {
+      setUser((user) => {
+        return { ...user, loading: false };
+      });
+    }
+  };
+  const handleChangeNumber = (e) => {
+    const target = handleFormatNumber(e);
+    handleInputChange(target);
+  };
   if (loading) {
     return <Loading />;
   }
@@ -106,11 +133,7 @@ export default function User() {
       <div className="userContainer">
         <div className="userShow">
           <div className="userShowTop">
-            <img
-              src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt=""
-              className="userShowImg"
-            />
+            <img src={user?.img} alt="" className="userShowImg" />
             <div className="userShowTopTitle">
               <span className="userShowUsername">{user?.nombre}</span>
               <span className="userShowUserTitle">{user?.rol}</span>
@@ -167,6 +190,7 @@ export default function User() {
                   variant="outlined"
                   autoComplete="off"
                   size="small"
+                  inputProps={{ maxLength: "50" }}
                   value={correo}
                   onChange={handleInputChange}
                 />
@@ -178,6 +202,7 @@ export default function User() {
                   name="nombre"
                   variant="outlined"
                   autoComplete="off"
+                  inputProps={{ maxLength: "50" }}
                   size="small"
                   value={nombre}
                   onChange={handleInputChange}
@@ -189,6 +214,7 @@ export default function User() {
                   label="Contraseña"
                   name="password"
                   variant="outlined"
+                  inputProps={{ maxLength: "50" }}
                   size="small"
                   type={"password"}
                   autoComplete="off"
@@ -206,7 +232,7 @@ export default function User() {
                   size="small"
                   inputProps={{ maxLength: "10" }}
                   value={telefono}
-                  onChange={handleInputChange}
+                  onChange={handleChangeNumber}
                 />
               </div>
               <div className="userUpdateItem">
@@ -272,9 +298,9 @@ export default function User() {
                     onChange={handleInputChange}
                   >
                     <MenuItem value={"Casado"}>Casado</MenuItem>
+                    <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
                     <MenuItem value={"Soltero"}>Soltero</MenuItem>
                     <MenuItem value={"Viudo"}>Viudo</MenuItem>
-                    <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -291,11 +317,10 @@ export default function User() {
                     onChange={handleInputChange}
                   >
                     <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
+                    <MenuItem value={"CAJERO"}>Cajero</MenuItem>
                     <MenuItem value={"TECNICO_MESA"}>
                       Técnico mesa de ayuda
                     </MenuItem>
-                    <MenuItem value={"CUSTOMER_ROLE"}>Cliente</MenuItem>
-                    <MenuItem value={"CAJERO"}>Cajero</MenuItem>
                     <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
                   </Select>
                 </FormControl>
@@ -303,15 +328,16 @@ export default function User() {
             </div>
             <div className="userUpdateRight">
               <div className="userUpdateUpload">
-                <img
-                  className="userUpdateImg"
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                />
+                <img className="userUpdateImg" src={user?.img} alt="" />
                 <label htmlFor="file">
                   <Publish className="userUpdateIcon" />
                 </label>
-                <input type="file" id="file" style={{ display: "none" }} />
+                <input
+                  type="file"
+                  id="file"
+                  style={{ display: "none" }}
+                  onChange={handleUploadImage}
+                />
               </div>
               <button className="userUpdateButton">Actualizar</button>
             </div>

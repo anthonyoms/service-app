@@ -11,7 +11,11 @@ import {
 import useForm from "../../hooks/useForm";
 import { useEffect, useState } from "react";
 import Loading from "../../components/ui/Loading";
-import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
+import {
+  getServiceApp,
+  updateServiceApp,
+  uploadFileServiceApp,
+} from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 
@@ -66,6 +70,31 @@ export default function Product() {
     if (validData.ok) {
       reset();
       loadProducts();
+    }
+  };
+  const handleUploadImage = async (e) => {
+    setProducts((product) => {
+      return { ...product, loading: true };
+    });
+    const data = await uploadFileServiceApp(
+      e.target.files[0],
+      endpoints.products,
+      product.uid
+    );
+    const validData = dataValidation(data);
+    if (validData.ok) {
+      loadProducts();
+    } else {
+      setProducts((user) => {
+        return { ...user, loading: false };
+      });
+    }
+  };
+  const textFieldValidation = (e, regex) => {
+    // if value is not blank, then test the regex
+
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      handleInputChange(e);
     }
   };
   if (loading) {
@@ -126,20 +155,12 @@ export default function Product() {
         <form onSubmit={handleSubmit} className="productForm">
           <div className="productFormLeft">
             <TextField
-              id="img"
-              label="Imagen url"
-              name="img"
-              variant="outlined"
-              sx={{ m: 1 }}
-              size="small"
-              value={img}
-              onChange={handleInputChange}
-            />
-            <TextField
               id="nombre"
               label="Nombre"
               name="nombre"
               variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "50" }}
               sx={{ m: 1 }}
               size="small"
               value={nombre}
@@ -151,9 +172,9 @@ export default function Product() {
               label="Descripción"
               multiline
               inputProps={{ maxLength: "50" }}
-              maxRows={5}
               rows={5}
               sx={{ m: 1 }}
+              autoComplete="off"
               size="small"
               value={descripcion}
               onChange={handleInputChange}
@@ -166,17 +187,17 @@ export default function Product() {
               sx={{ m: 1 }}
               size="small"
               value={precio}
-              onChange={handleInputChange}
+              onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
             />
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label-categoria">
-                Categoria
+                Categoría
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label-categoria"
                 id="demo-simple-select-categoria"
                 name="categoria"
-                label="Categoria"
+                label="Categoría"
                 sx={{ m: 1 }}
                 size="small"
                 value={categoria}
@@ -234,7 +255,12 @@ export default function Product() {
               <label htmlFor="file">
                 <Publish />
               </label>
-              <input type="file" id="file" style={{ display: "none" }} />
+              <input
+                type="file"
+                onChange={handleUploadImage}
+                id="file"
+                style={{ display: "none" }}
+              />
             </div>
             <button className="productButton">Actualizar</button>
           </div>

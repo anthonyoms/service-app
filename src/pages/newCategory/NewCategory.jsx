@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -6,8 +7,7 @@ import Select from "@mui/material/Select";
 import "./newCategory.css";
 import useForm from "../../hooks/useForm";
 import { endpoints } from "../../utils/constants/endpoints";
-import { postServiceApp } from "../../services/serviceApp";
-import { dataValidation } from "../../utils/helpers/messages";
+import { saveWithImage } from "../../services/serviceApp";
 
 export default function NewCategory() {
   const [{ nombre, descripcion, img, estado }, handleInputChange, reset] =
@@ -17,6 +17,7 @@ export default function NewCategory() {
       img: "",
       estado: true,
     });
+  const [image, setImage] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
@@ -25,24 +26,32 @@ export default function NewCategory() {
       img,
       estado,
     };
-    const dataResponse = await postServiceApp(payload, endpoints.categories);
-    const validData = dataValidation(dataResponse);
-    if (validData.ok) {
+    const isSaveCategory = await saveWithImage(
+      payload,
+      image,
+      endpoints.categories
+    );
+    if (isSaveCategory.ok) {
       reset();
     }
   };
   return (
     <div className="newCategory">
-      <h1 className="addCategoryTitle">Nueva categoria</h1>
+      <h1 className="addCategoryTitle">Nueva categoría</h1>
       <form onSubmit={handleSubmit} className="addCategoryForm">
         <div className="addCategoryItem">
+          <InputLabel htmlFor="img">Imagen de la categoría</InputLabel>
           <TextField
             id="img"
-            label="Imagen url"
             name="img"
             variant="outlined"
+            type="file"
+            autoComplete="off"
             value={img}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              handleInputChange(e);
+              setImage(e.target.files[0]);
+            }}
           />
         </div>
         <div className="addCategoryItem">
@@ -51,6 +60,7 @@ export default function NewCategory() {
             label="Nombre"
             name="nombre"
             variant="outlined"
+            autoComplete="off"
             inputProps={{ maxLength: "50" }}
             value={nombre}
             onChange={handleInputChange}
@@ -62,6 +72,8 @@ export default function NewCategory() {
             name="descripcion"
             label="Descripción"
             multiline
+            rows={2}
+            autoComplete="off"
             inputProps={{ maxLength: "50" }}
             value={descripcion}
             onChange={handleInputChange}
@@ -75,6 +87,7 @@ export default function NewCategory() {
               id="demo-simple-select-estado"
               name="estado"
               label="Estado"
+              autoComplete="off"
               value={estado}
               onChange={handleInputChange}
             >
