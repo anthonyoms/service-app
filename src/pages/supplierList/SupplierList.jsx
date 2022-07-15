@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import { TextField } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 
 import "./supplierList.css";
@@ -16,12 +15,12 @@ export default function SupplierList() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "username", headerName: "Nombre de suplidor", width: 200 },
+    { field: "id", headerName: "ID", flex: 1, hide: true },
+    { field: "username", headerName: "Nombre de suplidor", flex: 1 },
     {
       field: "supplier",
       headerName: "Usuario",
-      width: 200,
+      flex: 1,
       renderCell: (params) => {
         return (
           <div className="supplierListSupplier">
@@ -35,17 +34,16 @@ export default function SupplierList() {
         );
       },
     },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "email", headerName: "Email", flex: 1 },
     {
       field: "status",
       headerName: "Estatus",
-      type: "number",
-      width: 120,
+      flex: 1,
     },
     {
       field: "action",
       headerName: "Acciones",
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -64,20 +62,17 @@ export default function SupplierList() {
 
   return (
     <div className="supplierList">
-      <TextField
-        id="outlined-search"
-        label="Search field"
-        type="search"
-        sx={{ mb: 1 }}
-      />
       <MyFab route="/newsupplier" />
       <div className="dataGrid">
         <DataGrid
           rows={data}
           columns={columns}
-          pageSize={8}
-          rowsPerPageOptions={[8]}
-          checkboxSelection
+          components={{ Toolbar: GridToolbar }}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          // getRowId={(e) => e.uid}
+          // loading={loading}
+          filterMode="client"
         />
       </div>
     </div>

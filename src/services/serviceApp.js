@@ -5,6 +5,7 @@ import { dataValidation, swalLoading } from "../utils/helpers/messages";
 
 export const serviceApp = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
+  timeout: 30000,
 });
 
 serviceApp.interceptors.request.use((config) => {

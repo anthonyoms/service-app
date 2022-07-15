@@ -21,14 +21,24 @@ export default function NewProduct() {
   }, []);
 
   const [
-    { img, nombre, estado, precio, categoria, disponible, descripcion },
+    {
+      img,
+      nombre,
+      estado,
+      categoria,
+      disponible,
+      descripcion,
+      precio_compra,
+      utilidad,
+    },
     handleInputChange,
     reset,
   ] = useForm({
     img: "",
     nombre: "",
     estado: true,
-    precio: "",
+    precio_compra: 0,
+    utilidad: 0,
     categoria: "",
     descripcion: "",
     disponible: true,
@@ -47,10 +57,14 @@ export default function NewProduct() {
       img,
       nombre,
       estado,
-      precio,
       categoria,
       disponible,
       descripcion,
+      precio_venta: ((utilidad / 100) * precio_compra + +precio_compra).toFixed(
+        2
+      ),
+      precio_compra,
+      utilidad,
     };
     const isSaveProduct = await saveWithImage(
       payload,
@@ -113,14 +127,42 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <TextField
-            id="precio"
-            label="Precio"
-            name="precio"
+            id="precio_venta"
+            label="Precio compra"
+            name="precio_compra"
             variant="outlined"
             autoComplete="off"
             inputProps={{ maxLength: "12" }}
-            value={precio}
-            onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
+            size="small"
+            value={precio_compra}
+            onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+          />
+        </div>
+        <div className="addProductItem">
+          <TextField
+            id="utilidad"
+            label="Utilidad %"
+            name="utilidad"
+            variant="outlined"
+            autoComplete="off"
+            size="small"
+            inputProps={{ maxLength: "12" }}
+            value={utilidad}
+            onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+          />
+        </div>
+        <div className="addProductItem">
+          <TextField
+            id="precio_venta"
+            label="Precio venta"
+            name="precio_venta"
+            variant="outlined"
+            autoComplete="off"
+            size="small"
+            inputProps={{ maxLength: "12", readOnly: true }}
+            value={((utilidad / 100) * precio_compra + +precio_compra).toFixed(
+              2
+            )}
           />
         </div>
         <div className="addProductItem">
@@ -143,40 +185,6 @@ export default function NewProduct() {
                   </MenuItem>
                 );
               })}
-            </Select>
-          </FormControl>
-        </div>
-        <div className="addProductItem">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label-disponible">
-              Disponible
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label-disponible"
-              id="demo-simple-select-disponible"
-              name="disponible"
-              label="Disponible"
-              value={disponible}
-              onChange={handleInputChange}
-            >
-              <MenuItem value={true}>Si</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        <div className="addProductItem">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label-estado">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label-estado"
-              id="demo-simple-select-estado"
-              name="estado"
-              label="Estado"
-              value={estado}
-              onChange={handleInputChange}
-            >
-              <MenuItem value={true}>Si</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
             </Select>
           </FormControl>
         </div>

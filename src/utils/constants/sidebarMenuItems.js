@@ -12,7 +12,7 @@ import {
   Report,
   AccountCircle,
   Category,
-  BusinessCenter,
+  LocalShipping,
   SimCard,
   AddShoppingCart,
   SignalCellularAltRounded,
@@ -29,6 +29,7 @@ export const inventario = {
   listItem: [
     { link: "/categories", Icon: Category, sidebarItemName: "Categorías" },
     { link: "/products", Icon: Storefront, sidebarItemName: "Productos" },
+    { link: "/suppliers", Icon: LocalShipping, sidebarItemName: "Suplidores" },
   ],
 };
 
@@ -57,7 +58,6 @@ export const quickMenu = {
       Icon: Category,
       sidebarItemName: "Categorías de productos",
     },
-    { link: "/suppliers", Icon: BusinessCenter, sidebarItemName: "Suplidores" },
     { link: "/services", Icon: SimCard, sidebarItemName: "Servicios" },
     {
       link: "/servicesales",

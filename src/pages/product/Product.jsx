@@ -29,14 +29,23 @@ export default function Product() {
     img: "",
     nombre: "",
     estado: true,
-    precio: "",
+    precio_compra: 0,
     categoria: "",
     descripcion: "",
     disponible: true,
+    utilidad: 0,
   });
 
-  const { img, nombre, estado, precio, categoria, disponible, descripcion } =
-    productsValues;
+  const {
+    img,
+    nombre,
+    estado,
+    precio_compra,
+    categoria,
+    disponible,
+    descripcion,
+    utilidad,
+  } = productsValues;
   useEffect(() => {
     loadProducts();
   }, []);
@@ -50,16 +59,23 @@ export default function Product() {
     setCategories(categorias);
     setProducts({ product: producto, loading: false });
   };
+  const getPrecioVentas = () => {
+    const precio = precio_compra || product.precio_compra;
+    const utilidadActual = utilidad || product.utilidad;
+    return ((utilidadActual / 100) * precio + +precio).toFixed(2);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       img: img || product.img,
       nombre: nombre || product.nombre,
       estado: estado,
-      precio: precio || product.precio,
+      disponible: disponible,
+      precio_compra: precio_compra || product.precio,
+      utilidad: utilidad || product.utilidad,
+      precio_venta: getPrecioVentas(),
       categoria: categoria || product?.categoria?.uid,
       descripcion: descripcion || product.descripcion,
-      disponible: disponible || product.disponible,
     };
     const dataResponse = await updateServiceApp(
       payload,
@@ -103,7 +119,7 @@ export default function Product() {
   return (
     <div className="product">
       <div className="productTitleContainer">
-        <h1 className="productTitle">Productos</h1>
+        <h1 className="productTitle">Actualización de productos</h1>
         <Link to="/newproduct">
           <button className="productAddButton">Crear</button>
         </Link>
@@ -124,8 +140,16 @@ export default function Product() {
               <span className="productInfoValue">{product?.descripcion}</span>
             </div>
             <div className="productInfoItem">
-              <span className="productInfoKey">Precio:&nbsp;</span>
-              <span className="productInfoValue">{product?.precio}</span>
+              <span className="productInfoKey">Utilidad %:&nbsp;</span>
+              <span className="productInfoValue">{product?.utilidad}</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">Precio compra:&nbsp;</span>
+              <span className="productInfoValue">{product?.precio_compra}</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">Precio venta:&nbsp;</span>
+              <span className="productInfoValue">{product?.precio_venta}</span>
             </div>
             <div className="productInfoItem">
               <span className="productInfoKey">Categoria:&nbsp;</span>
@@ -180,14 +204,39 @@ export default function Product() {
               onChange={handleInputChange}
             />
             <TextField
-              id="precio"
-              label="Precio"
-              name="precio"
+              id="precio_compra"
+              label="Precio compra"
+              name="precio_compra"
               variant="outlined"
+              autoComplete="off"
               sx={{ m: 1 }}
               size="small"
-              value={precio}
-              onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
+              value={precio_compra}
+              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+            />
+            <TextField
+              id="utilidad"
+              label="Utilidad %"
+              name="utilidad"
+              variant="outlined"
+              autoComplete="off"
+              sx={{ m: 1 }}
+              size="small"
+              value={utilidad}
+              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+            />
+            <TextField
+              id="precio_ventas"
+              label="Precio ventas"
+              name="precio_ventas"
+              variant="outlined"
+              autoComplete="off"
+              sx={{ m: 1 }}
+              size="small"
+              value={(
+                (utilidad / 100) * precio_compra +
+                +precio_compra
+              ).toFixed(2)}
             />
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label-categoria">

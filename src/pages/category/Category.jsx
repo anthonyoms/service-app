@@ -88,7 +88,7 @@ export default function Category() {
   return (
     <div className="category">
       <div className="categoryTitleContainer">
-        <h1 className="categoryTitle">Categoría</h1>
+        <h1 className="categoryTitle">Actualización de categoría</h1>
         <Link to="/newcategory">
           <button className="categoryAddButton">Crear</button>
         </Link>

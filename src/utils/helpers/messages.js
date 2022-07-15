@@ -43,7 +43,7 @@ export const swalLoading = () => {
   Swal.fire({
     title: "Enviando información al servidor.",
     html: "Por favor no cierre la aplicación ya que podrían perderse los datos.",
-    timer: 5000,
+    timer: 30000,
     timerProgressBar: true,
     didOpen: () => {
       Swal.showLoading();

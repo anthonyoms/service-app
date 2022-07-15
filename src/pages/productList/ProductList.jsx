@@ -73,8 +73,8 @@ export default function ProductList() {
       },
     },
     {
-      field: "precio",
-      headerName: "Precio",
+      field: "precio_venta",
+      headerName: "Precio de venta",
       flex: 1,
     },
     {
