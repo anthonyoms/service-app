@@ -1,44 +1,62 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 
 import "./supplierList.css";
-import { userRows } from "../../dummyData";
 import MyFab from "../../components/fab/MyFab";
+import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
+import {
+  confirmActionMessage,
+  dataValidation,
+} from "../../utils/helpers/messages";
 
 export default function SupplierList() {
-  const [data, setData] = useState(userRows);
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const [{ loading, suppliersData }, setSuppliersData] = useState({
+    loading: true,
+    suppliersData: [],
+  });
+  useEffect(() => {
+    loadSuppliers();
+  }, []);
+
+  const loadSuppliers = async () => {
+    const dataResponse = await getServiceApp(endpoints.suppliers);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setSuppliersData({
+        loading: false,
+        suppliersData: validData.suplidor,
+      });
+    }
+  };
+  const handleDelete = async (id) => {
+    const result = await confirmActionMessage();
+    if (result.isConfirmed) {
+      const dataResponse = await deleteServiceApp(id, endpoints.suppliers);
+      dataValidation(dataResponse);
+      loadSuppliers();
+    }
   };
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 1, hide: true },
-    { field: "username", headerName: "Nombre de suplidor", flex: 1 },
+    { field: "uid", headerName: "ID", flex: 1, hide: true },
+    { field: "cedula_rnc", headerName: "Rnc/Cedula", flex: 1 },
+    { field: "nombre", headerName: "Nombre", flex: 1 },
+    { field: "contacto", headerName: "Contacto", flex: 1 },
     {
-      field: "supplier",
-      headerName: "Usuario",
+      field: "estado",
+      headerName: "Estado",
       flex: 1,
       renderCell: (params) => {
         return (
-          <div className="supplierListSupplier">
-            <img
-              className="supplierListImg"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBrIJd0VXBhuzW4AOMssMlDBO-A5qhaGUvN4wF4t8pgJlaSkF5aB_W0Rqucp8Z8tELzMg&usqp=CAU"
-              alt=""
-            />
-            {params.row.username}
+          <div className="categoryListItem">
+            {params.row.estado ? "Activo" : "Inactivo"}
           </div>
         );
       },
-    },
-    { field: "email", headerName: "Email", flex: 1 },
-    {
-      field: "status",
-      headerName: "Estatus",
-      flex: 1,
     },
     {
       field: "action",
@@ -47,13 +65,15 @@ export default function SupplierList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/supplier/" + params.row.id}>
+            <Link to={"/supplier/" + params.row.uid}>
               <button className="supplierListEdit">Editar</button>
             </Link>
-            <DeleteOutline
-              className="supplierListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
+            {params.row.estado && (
+              <DeleteOutline
+                className="categoryListDelete"
+                onClick={() => handleDelete(params.row.uid)}
+              />
+            )}
           </>
         );
       },
@@ -65,13 +85,13 @@ export default function SupplierList() {
       <MyFab route="/newsupplier" />
       <div className="dataGrid">
         <DataGrid
-          rows={data}
+          rows={suppliersData}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           pageSize={10}
           rowsPerPageOptions={[10]}
-          // getRowId={(e) => e.uid}
-          // loading={loading}
+          getRowId={(e) => e.uid}
+          loading={loading}
           filterMode="client"
         />
       </div>

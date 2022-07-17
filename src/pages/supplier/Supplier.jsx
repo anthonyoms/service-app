@@ -1,107 +1,284 @@
 import {
-  CalendarToday,
+  AssignmentIndOutlined,
   LocationSearching,
   MailOutline,
-  PermIdentity,
+  ContactsOutlined,
   PhoneAndroid,
-  Publish,
+  Public,
+  LocationOnOutlined,
 } from "@material-ui/icons";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import Loading from "../../components/ui/Loading";
+import useForm from "../../hooks/useForm";
+import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
+import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
+import { dataValidation, swalLoading } from "../../utils/helpers/messages";
 import "./supplier.css";
 
 export default function Supplier() {
+  const [{ supplier, loading }, setSupplier] = useState({
+    supplier: null,
+    loading: true,
+  });
+  const [supplierValues, handleInputChange, reset] = useForm({
+    nombre: "",
+    direccion: "",
+    telefono: "",
+    contacto: "",
+    ciudad: "",
+    pais: "",
+    estado: true,
+    vendedor: "",
+  });
+  const {
+    nombre,
+    direccion,
+    telefono,
+    contacto,
+    ciudad,
+    pais,
+    estado,
+    vendedor,
+  } = supplierValues;
+
+  useEffect(() => {
+    loadSupplier();
+  }, []);
+
+  const loadSupplier = async () => {
+    const id = window.location.pathname.split("/")[2];
+    const dataResponse = await getServiceApp(`${endpoints.suppliers}/${id}`);
+    const validData = dataValidation(dataResponse, false);
+    if (validData.ok) {
+      setSupplier({ supplier: validData.suplidor, loading: false });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    swalLoading();
+    const payload = {
+      nombre: nombre || supplier.nombre,
+      direccion: direccion || supplier.direccion,
+      telefono: telefono || supplier.telefono,
+      contacto: contacto || supplier.contacto,
+      ciudad: ciudad || supplier.ciudad,
+      pais: pais || supplier.pais,
+      estado: estado,
+      vendedor: vendedor || supplier.vendedor,
+    };
+    const dataResponse = await updateServiceApp(
+      payload,
+      endpoints.suppliers,
+      supplier.uid
+    );
+    const validData = await dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+      loadSupplier();
+    }
+  };
+
+  const handleChangeNumber = (e) => {
+    const target = handleFormatNumber(e);
+    handleInputChange(target);
+  };
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="user">
-      <div className="userTitleContainer">
-        <h1 className="userTitle">Actualización de suplidor</h1>
+    <div className="supplier">
+      <div className="supplierTitleContainer">
+        <h1 className="supplierTitle">Actualización de suplidor</h1>
       </div>
-      <div className="userContainer">
-        <div className="userShow">
-          <div className="userShowTop">
-            <img
-              src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt=""
-              className="userShowImg"
-            />
-            <div className="userShowTopTitle">
-              <span className="userShowUsername">Anna Becker</span>
-              <span className="userShowUserTitle">Software Engineer</span>
+      <div className="supplierContainer">
+        <div className="supplierShow">
+          <div className="supplierShowTop">
+            <div className="supplierShowTopTitle">
+              <span className="supplierShowsuppliername">
+                {supplier?.nombre}
+              </span>
+              <span
+                className={
+                  supplier?.estado ? "supplierActive" : "supplierDisabled"
+                }
+              >
+                {supplier?.estado ? "Activo" : "Inactivo"}
+              </span>
             </div>
           </div>
-          <div className="userShowBottom">
-            <span className="userShowTitle">Detalles de la cuenta</span>
-            <div className="userShowInfo">
-              <PermIdentity className="userShowIcon" />
-              <span className="userShowInfoTitle">annabeck99</span>
+          <div className="supplierShowBottom">
+            <span className="supplierShowTitle">Detalles de la cuenta</span>
+            <div className="supplierShowInfo">
+              <ContactsOutlined className="supplierShowIcon" />
+
+              <span className="supplierShowInfoTitle">
+                {supplier?.vendedor || "Sin vendedor registrado"}
+              </span>
             </div>
-            <div className="userShowInfo">
-              <CalendarToday className="userShowIcon" />
-              <span className="userShowInfoTitle">10.12.1999</span>
+            <div className="supplierShowInfo">
+              <AssignmentIndOutlined className="supplierShowIcon" />
+              <span className="supplierShowInfoTitle">
+                {supplier?.cedula_rnc}
+              </span>
             </div>
-            <span className="userShowTitle">Detalles de contacto</span>
-            <div className="userShowInfo">
-              <PhoneAndroid className="userShowIcon" />
-              <span className="userShowInfoTitle">+1 123 456 67</span>
+            <span className="supplierShowTitle">Detalles de contacto</span>
+            <div className="supplierShowInfo">
+              <PhoneAndroid className="supplierShowIcon" />
+              <span className="supplierShowInfoTitle">
+                {supplier?.telefono}
+              </span>
             </div>
-            <div className="userShowInfo">
-              <MailOutline className="userShowIcon" />
-              <span className="userShowInfoTitle">annabeck99@gmail.com</span>
+            <div className="supplierShowInfo">
+              <MailOutline className="supplierShowIcon" />
+              <span className="supplierShowInfoTitle">
+                {supplier?.contacto}
+              </span>
             </div>
-            <div className="userShowInfo">
-              <LocationSearching className="userShowIcon" />
-              <span className="userShowInfoTitle">New York | USA</span>
+            <div className="supplierShowInfo">
+              <Public className="supplierShowIcon" />
+              <span className="supplierShowInfoTitle">{supplier?.pais}</span>
+            </div>
+            <div className="supplierShowInfo">
+              <LocationOnOutlined className="supplierShowIcon" />
+              <span className="supplierShowInfoTitle">{supplier?.ciudad}</span>
+            </div>
+            <div className="supplierShowInfo">
+              <LocationSearching className="supplierShowIcon" />
+              <span className="supplierShowInfoTitle">
+                {supplier?.direccion}
+              </span>
             </div>
           </div>
         </div>
-        <div className="userUpdate">
-          <span className="userUpdateTitle">Editar</span>
-          <form className="userUpdateForm">
-            <div className="userUpdateLeft">
-              <div className="userUpdateItem">
-                <label>Razón social</label>
-                <input
-                  type="text"
-                  placeholder="Anna Becker"
-                  className="userUpdateInput"
+        <div className="supplierUpdate">
+          <span className="supplierUpdateTitle">Editar</span>
+          <form onSubmit={handleSubmit} className="supplierUpdateForm">
+            <div className="supplierUpdateLeft">
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="nombre"
+                  label="Nombre"
+                  name="nombre"
+                  variant="outlined"
+                  autoComplete="off"
+                  size="small"
+                  inputProps={{ maxLength: "50" }}
+                  value={nombre}
+                  onChange={handleInputChange}
                 />
               </div>
-              <div className="userUpdateItem">
-                <label>Email</label>
-                <input
-                  type="text"
-                  placeholder="annabeck99@gmail.com"
-                  className="userUpdateInput"
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="telefono"
+                  label="Teléfono"
+                  name="telefono"
+                  variant="outlined"
+                  autoComplete="off"
+                  size="small"
+                  inputProps={{ maxLength: "10" }}
+                  value={telefono}
+                  onChange={handleChangeNumber}
                 />
               </div>
-              <div className="userUpdateItem">
-                <label>Teléfono</label>
-                <input
-                  type="text"
-                  placeholder="+1 123 456 67"
-                  className="userUpdateInput"
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="contacto"
+                  label="Contacto"
+                  name="contacto"
+                  variant="outlined"
+                  autoComplete="off"
+                  size="small"
+                  inputProps={{ maxLength: "50" }}
+                  value={contacto}
+                  onChange={handleInputChange}
                 />
               </div>
-              <div className="userUpdateItem">
-                <label>Dirección</label>
-                <input
-                  type="text"
-                  placeholder="New York | USA"
-                  className="userUpdateInput"
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="direccion"
+                  label="Dirección"
+                  name="direccion"
+                  variant="outlined"
+                  autoComplete="off"
+                  multiline
+                  rows={5}
+                  size="small"
+                  inputProps={{ maxLength: "100" }}
+                  value={direccion}
+                  onChange={handleInputChange}
                 />
+              </div>
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="vendedor"
+                  label="Vendedor"
+                  name="vendedor"
+                  variant="outlined"
+                  autoComplete="off"
+                  size="small"
+                  inputProps={{ maxLength: "50" }}
+                  value={vendedor}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="ciudad"
+                  label="Ciudad"
+                  name="ciudad"
+                  variant="outlined"
+                  autoComplete="off"
+                  size="small"
+                  inputProps={{ maxLength: "50" }}
+                  value={ciudad}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="supplierUpdateItem">
+                <TextField
+                  id="pais"
+                  label="País"
+                  name="pais"
+                  variant="outlined"
+                  autoComplete="off"
+                  size="small"
+                  inputProps={{ maxLength: "50" }}
+                  value={pais}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="supplierUpdateItem">
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label-estado">
+                    Activo
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label-estado"
+                    id="demo-simple-select-estado"
+                    name="estado"
+                    label="Estado"
+                    size="small"
+                    value={estado}
+                    onChange={handleInputChange}
+                  >
+                    <MenuItem value={true}>Si</MenuItem>
+                    <MenuItem value={false}>No</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
             </div>
-            <div className="userUpdateRight">
-              <div className="userUpdateUpload">
-                <img
-                  className="userUpdateImg"
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                />
-                <label htmlFor="file">
-                  <Publish className="userUpdateIcon" />
-                </label>
-                <input type="file" id="file" style={{ display: "none" }} />
-              </div>
-              <button className="userUpdateButton">Actualizar</button>
+            <div className="supplierUpdateRight">
+              <button className="supplierUpdateButton">Actualizar</button>
             </div>
           </form>
         </div>

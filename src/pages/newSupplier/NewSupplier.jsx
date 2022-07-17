@@ -1,25 +1,46 @@
 import { TextField } from "@mui/material";
 import useForm from "../../hooks/useForm";
+import { postServiceApp } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
+import { dataValidation } from "../../utils/helpers/messages";
 import "./newSupplier.css";
 
 export default function NewSupplier() {
   const [
-    { cedula, nombre, ciudad, pais, telefono, contacto, direccion },
+    { cedula_rnc, nombre, ciudad, pais, telefono, contacto, direccion, vendedor },
     handleInputChange,
     reset,
   ] = useForm({
-    cedula: "",
+    cedula_rnc: "",
     nombre: "",
     ciudad: "",
     pais: "",
     telefono: "",
     contacto: "",
     direccion: "",
+    vendedor: "",
   });
   const handleChangeNumber = (e) => {
     const target = handleFormatNumber(e);
     handleInputChange(target);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      cedula_rnc,
+      nombre,
+      ciudad,
+      pais,
+      telefono,
+      contacto,
+      direccion,
+    };
+    const dataResponse = await postServiceApp(payload, endpoints.suppliers);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      reset();
+    }
   };
   const textFieldValidation = (e, regex) => {
     // if value is not blank, then test the regex
@@ -31,17 +52,17 @@ export default function NewSupplier() {
   return (
     <div className="newSupplier">
       <h1 className="newSupplierTitle">Registro de suplidores</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="newSupplierForm">
           <div className="newSupplierItem">
             <TextField
-              id="cedula"
+              id="cedula_rnc"
               label="Cedula/Rnc"
-              name="cedula"
+              name="cedula_rnc"
               variant="outlined"
               autoComplete="off"
               inputProps={{ maxLength: "11" }}
-              value={cedula}
+              value={cedula_rnc}
               onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
             />
           </div>
@@ -66,7 +87,7 @@ export default function NewSupplier() {
               autoComplete="off"
               inputProps={{ maxLength: "50" }}
               value={ciudad}
-              onChange={(e) => textFieldValidation(e, /^[a-zA-Z ]*$/)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="newSupplierItem">
@@ -78,7 +99,7 @@ export default function NewSupplier() {
               autoComplete="off"
               inputProps={{ maxLength: "50" }}
               value={pais}
-              onChange={(e) => textFieldValidation(e, /^[a-zA-Z ]*$/)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="newSupplierItem">
@@ -102,6 +123,18 @@ export default function NewSupplier() {
               autoComplete="off"
               inputProps={{ maxLength: "50" }}
               value={contacto}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="newSupplierItem">
+            <TextField
+              id="vendedor"
+              label="Vendedor"
+              name="vendedor"
+              variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "50" }}
+              value={vendedor}
               onChange={handleInputChange}
             />
           </div>

@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 const defaultErrorMsg =
-  "Por favor comunicarse con el administrador del sistema";
+  "Por favor comunicarse con el administrador del sistema.";
 
 export const successMsg = (text) => {
   Swal.fire({

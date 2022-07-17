@@ -150,7 +150,7 @@ export default function Category() {
             />
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label-estado">
-                Estado
+                Activo
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label-estado"
