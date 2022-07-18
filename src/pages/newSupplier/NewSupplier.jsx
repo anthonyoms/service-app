@@ -8,7 +8,16 @@ import "./newSupplier.css";
 
 export default function NewSupplier() {
   const [
-    { cedula_rnc, nombre, ciudad, pais, telefono, contacto, direccion, vendedor },
+    {
+      cedula_rnc,
+      nombre,
+      ciudad,
+      pais,
+      telefono,
+      contacto,
+      direccion,
+      vendedor,
+    },
     handleInputChange,
     reset,
   ] = useForm({
@@ -138,14 +147,12 @@ export default function NewSupplier() {
               onChange={handleInputChange}
             />
           </div>
-          <div className="newSupplierItem">
+          <div className="newSupplierItemAdress">
             <TextField
               id="direccion"
               label="Dirección"
               name="direccion"
               variant="outlined"
-              multiline
-              rows={5}
               autoComplete="off"
               inputProps={{ maxLength: "100" }}
               value={direccion}

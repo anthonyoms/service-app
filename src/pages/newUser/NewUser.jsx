@@ -253,7 +253,7 @@ export default function NewUser() {
               onChange={handleInputChange}
             />
           </div>
-          <div className="newUserItem2">
+          <div className="newSupplierItem">
             <InputLabel htmlFor="img">Imagen de usuario</InputLabel>
             <TextField
               id="img"

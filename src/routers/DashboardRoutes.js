@@ -24,6 +24,7 @@ import Service from "../pages/productService/Service";
 import NewService from "../pages/newService/NewService";
 import ServiceManagementList from "../pages/serviceManagementList/ServiceManagementList";
 import SalesManagementList from "../pages/salesManagementList/SalesManagementList";
+import NewOrder from "../pages/newOrder/NewOrder";
 
 export const DashboardRoutes = () => {
   return (
@@ -65,7 +66,10 @@ export const DashboardRoutes = () => {
           <Route path="/service/:serviceId" element={<Service />} />
           <Route path="/newservice" element={<NewService />} />
 
-          {/*Sales routes */}
+          {/*Orders routes */}
+          <Route path="/orders" element={<ServiceList />} />
+          <Route path="/order/:orderId" element={<Service />} />
+          <Route path="/neworder" element={<NewOrder />} />
 
           <Route
             path="/servicemanagement"
