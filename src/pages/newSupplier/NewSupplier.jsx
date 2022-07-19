@@ -44,6 +44,7 @@ export default function NewSupplier() {
       telefono,
       contacto,
       direccion,
+      vendedor,
     };
     const dataResponse = await postServiceApp(payload, endpoints.suppliers);
     const validData = dataValidation(dataResponse);

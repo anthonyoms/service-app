@@ -1,12 +1,57 @@
-import { TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import "./newOrder.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getServiceApp } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
+import Loading from "../../components/ui/Loading";
+import moment from "moment";
+import { useRef } from "react";
 
 export default function NewOrder() {
-  const [data, setData] = useState([]);
+  const [
+    { loading, suppliersData, productsData, supplierSelected },
+    setDataState,
+  ] = useState({
+    loading: true,
+    suppliersData: [],
+    productsData: [],
+    supplierSelected: {},
+    currentProductSelected: {},
+  });
+
+  let totalRefence = useRef(0);
+
+  useEffect(() => {
+    loadSuppliers();
+  }, []);
+
+  const loadSuppliers = async () => {
+    const [suppliersDataResponse, productsDataResponse] = await Promise.all([
+      getServiceApp(endpoints.suppliers),
+      getServiceApp(endpoints.products),
+    ]);
+
+    const validDataSupplier = dataValidation(suppliersDataResponse, false);
+    const validDataProduct = dataValidation(productsDataResponse, false);
+    if (validDataSupplier.ok && validDataProduct.ok) {
+      setDataState({
+        loading: false,
+        suppliersData: validDataSupplier.suplidor,
+        productsData: validDataProduct.productos,
+      });
+    }
+  };
+
+  const handleSupplier = async (e, params) => {
+    e.preventDefault();
+    setDataState((data) => {
+      return { ...data, supplierSelected: params };
+    });
+  };
   const columns = [
     { field: "id", headerName: "ID", flex: 1, hide: true },
     {
@@ -49,6 +94,9 @@ export default function NewOrder() {
       },
     },
   ];
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className="newOrder">
       <div className="newOrderTitleContainer">
@@ -59,15 +107,19 @@ export default function NewOrder() {
       </div>
       <div className="newOrderTop">
         <div className="newOrderTopLeft">
-          <TextField
-            id="suplidor"
-            label="Suplidor"
-            name="suplidor"
-            variant="outlined"
-            autoComplete="off"
-            sx={{ m: 1 }}
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={suppliersData}
+            getOptionLabel={(option) =>
+              `${option.nombre} -${option.cedula_rnc}`
+            }
+            onChange={(e, params) => handleSupplier(e, params)}
+            sx={{ marginLeft: "8px", marginBottom: "6px" }}
             size="small"
-            inputProps={{ maxLength: "50" }}
+            renderInput={(params) => (
+              <TextField size="small" {...params} label="Suplidor" />
+            )}
           />
           <TextField
             id="vendedor"
@@ -77,7 +129,8 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "50" }}
+            inputProps={{ readOnly: true }}
+            value={supplierSelected?.vendedor || ""}
           />
           <TextField
             id="cedulaRnc"
@@ -87,7 +140,8 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "50" }}
+            inputProps={{ readOnly: true }}
+            value={supplierSelected?.cedula_rnc || ""}
           />
           <TextField
             id="contacto"
@@ -97,7 +151,8 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "50" }}
+            inputProps={{ readOnly: true }}
+            value={supplierSelected?.contacto || ""}
           />
           <TextField
             id="telefono"
@@ -107,7 +162,8 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "10" }}
+            inputProps={{ readOnly: true }}
+            value={supplierSelected?.telefono || ""}
           />
           <TextField
             id="fechaEmision"
@@ -117,7 +173,8 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "10" }}
+            inputProps={{ readOnly: true }}
+            defaultValue={moment().format("DD/MM/YYYY")}
           />
           <TextField
             id="vence"
@@ -127,7 +184,8 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "10" }}
+            inputProps={{ readOnly: true }}
+            defaultValue={moment().add(1, "M").format("DD/MM/YYYY")}
           />
           <TextField
             id="total"
@@ -137,22 +195,22 @@ export default function NewOrder() {
             autoComplete="off"
             sx={{ m: 1 }}
             size="small"
-            inputProps={{ maxLength: "10" }}
+            value={supplierSelected?.total || 0}
           />
         </div>
         <div className="newOrderTopRight">
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo-2"
+            options={productsData}
+            getOptionLabel={(option) => option.nombre}
+            size="small"
+            sx={{ marginBottom: "6px" }}
+            renderInput={(params) => (
+              <TextField {...params} label="Nombre del producto" />
+            )}
+          />
           <div className="newOrderForm">
-            <div className="newOrderItem">
-              <TextField
-                id="nombreProducto"
-                label="Nombre del Producto"
-                name="nombre"
-                variant="outlined"
-                autoComplete="off"
-                size="small"
-                inputProps={{ maxLength: "50" }}
-              />
-            </div>
             <div className="newOrderItem">
               <TextField
                 id="cantidadActual"
@@ -209,12 +267,28 @@ export default function NewOrder() {
               />
             </div>
           </div>
-          <button className="newOrderButton">Agregar Producto</button>
+          <button
+            onClick={() =>
+              setDataState((data) => {
+                totalRefence.current++;
+                return {
+                  ...data,
+                  supplierSelected: {
+                    ...data.supplierSelected,
+                    total: totalRefence.current,
+                  },
+                };
+              })
+            }
+            className="newOrderButton"
+          >
+            Agregar Producto
+          </button>
         </div>
       </div>
       <div className="newOrderBottom">
         <DataGrid
-          rows={data}
+          rows={[]}
           columns={columns}
           pageSize={8}
           rowsPerPageOptions={[8]}
