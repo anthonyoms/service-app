@@ -9,6 +9,13 @@ export const successMsg = (text) => {
     text,
   });
 };
+export const infoMsg = (text) => {
+  Swal.fire({
+    icon: "info",
+    title: "Advertencia!",
+    text,
+  });
+};
 
 export const errorMsg = (text = defaultErrorMsg) => {
   Swal.fire({

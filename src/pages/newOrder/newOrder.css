@@ -130,6 +130,11 @@
   align-items: center;
 }
 
+.orderListDelete{
+  color: red;
+  cursor: pointer;
+}
+
 .newOrderButton {
   width: 200px;
   border: none;
