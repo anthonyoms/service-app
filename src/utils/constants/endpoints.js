@@ -4,4 +4,6 @@ export const endpoints = {
   products: "/productos",
   uploads: "/uploads",
   suppliers: "/suplidores",
+  ordenes: "/ordenes",
+  detalleOrdenes: "/detalleOrdenes",
 };

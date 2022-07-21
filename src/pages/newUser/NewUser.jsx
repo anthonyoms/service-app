@@ -14,6 +14,7 @@ import { createUsername } from "../../utils/helpers/createUsername";
 import { endpoints } from "../../utils/constants/endpoints";
 import { saveWithImage } from "../../services/serviceApp";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
+import { MyBackdrop } from "../../components/ui/Backdrop";
 
 export default function NewUser() {
   const [
@@ -47,7 +48,7 @@ export default function NewUser() {
     rol: "",
     img: "",
   });
-
+  const [loading, setLoading] = useState(false);
   const [userImage, setUserImage] = useState(null);
   const handleChangeDate = (newValue) => {
     handleInputChange({ target: { name: "fechaNacimiento", value: newValue } });
@@ -73,7 +74,9 @@ export default function NewUser() {
       estadoCivil,
       rol,
     };
+    setLoading(true);
     const isSaveUser = await saveWithImage(payload, userImage, endpoints.users);
+    setLoading(false);
     if (isSaveUser.ok) {
       reset();
     }
@@ -90,186 +93,189 @@ export default function NewUser() {
     handleInputChange(target);
   };
   return (
-    <div className="newUser">
-      <h1 className="newUserTitle">Registro de usuario</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="newUserForm">
-          <div className="newUserItem">
-            <TextField
-              id="cedula"
-              label="Cedula*"
-              name="cedula"
-              variant="outlined"
-              autoComplete="off"
-              inputProps={{ maxLength: "11" }}
-              value={cedula}
-              onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
-            />
-          </div>
-          <div className="newUserItem">
-            <TextField
-              id="correo"
-              label="Email"
-              name="correo"
-              variant="outlined"
-              autoComplete="off"
-              inputProps={{ maxLength: "50" }}
-              value={correo}
-              onChange={handleInputChange}
-              onBlur={getUsername}
-            />
-          </div>
-          <div className="newUserItem">
-            <TextField
-              id="usuario"
-              label="Nombre de usuario"
-              name="usuario"
-              variant="outlined"
-              autoComplete="off"
-              value={usuario}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </div>
-          <div className="newUserItem">
-            <TextField
-              id="nombre"
-              label="Nombre"
-              name="nombre"
-              variant="outlined"
-              autoComplete="off"
-              inputProps={{ maxLength: "50" }}
-              value={nombre}
-              onChange={(e) => textFieldValidation(e, /^[a-zA-Z ]*$/)}
-            />
-          </div>
-          <div className="newUserItem">
-            <TextField
-              id="password"
-              label="Contraseña"
-              name="password"
-              variant="outlined"
-              inputProps={{ maxLength: "50" }}
-              type={"password"}
-              autoComplete="off"
-              value={password}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="newUserItem">
-            <TextField
-              id="telefono"
-              label="Teléfono"
-              name="telefono"
-              variant="outlined"
-              autoComplete="off"
-              inputProps={{ maxLength: "10" }}
-              value={telefono}
-              onChange={handleChangeNumber}
-            />
-          </div>
-          <div className="newUserItem">
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DesktopDatePicker
-                label="Fecha de nacimiento"
-                inputFormat="dd/MM/yyyy"
-                value={fechaNacimiento}
-                onChange={handleChangeDate}
-                renderInput={(params) => (
-                  <TextField autoComplete="off" {...params} />
-                )}
+    <>
+      <MyBackdrop loading={loading} />
+      <div className="newUser">
+        <h1 className="newUserTitle">Registro de usuario</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="newUserForm">
+            <div className="newUserItem">
+              <TextField
+                id="cedula"
+                label="Cedula*"
+                name="cedula"
+                variant="outlined"
+                autoComplete="off"
+                inputProps={{ maxLength: "11" }}
+                value={cedula}
+                onChange={(e) => textFieldValidation(e, /^[0-9\b]+$/)}
               />
-            </LocalizationProvider>
-          </div>
-          <div className="newUserItem">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Rol</InputLabel>
-              <Select
-                labelId="demo-simple-select-label-rol"
-                id="demo-simple-select-rol"
-                name="rol"
-                label="Rol"
-                value={rol}
+            </div>
+            <div className="newUserItem">
+              <TextField
+                id="correo"
+                label="Email"
+                name="correo"
+                variant="outlined"
+                autoComplete="off"
+                inputProps={{ maxLength: "50" }}
+                value={correo}
                 onChange={handleInputChange}
-              >
-                <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
-                <MenuItem value={"TECNICO_MESA"}>
-                  Técnico mesa de ayuda
-                </MenuItem>
-                <MenuItem value={"CAJERO"}>Cajero</MenuItem>
-                <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className="newUserItem">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label-genero">
-                Genero
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label-genero"
-                id="demo-simple-select-genero"
-                name="genero"
-                label="Genero"
-                value={genero}
+                onBlur={getUsername}
+              />
+            </div>
+            <div className="newUserItem">
+              <TextField
+                id="usuario"
+                label="Nombre de usuario"
+                name="usuario"
+                variant="outlined"
+                autoComplete="off"
+                value={usuario}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </div>
+            <div className="newUserItem">
+              <TextField
+                id="nombre"
+                label="Nombre"
+                name="nombre"
+                variant="outlined"
+                autoComplete="off"
+                inputProps={{ maxLength: "50" }}
+                value={nombre}
+                onChange={(e) => textFieldValidation(e, /^[a-zA-Z ]*$/)}
+              />
+            </div>
+            <div className="newUserItem">
+              <TextField
+                id="password"
+                label="Contraseña"
+                name="password"
+                variant="outlined"
+                inputProps={{ maxLength: "50" }}
+                type={"password"}
+                autoComplete="off"
+                value={password}
                 onChange={handleInputChange}
-              >
-                <MenuItem value={"masculino"}>Masculino</MenuItem>
-                <MenuItem value={"femenino"}>Femenino</MenuItem>
-                <MenuItem value={"otro"}>Otro</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className="newUserItem">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label-estadoCivil">
-                Estado Civil
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label-estadoCivil"
-                id="demo-simple-select-estadoCivil"
-                name="estadoCivil"
-                label="Estado Civil"
-                value={estadoCivil}
+              />
+            </div>
+            <div className="newUserItem">
+              <TextField
+                id="telefono"
+                label="Teléfono"
+                name="telefono"
+                variant="outlined"
+                autoComplete="off"
+                inputProps={{ maxLength: "10" }}
+                value={telefono}
+                onChange={handleChangeNumber}
+              />
+            </div>
+            <div className="newUserItem">
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  label="Fecha de nacimiento"
+                  inputFormat="dd/MM/yyyy"
+                  value={fechaNacimiento}
+                  onChange={handleChangeDate}
+                  renderInput={(params) => (
+                    <TextField autoComplete="off" {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+            </div>
+            <div className="newUserItem">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Rol</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-rol"
+                  id="demo-simple-select-rol"
+                  name="rol"
+                  label="Rol"
+                  value={rol}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
+                  <MenuItem value={"TECNICO_MESA"}>
+                    Técnico mesa de ayuda
+                  </MenuItem>
+                  <MenuItem value={"CAJERO"}>Cajero</MenuItem>
+                  <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <div className="newUserItem">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-genero">
+                  Genero
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-genero"
+                  id="demo-simple-select-genero"
+                  name="genero"
+                  label="Genero"
+                  value={genero}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value={"masculino"}>Masculino</MenuItem>
+                  <MenuItem value={"femenino"}>Femenino</MenuItem>
+                  <MenuItem value={"otro"}>Otro</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <div className="newUserItem">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-estadoCivil">
+                  Estado Civil
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-estadoCivil"
+                  id="demo-simple-select-estadoCivil"
+                  name="estadoCivil"
+                  label="Estado Civil"
+                  value={estadoCivil}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value={"Casado"}>Casado</MenuItem>
+                  <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
+                  <MenuItem value={"Soltero"}>Soltero</MenuItem>
+                  <MenuItem value={"Viudo"}>Viudo</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <div className="newUserItem2">
+              <TextField
+                id="direccion"
+                label="Dirección"
+                name="direccion"
+                variant="outlined"
+                autoComplete="off"
+                inputProps={{ maxLength: "100" }}
+                value={direccion}
                 onChange={handleInputChange}
-              >
-                <MenuItem value={"Casado"}>Casado</MenuItem>
-                <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
-                <MenuItem value={"Soltero"}>Soltero</MenuItem>
-                <MenuItem value={"Viudo"}>Viudo</MenuItem>
-              </Select>
-            </FormControl>
+              />
+            </div>
+            <div className="newSupplierItem">
+              <InputLabel htmlFor="img">Imagen de usuario</InputLabel>
+              <TextField
+                id="img"
+                name="img"
+                variant="outlined"
+                type="file"
+                value={img}
+                onChange={(e) => {
+                  handleInputChange(e);
+                  setUserImage(e.target.files[0]);
+                }}
+              />
+            </div>
           </div>
-          <div className="newUserItem2">
-            <TextField
-              id="direccion"
-              label="Dirección"
-              name="direccion"
-              variant="outlined"
-              autoComplete="off"
-              inputProps={{ maxLength: "100" }}
-              value={direccion}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="newSupplierItem">
-            <InputLabel htmlFor="img">Imagen de usuario</InputLabel>
-            <TextField
-              id="img"
-              name="img"
-              variant="outlined"
-              type="file"
-              value={img}
-              onChange={(e) => {
-                handleInputChange(e);
-                setUserImage(e.target.files[0]);
-              }}
-            />
-          </div>
-        </div>
-        <button className="newUserButton">Crear</button>
-      </form>
-    </div>
+          <button className="newUserButton">Crear</button>
+        </form>
+      </div>
+    </>
   );
 }

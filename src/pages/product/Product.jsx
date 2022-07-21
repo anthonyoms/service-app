@@ -17,7 +17,7 @@ import {
   uploadFileServiceApp,
 } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
-import { dataValidation, swalLoading } from "../../utils/helpers/messages";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function Product() {
   const [{ product, loading }, setProducts] = useState({
@@ -77,7 +77,7 @@ export default function Product() {
       categoria: categoria || product?.categoria?.uid,
       descripcion: descripcion || product.descripcion,
     };
-    swalLoading();
+
     const dataResponse = await updateServiceApp(
       payload,
       endpoints.products,

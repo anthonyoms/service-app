@@ -20,7 +20,7 @@ import useForm from "../../hooks/useForm";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
-import { dataValidation, swalLoading } from "../../utils/helpers/messages";
+import { dataValidation } from "../../utils/helpers/messages";
 import "./supplier.css";
 
 export default function Supplier() {
@@ -64,7 +64,6 @@ export default function Supplier() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    swalLoading();
     const payload = {
       nombre: nombre || supplier.nombre,
       direccion: direccion || supplier.direccion,

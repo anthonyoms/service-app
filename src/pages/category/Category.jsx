@@ -17,7 +17,7 @@ import {
 } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import Loading from "../../components/ui/Loading";
-import { dataValidation, swalLoading } from "../../utils/helpers/messages";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export default function Category() {
   const [{ category, loading }, setCategory] = useState({
@@ -52,7 +52,6 @@ export default function Category() {
       descripcion: descripcion || category.descripcion,
       estado: estado,
     };
-    swalLoading();
     const dataResponse = await updateServiceApp(
       payload,
       endpoints.categories,

@@ -29,7 +29,7 @@ import {
 } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
-import { dataValidation, swalLoading } from "../../utils/helpers/messages";
+import { dataValidation } from "../../utils/helpers/messages";
 
 import "./user.css";
 
@@ -76,7 +76,7 @@ export default function User() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    swalLoading();
+
     const payload = {
       correo: correo || user?.correo,
       nombre: nombre || user?.nombre,

@@ -1,16 +1,16 @@
 import { Autocomplete, Fab, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Save, DeleteOutline } from "@material-ui/icons";
 import "./newOrder.css";
 import { useCallback, useEffect, useState } from "react";
-import { getServiceApp } from "../../services/serviceApp";
+import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation, infoMsg } from "../../utils/helpers/messages";
-import Loading from "../../components/ui/Loading";
 import moment from "moment";
 import { useRef } from "react";
 import useForm from "../../hooks/useForm";
+import { MyBackdrop } from "../../components/ui/Backdrop";
 
 export default function NewOrder() {
   const style = {
@@ -31,6 +31,7 @@ export default function NewOrder() {
       productsData,
       supplierSelected,
       currentProductSelected,
+      ordenes,
       key,
     },
     setDataState,
@@ -40,6 +41,7 @@ export default function NewOrder() {
     suppliersData: [],
     productsData: [],
     supplierSelected: null,
+    ordenes: null,
     currentProductSelected: null,
     error: false,
   });
@@ -53,18 +55,22 @@ export default function NewOrder() {
   }, []);
 
   const loadSuppliers = async () => {
-    const [suppliersDataResponse, productsDataResponse] = await Promise.all([
-      getServiceApp(endpoints.suppliers),
-      getServiceApp(endpoints.products),
-    ]);
+    const [ordenesDataResponse, suppliersDataResponse, productsDataResponse] =
+      await Promise.all([
+        getServiceApp(endpoints.ordenes),
+        getServiceApp(endpoints.suppliers),
+        getServiceApp(endpoints.products + `?estado=true`),
+      ]);
 
     const validDataSupplier = dataValidation(suppliersDataResponse, false);
     const validDataProduct = dataValidation(productsDataResponse, false);
+    const validDataOrdenes = dataValidation(ordenesDataResponse, false);
     if (validDataSupplier.ok && validDataProduct.ok) {
       setDataState({
         loading: false,
         suppliersData: validDataSupplier.suplidor,
         productsData: validDataProduct.productos,
+        ordenes: validDataOrdenes,
       });
     }
   };
@@ -90,7 +96,6 @@ export default function NewOrder() {
         totalRefence.current -= totalPrice;
         return {
           ...data,
-
           supplierSelected: {
             ...supplierSelected,
             total: totalRefence.current,
@@ -107,10 +112,46 @@ export default function NewOrder() {
   );
 
   const saveOrder = async () => {
+    if (!detalleOrden.length) return infoMsg(`Ningún producto agregado.`);
     if (!supplierSelected?.cedula_rnc) {
       infoMsg(`El campo "Suplidor" es requerido.`);
     } else {
+      setDataState((data) => {
+        return { ...data, loading: true };
+      });
       //save order
+      const payload = {
+        id: ordenes.total + 1,
+        suplidor: supplierSelected.uid,
+        fechaEmision: moment(),
+        fechaVencimineto: moment().add(1, "M"),
+        totalTax: supplierSelected?.total * 0.16,
+        total: supplierSelected?.total,
+      };
+      const isSaveOrder = await postServiceApp(payload, endpoints.ordenes);
+      if (isSaveOrder.ok) {
+        const detallePayload = {
+          ordenCompra: isSaveOrder.ordenCompra.uid,
+          productos: detalleOrden,
+        };
+        const isDetalleSave = await postServiceApp(
+          detallePayload,
+          endpoints.detalleOrdenes
+        );
+        setDataState((data) => {
+          return { ...data, loading: false };
+        });
+        if (isDetalleSave.ok) {
+          dataValidation(isSaveOrder);
+        } else {
+          dataValidation(isDetalleSave, false);
+        }
+      } else {
+        setDataState((data) => {
+          return { ...data, loading: false };
+        });
+        dataValidation(isSaveOrder, false);
+      }
     }
   };
   const handleAddProduct = async (e) => {
@@ -124,6 +165,8 @@ export default function NewOrder() {
           ...detalleOrden,
           {
             ...currentProductSelected,
+            totalTax:
+              currentProductSelected?.precio_compra * cantidadRequerida * 0.16,
             totalPrice:
               currentProductSelected?.precio_compra * cantidadRequerida,
             cantidadRequerida,
@@ -161,16 +204,29 @@ export default function NewOrder() {
       headerName: "Producto",
       flex: 1,
     },
-    { field: "cantidadRequerida", headerName: "Cantidad", flex: 1 },
+    {
+      field: "cantidadRequerida",
+      headerName: "Cantidad",
+      flex: 1,
+      type: "number",
+    },
     {
       field: "precio_compra",
       headerName: "Precio unitario",
       flex: 1,
+      type: "number",
+    },
+    {
+      field: "totalTax",
+      headerName: "Impuesto",
+      flex: 1,
+      type: "number",
     },
     {
       field: "totalPrice",
       headerName: "Precio total",
       flex: 1,
+      type: "number",
     },
     {
       field: "action",
@@ -186,18 +242,19 @@ export default function NewOrder() {
       },
     },
   ];
-  if (loading) {
-    return <Loading />;
-  }
+
   return (
     <>
+      <MyBackdrop loading={loading} />
       <Fab onClick={saveOrder} style={style} color="success" aria-label="add">
         <Save />
       </Fab>
 
       <div className="newOrder">
         <div className="newOrderTitleContainer">
-          <h1 className="newOrderTitle">Orden de compra No. #{1}</h1>
+          <h1 className="newOrderTitle">
+            Orden de compra No. #{ordenes?.total + 1 || 0}
+          </h1>
           <Link to="/newsupplier">
             <button className="newOrderAddButton">Crear Suplidor</button>
           </Link>
@@ -285,6 +342,17 @@ export default function NewOrder() {
               defaultValue={moment().add(1, "M").format("DD/MM/YYYY")}
             />
             <TextField
+              id="totalTax"
+              label="Total impuestos 16%"
+              name="totalTax"
+              variant="outlined"
+              autoComplete="off"
+              sx={{ m: 1 }}
+              size="small"
+              inputProps={{ readOnly: true }}
+              value={supplierSelected?.total * 0.16 || 0}
+            />
+            <TextField
               id="total"
               label="Total orden de compra"
               name="total"
@@ -340,6 +408,7 @@ export default function NewOrder() {
                   id="cantidadRequerida"
                   label="Cantidad requerida*"
                   name="cantidadRequerida"
+                  inputProps={{ maxLength: "5" }}
                   variant="outlined"
                   autoComplete="off"
                   size="small"
@@ -369,10 +438,9 @@ export default function NewOrder() {
                   size="small"
                   inputProps={{ readOnly: true }}
                   value={
-                    ((currentProductSelected?.precio_compra *
-                      cantidadRequerida) /
-                      100) *
-                      16 || 0
+                    currentProductSelected?.precio_compra *
+                      cantidadRequerida *
+                      0.16 || 0
                   }
                 />
               </div>
@@ -404,6 +472,8 @@ export default function NewOrder() {
             pageSize={8}
             rowsPerPageOptions={[8]}
             getRowId={(e) => e.uid}
+            components={{ Toolbar: GridToolbar }}
+            filterMode="client"
           />
         </div>
       </div>

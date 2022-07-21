@@ -1,7 +1,7 @@
 import axios from "axios/dist/axios";
 import { endpoints } from "../utils/constants/endpoints";
 import { httpMethods } from "../utils/constants/httpMethods";
-import { dataValidation, swalLoading } from "../utils/helpers/messages";
+import { dataValidation } from "../utils/helpers/messages";
 
 export const serviceApp = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -40,7 +40,6 @@ export const getServiceApp = async (endpoint) => {
 };
 
 export const deleteServiceApp = async (id, endpoint) => {
-  swalLoading();
   const { data } = await fetchServiceApp(
     `${endpoint}/${id}`,
     {},
@@ -50,7 +49,6 @@ export const deleteServiceApp = async (id, endpoint) => {
 };
 
 export const postServiceApp = async (payload, endpoint) => {
-  swalLoading();
   const { data } = await fetchServiceApp(endpoint, payload, httpMethods.Post);
   return data;
 };
