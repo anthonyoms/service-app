@@ -15,7 +15,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import Loading from "../../components/ui/Loading";
+import { MyBackdrop } from "../../components/ui/Backdrop";
 import useForm from "../../hooks/useForm";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
@@ -90,198 +90,199 @@ export default function Supplier() {
     const target = handleFormatNumber(e);
     handleInputChange(target);
   };
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
-    <div className="supplier">
-      <div className="supplierTitleContainer">
-        <h1 className="supplierTitle">Actualización de suplidor</h1>
-      </div>
-      <div className="supplierContainer">
-        <div className="supplierShow">
-          <div className="supplierShowTop">
-            <div className="supplierShowTopTitle">
-              <span className="supplierShowsuppliername">
-                {supplier?.nombre}
-              </span>
-              <span
-                className={
-                  supplier?.estado ? "supplierActive" : "supplierDisabled"
-                }
-              >
-                {supplier?.estado ? "Activo" : "Inactivo"}
-              </span>
+    <>
+      <MyBackdrop loading={loading} />
+      <div className="supplier">
+        <div className="supplierTitleContainer">
+          <h1 className="supplierTitle">Actualización de suplidor</h1>
+        </div>
+        <div className="supplierContainer">
+          <div className="supplierShow">
+            <div className="supplierShowTop">
+              <div className="supplierShowTopTitle">
+                <span className="supplierShowsuppliername">
+                  {supplier?.nombre}
+                </span>
+                <span
+                  className={
+                    supplier?.estado ? "supplierActive" : "supplierDisabled"
+                  }
+                >
+                  {supplier?.estado ? "Activo" : "Inactivo"}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="supplierShowBottom">
-            <span className="supplierShowTitle">Detalles de la cuenta</span>
-            <div className="supplierShowInfo">
-              <ContactsOutlined className="supplierShowIcon" />
+            <div className="supplierShowBottom">
+              <span className="supplierShowTitle">Detalles de la cuenta</span>
+              <div className="supplierShowInfo">
+                <ContactsOutlined className="supplierShowIcon" />
 
-              <span className="supplierShowInfoTitle">
-                {supplier?.vendedor || "Sin vendedor registrado"}
-              </span>
-            </div>
-            <div className="supplierShowInfo">
-              <AssignmentIndOutlined className="supplierShowIcon" />
-              <span className="supplierShowInfoTitle">
-                {supplier?.cedula_rnc}
-              </span>
-            </div>
-            <span className="supplierShowTitle">Detalles de contacto</span>
-            <div className="supplierShowInfo">
-              <PhoneAndroid className="supplierShowIcon" />
-              <span className="supplierShowInfoTitle">
-                {supplier?.telefono}
-              </span>
-            </div>
-            <div className="supplierShowInfo">
-              <MailOutline className="supplierShowIcon" />
-              <span className="supplierShowInfoTitle">
-                {supplier?.contacto}
-              </span>
-            </div>
-            <div className="supplierShowInfo">
-              <Public className="supplierShowIcon" />
-              <span className="supplierShowInfoTitle">{supplier?.pais}</span>
-            </div>
-            <div className="supplierShowInfo">
-              <LocationOnOutlined className="supplierShowIcon" />
-              <span className="supplierShowInfoTitle">{supplier?.ciudad}</span>
-            </div>
-            <div className="supplierShowInfo">
-              <LocationSearching className="supplierShowIcon" />
-              <span className="supplierShowInfoTitle">
-                {supplier?.direccion}
-              </span>
+                <span className="supplierShowInfoTitle">
+                  {supplier?.vendedor || "Sin vendedor registrado"}
+                </span>
+              </div>
+              <div className="supplierShowInfo">
+                <AssignmentIndOutlined className="supplierShowIcon" />
+                <span className="supplierShowInfoTitle">
+                  {supplier?.cedula_rnc}
+                </span>
+              </div>
+              <span className="supplierShowTitle">Detalles de contacto</span>
+              <div className="supplierShowInfo">
+                <PhoneAndroid className="supplierShowIcon" />
+                <span className="supplierShowInfoTitle">
+                  {supplier?.telefono}
+                </span>
+              </div>
+              <div className="supplierShowInfo">
+                <MailOutline className="supplierShowIcon" />
+                <span className="supplierShowInfoTitle">
+                  {supplier?.contacto}
+                </span>
+              </div>
+              <div className="supplierShowInfo">
+                <Public className="supplierShowIcon" />
+                <span className="supplierShowInfoTitle">{supplier?.pais}</span>
+              </div>
+              <div className="supplierShowInfo">
+                <LocationOnOutlined className="supplierShowIcon" />
+                <span className="supplierShowInfoTitle">
+                  {supplier?.ciudad}
+                </span>
+              </div>
+              <div className="supplierShowInfo">
+                <LocationSearching className="supplierShowIcon" />
+                <span className="supplierShowInfoTitle">
+                  {supplier?.direccion}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="supplierUpdate">
-          <span className="supplierUpdateTitle">Editar</span>
-          <form onSubmit={handleSubmit} className="supplierUpdateForm">
-            <div className="supplierUpdateLeft">
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="nombre"
-                  label="Nombre"
-                  name="nombre"
-                  variant="outlined"
-                  autoComplete="off"
-                  size="small"
-                  inputProps={{ maxLength: "50" }}
-                  value={nombre}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="telefono"
-                  label="Teléfono"
-                  name="telefono"
-                  variant="outlined"
-                  autoComplete="off"
-                  size="small"
-                  inputProps={{ maxLength: "10" }}
-                  value={telefono}
-                  onChange={handleChangeNumber}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="contacto"
-                  label="Contacto"
-                  name="contacto"
-                  variant="outlined"
-                  autoComplete="off"
-                  size="small"
-                  inputProps={{ maxLength: "50" }}
-                  value={contacto}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="direccion"
-                  label="Dirección"
-                  name="direccion"
-                  variant="outlined"
-                  autoComplete="off"
-                  multiline
-                  rows={5}
-                  size="small"
-                  inputProps={{ maxLength: "100" }}
-                  value={direccion}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="vendedor"
-                  label="Vendedor"
-                  name="vendedor"
-                  variant="outlined"
-                  autoComplete="off"
-                  size="small"
-                  inputProps={{ maxLength: "50" }}
-                  value={vendedor}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="ciudad"
-                  label="Ciudad"
-                  name="ciudad"
-                  variant="outlined"
-                  autoComplete="off"
-                  size="small"
-                  inputProps={{ maxLength: "50" }}
-                  value={ciudad}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <TextField
-                  id="pais"
-                  label="País"
-                  name="pais"
-                  variant="outlined"
-                  autoComplete="off"
-                  size="small"
-                  inputProps={{ maxLength: "50" }}
-                  value={pais}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="supplierUpdateItem">
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label-estado">
-                    Activo
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label-estado"
-                    id="demo-simple-select-estado"
-                    name="estado"
-                    label="Estado"
+          <div className="supplierUpdate">
+            <span className="supplierUpdateTitle">Editar</span>
+            <form onSubmit={handleSubmit} className="supplierUpdateForm">
+              <div className="supplierUpdateLeft">
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="nombre"
+                    label="Nombre"
+                    name="nombre"
+                    variant="outlined"
+                    autoComplete="off"
                     size="small"
-                    value={estado}
+                    inputProps={{ maxLength: "50" }}
+                    value={nombre}
                     onChange={handleInputChange}
-                  >
-                    <MenuItem value={true}>Si</MenuItem>
-                    <MenuItem value={false}>No</MenuItem>
-                  </Select>
-                </FormControl>
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="telefono"
+                    label="Teléfono"
+                    name="telefono"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "10" }}
+                    value={telefono}
+                    onChange={handleChangeNumber}
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="contacto"
+                    label="Contacto"
+                    name="contacto"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={contacto}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="direccion"
+                    label="Dirección"
+                    name="direccion"
+                    variant="outlined"
+                    autoComplete="off"
+                    multiline
+                    rows={5}
+                    size="small"
+                    inputProps={{ maxLength: "100" }}
+                    value={direccion}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="vendedor"
+                    label="Vendedor"
+                    name="vendedor"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={vendedor}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="ciudad"
+                    label="Ciudad"
+                    name="ciudad"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={ciudad}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="pais"
+                    label="País"
+                    name="pais"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={pais}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="supplierUpdateItem">
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label-estado">
+                      Activo
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label-estado"
+                      id="demo-simple-select-estado"
+                      name="estado"
+                      label="Estado"
+                      size="small"
+                      value={estado}
+                      onChange={handleInputChange}
+                    >
+                      <MenuItem value={true}>Si</MenuItem>
+                      <MenuItem value={false}>No</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
               </div>
-            </div>
-            <div className="supplierUpdateRight">
-              <button className="supplierUpdateButton">Actualizar</button>
-            </div>
-          </form>
+              <div className="supplierUpdateRight">
+                <button className="supplierUpdateButton">Actualizar</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

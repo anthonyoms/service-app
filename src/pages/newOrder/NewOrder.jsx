@@ -13,6 +13,17 @@ import useForm from "../../hooks/useForm";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 
 export default function NewOrder() {
+  const initialState = {
+    loading: true,
+    key: true,
+    supplierKey: true,
+    suppliersData: [],
+    productsData: [],
+    supplierSelected: null,
+    ordenes: null,
+    currentProductSelected: null,
+    error: false,
+  };
   const style = {
     margin: 0,
     top: "auto",
@@ -33,18 +44,10 @@ export default function NewOrder() {
       currentProductSelected,
       ordenes,
       key,
+      supplierKey,
     },
     setDataState,
-  ] = useState({
-    loading: true,
-    key: true,
-    suppliersData: [],
-    productsData: [],
-    supplierSelected: null,
-    ordenes: null,
-    currentProductSelected: null,
-    error: false,
-  });
+  ] = useState(initialState);
 
   const [detalleOrden, setDetalleOrden] = useState([]);
 
@@ -143,6 +146,9 @@ export default function NewOrder() {
         });
         if (isDetalleSave.ok) {
           dataValidation(isSaveOrder);
+          setDataState({ ...initialState, loading: false });
+          setDetalleOrden([]);
+          loadSuppliers();
         } else {
           dataValidation(isDetalleSave, false);
         }
@@ -249,7 +255,6 @@ export default function NewOrder() {
       <Fab onClick={saveOrder} style={style} color="success" aria-label="add">
         <Save />
       </Fab>
-
       <div className="newOrder">
         <div className="newOrderTitleContainer">
           <h1 className="newOrderTitle">
@@ -263,6 +268,7 @@ export default function NewOrder() {
           <div className="newOrderTopLeft">
             <Autocomplete
               disablePortal
+              key={supplierKey}
               id="combo-box-demo"
               options={suppliersData}
               getOptionLabel={(option) =>
@@ -272,7 +278,7 @@ export default function NewOrder() {
               sx={{ marginLeft: "8px", marginBottom: "6px" }}
               size="small"
               renderInput={(params) => (
-                <TextField size="small" {...params} label="Suplidor" />
+                <TextField size="small" {...params} label="Suplidor*" />
               )}
             />
             <TextField

@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import useForm from "../../hooks/useForm";
 import { useEffect, useState } from "react";
-import Loading from "../../components/ui/Loading";
 import {
   getServiceApp,
   updateServiceApp,
@@ -18,6 +17,7 @@ import {
 } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
+import { MyBackdrop } from "../../components/ui/Backdrop";
 
 export default function Product() {
   const [{ product, loading }, setProducts] = useState({
@@ -114,208 +114,216 @@ export default function Product() {
       handleInputChange(e);
     }
   };
-  if (loading) {
-    return <Loading />;
-  }
   return (
-    <div className="product">
-      <div className="productTitleContainer">
-        <h1 className="productTitle">Actualización de productos</h1>
-        <Link to="/newproduct">
-          <button className="productAddButton">Crear</button>
-        </Link>
-      </div>
-      <div className="productTop">
-        <div className="productTopRight">
-          <div className="productInfoTop">
-            <img src={product.img} alt="" className="productInfoImg" />
-            <span className="productName">{product?.nombre}</span>
-          </div>
-          <div className="productInfoBottom">
-            <div className="productInfoItem">
-              <span className="productInfoKey">Cantidad:&nbsp;</span>
-              <span className="productInfoValue">{product?.cantidad}</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Descripcion:&nbsp;</span>
-              <span className="productInfoValue">{product?.descripcion}</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Utilidad %:&nbsp;</span>
-              <span className="productInfoValue">{product?.utilidad}</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Precio compra:&nbsp;</span>
-              <span className="productInfoValue">{product?.precio_compra}</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Precio venta:&nbsp;</span>
-              <span className="productInfoValue">{product?.precio_venta}</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Categoria:&nbsp;</span>
-              <span className="productInfoValue">
-                {product?.categoria?.nombre}
-              </span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Disponible:&nbsp;</span>
-              <span className="productInfoValue">
-                {" "}
-                {product?.disponible ? "Si" : "No"}
-              </span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">Estado:&nbsp;</span>
-              <span className="productInfoValue">
-                {" "}
-                {product?.estado ? "Activo" : "Inactivo"}
-              </span>
-            </div>
-          </div>
+    <>
+      <MyBackdrop loading={loading} />
+      <div className="product">
+        <div className="productTitleContainer">
+          <h1 className="productTitle">Actualización de productos</h1>
+          <Link to="/newproduct">
+            <button className="productAddButton">Crear</button>
+          </Link>
         </div>
-        <div className="productTopLeft"></div>
-      </div>
-      <div className="productBottom">
-        <form onSubmit={handleSubmit} className="productForm">
-          <div className="productFormLeft">
-            <TextField
-              id="nombre"
-              label="Nombre"
-              name="nombre"
-              variant="outlined"
-              autoComplete="off"
-              inputProps={{ maxLength: "50" }}
-              sx={{ m: 1 }}
-              size="small"
-              value={nombre}
-              onChange={handleInputChange}
-            />
-            <TextField
-              id="outlined-multiline-flexible"
-              name="descripcion"
-              label="Descripción"
-              multiline
-              inputProps={{ maxLength: "50" }}
-              rows={5}
-              sx={{ m: 1 }}
-              autoComplete="off"
-              size="small"
-              value={descripcion}
-              onChange={handleInputChange}
-            />
-            <TextField
-              id="precio_compra"
-              label="Precio compra"
-              name="precio_compra"
-              variant="outlined"
-              autoComplete="off"
-              sx={{ m: 1 }}
-              size="small"
-              value={precio_compra}
-              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
-            />
-            <TextField
-              id="utilidad"
-              label="Utilidad %"
-              name="utilidad"
-              variant="outlined"
-              autoComplete="off"
-              sx={{ m: 1 }}
-              size="small"
-              value={utilidad}
-              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
-            />
-            <TextField
-              id="precio_ventas"
-              label="Precio ventas"
-              name="precio_ventas"
-              variant="outlined"
-              autoComplete="off"
-              sx={{ m: 1 }}
-              size="small"
-              value={(
-                (utilidad / 100) * precio_compra +
-                +precio_compra
-              ).toFixed(2)}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label-categoria">
-                Categoría
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label-categoria"
-                id="demo-simple-select-categoria"
-                name="categoria"
-                label="Categoría"
-                sx={{ m: 1 }}
-                size="small"
-                value={categoria}
-                onChange={handleInputChange}
-              >
-                {categories.map((category) => {
-                  return (
-                    <MenuItem key={category?.uid} value={category?.uid}>
-                      {category?.nombre}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label-disponible">
-                Disponible
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label-disponible"
-                id="demo-simple-select-disponible"
-                name="disponible"
-                label="Disponible"
-                sx={{ m: 1 }}
-                size="small"
-                value={disponible}
-                onChange={handleInputChange}
-              >
-                <MenuItem value={true}>Si</MenuItem>
-                <MenuItem value={false}>No</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label-estado">
-                Activo
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label-estado"
-                id="demo-simple-select-estado"
-                name="estado"
-                label="Estado"
-                sx={{ m: 1 }}
-                size="small"
-                value={estado}
-                onChange={handleInputChange}
-              >
-                <MenuItem value={true}>Si</MenuItem>
-                <MenuItem value={false}>No</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className="productFormRight">
-            <div className="productUpload">
-              <img src={product.img} alt="" className="productUploadImg" />
-              <label htmlFor="file">
-                <Publish />
-              </label>
-              <input
-                type="file"
-                onChange={handleUploadImage}
-                id="file"
-                style={{ display: "none" }}
-              />
+        <div className="productTop">
+          <div className="productTopRight">
+            <div className="productInfoTop">
+              <img src={product?.img || ""} alt="" className="productInfoImg" />
+              <span className="productName">{product?.nombre}</span>
             </div>
-            <button className="productButton">Actualizar</button>
+            <div className="productInfoBottom">
+              <div className="productInfoItem">
+                <span className="productInfoKey">Cantidad:&nbsp;</span>
+                <span className="productInfoValue">{product?.cantidad}</span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Descripcion:&nbsp;</span>
+                <span className="productInfoValue">{product?.descripcion}</span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Utilidad %:&nbsp;</span>
+                <span className="productInfoValue">{product?.utilidad}</span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Precio compra:&nbsp;</span>
+                <span className="productInfoValue">
+                  {product?.precio_compra}
+                </span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Precio venta:&nbsp;</span>
+                <span className="productInfoValue">
+                  {product?.precio_venta}
+                </span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Categoria:&nbsp;</span>
+                <span className="productInfoValue">
+                  {product?.categoria?.nombre}
+                </span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Disponible:&nbsp;</span>
+                <span className="productInfoValue">
+                  {" "}
+                  {product?.disponible ? "Si" : "No"}
+                </span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Estado:&nbsp;</span>
+                <span className="productInfoValue">
+                  {" "}
+                  {product?.estado ? "Activo" : "Inactivo"}
+                </span>
+              </div>
+            </div>
           </div>
-        </form>
+          <div className="productTopLeft"></div>
+        </div>
+        <div className="productBottom">
+          <form onSubmit={handleSubmit} className="productForm">
+            <div className="productFormLeft">
+              <TextField
+                id="nombre"
+                label="Nombre"
+                name="nombre"
+                variant="outlined"
+                autoComplete="off"
+                inputProps={{ maxLength: "50" }}
+                sx={{ m: 1 }}
+                size="small"
+                value={nombre}
+                onChange={handleInputChange}
+              />
+              <TextField
+                id="outlined-multiline-flexible"
+                name="descripcion"
+                label="Descripción"
+                multiline
+                inputProps={{ maxLength: "50" }}
+                rows={5}
+                sx={{ m: 1 }}
+                autoComplete="off"
+                size="small"
+                value={descripcion}
+                onChange={handleInputChange}
+              />
+              <TextField
+                id="precio_compra"
+                label="Precio compra"
+                name="precio_compra"
+                variant="outlined"
+                autoComplete="off"
+                sx={{ m: 1 }}
+                size="small"
+                value={precio_compra}
+                onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+              />
+              <TextField
+                id="utilidad"
+                label="Utilidad %"
+                name="utilidad"
+                variant="outlined"
+                autoComplete="off"
+                sx={{ m: 1 }}
+                size="small"
+                value={utilidad}
+                onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+              />
+              <TextField
+                id="precio_ventas"
+                label="Precio ventas"
+                name="precio_ventas"
+                variant="outlined"
+                autoComplete="off"
+                sx={{ m: 1 }}
+                size="small"
+                value={(
+                  (utilidad / 100) * precio_compra +
+                  +precio_compra
+                ).toFixed(2)}
+              />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-categoria">
+                  Categoría
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-categoria"
+                  id="demo-simple-select-categoria"
+                  name="categoria"
+                  label="Categoría"
+                  sx={{ m: 1 }}
+                  size="small"
+                  value={categoria}
+                  onChange={handleInputChange}
+                >
+                  {categories.map((category) => {
+                    return (
+                      <MenuItem key={category?.uid} value={category?.uid}>
+                        {category?.nombre}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-disponible">
+                  Disponible
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-disponible"
+                  id="demo-simple-select-disponible"
+                  name="disponible"
+                  label="Disponible"
+                  sx={{ m: 1 }}
+                  size="small"
+                  value={disponible}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value={true}>Si</MenuItem>
+                  <MenuItem value={false}>No</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-estado">
+                  Activo
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-estado"
+                  id="demo-simple-select-estado"
+                  name="estado"
+                  label="Estado"
+                  sx={{ m: 1 }}
+                  size="small"
+                  value={estado}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value={true}>Si</MenuItem>
+                  <MenuItem value={false}>No</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <div className="productFormRight">
+              <div className="productUpload">
+                <img
+                  src={product?.img || ""}
+                  alt=""
+                  className="productUploadImg"
+                />
+                <label htmlFor="file">
+                  <Publish />
+                </label>
+                <input
+                  type="file"
+                  onChange={handleUploadImage}
+                  id="file"
+                  style={{ display: "none" }}
+                />
+              </div>
+              <button className="productButton">Actualizar</button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

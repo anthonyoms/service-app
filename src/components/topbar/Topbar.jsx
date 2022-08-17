@@ -12,7 +12,7 @@ export default function Topbar() {
     <div className="topbar">
       <div className="topbarWrapper">
         <div className="topLeft">
-          <span className="logo">Orbit Cable S.A</span>
+          <span className="logo">Service app</span>
         </div>
         <div className="topRight">
           <div className="topbarIconContainer">

@@ -26,7 +26,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://orbitcable.com.do/">
-        Orbit Cable S.A
+        Service App
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -82,6 +82,7 @@ export default function SignIn() {
               name="correo"
               autoComplete="off"
               autoFocus
+              value={"anthony.otoniel@hotmail.com"}
             />
             <TextField
               margin="normal"
@@ -92,6 +93,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={12345}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
