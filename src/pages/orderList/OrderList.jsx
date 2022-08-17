@@ -75,7 +75,7 @@ export default function OrderList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/invoice" + params.row.id}>
+            <Link to="/invoice/" target="_blank">
               <button className="serviceListEdit">Ver</button>
             </Link>
             <DeleteOutline

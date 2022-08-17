@@ -258,7 +258,7 @@ export default function NewOrder() {
       <div className="newOrder">
         <div className="newOrderTitleContainer">
           <h1 className="newOrderTitle">
-            Orden de compra No. #{ordenes?.total + 1 || 0}
+            Orden de compra No. #{ordenes?.total + 1 || ""}
           </h1>
           <Link to="/newsupplier">
             <button className="newOrderAddButton">Crear Suplidor</button>
