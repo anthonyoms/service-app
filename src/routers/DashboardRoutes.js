@@ -33,7 +33,7 @@ export const DashboardRoutes = () => {
   if (isInvoice) {
     return (
       <Routes>
-        <Route path="/invoice" element={<OrderInvoice />} />
+        <Route path="/invoice/:invoiceId" element={<OrderInvoice />} />
       </Routes>
     );
   }
