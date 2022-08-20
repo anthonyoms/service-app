@@ -1,7 +1,7 @@
 import React from "react";
-import "./orderInvoice.css";
+import "./invoice.css";
 
-export const OrderInvoice = () => {
+export const Invoice = () => {
   return (
     <div className="divBody">
       <br />

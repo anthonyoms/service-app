@@ -4,37 +4,46 @@ import { NotificationsNone, Settings, ExitToApp } from "@material-ui/icons";
 import Tooltip from "@mui/material/Tooltip";
 import "./topbar.css";
 import { startLogout } from "../../actions/auth";
+import FormDialog from "../dialog/Dialog";
+import { useState } from "react";
 
 export default function Topbar() {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const { nombre, img } = useSelector((state) => state.auth);
+  const handle = () => {
+    setOpen(true);
+    console.log(open);
+  };
   return (
-    <div className="topbar">
-      <div className="topbarWrapper">
-        <div className="topLeft">
-          <span className="logo">Service app</span>
-        </div>
-        <div className="topRight">
-          <div className="topbarIconContainer">
-            <NotificationsNone />
-            <span className="topIconBadge">2</span>
+    <>
+      <FormDialog isOpen={open} setOpen={setOpen} />
+      <div className="topbar">
+        <div className="topbarWrapper">
+          <div className="topLeft">
+            <span className="logo">Service app</span>
           </div>
-          <div className="topbarIconContainer">
-            <Settings />
-            <span className="topIconBadge">2</span>
+          <div className="topRight">
+            <div className="topbarIconContainer">
+              <NotificationsNone />
+              <span className="topIconBadge">2</span>
+            </div>
+            <div className="topbarIconContainer">
+              <Settings onClick={handle} />
+            </div>
+            <div
+              onClick={() => dispatch(startLogout())}
+              className="topbarIconContainer"
+            >
+              <Tooltip title="Salir">
+                <ExitToApp />
+              </Tooltip>
+            </div>
+            <div className="topbarIconContainer">{nombre}</div>
+            <img src={img} alt="" className="topAvatar" />
           </div>
-          <div
-            onClick={() => dispatch(startLogout())}
-            className="topbarIconContainer"
-          >
-            <Tooltip title="Salir">
-              <ExitToApp />
-            </Tooltip>
-          </div>
-          <div className="topbarIconContainer">{nombre}</div>
-          <img src={img} alt="" className="topAvatar" />
         </div>
       </div>
-    </div>
+    </>
   );
 }

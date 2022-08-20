@@ -26,14 +26,14 @@ import ServiceManagementList from "../pages/serviceManagementList/ServiceManagem
 import SalesManagementList from "../pages/salesManagementList/SalesManagementList";
 import NewOrder from "../pages/newOrder/NewOrder";
 import OrderList from "../pages/orderList/OrderList";
-import { OrderInvoice } from "../pages/orderInvoice/OrderInvoice";
+import { Invoice } from "../pages/invoice/Invoice";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
   if (isInvoice) {
     return (
       <Routes>
-        <Route path="/invoice/:invoiceId" element={<OrderInvoice />} />
+        <Route path="/invoice/:invoiceId" element={<Invoice />} />
       </Routes>
     );
   }
