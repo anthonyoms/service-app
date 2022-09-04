@@ -21,7 +21,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { MyBackdrop } from "../../components/ui/Backdrop";
-import useForm from "../../hooks/useForm";
 import {
   getServiceApp,
   updateServiceApp,
@@ -35,7 +34,7 @@ import "./user.css";
 
 export default function User() {
   const [{ user, loading }, setUser] = useState({ user: null, loading: true });
-  const [userValues, handleInputChange, reset] = useForm({
+  const [formValues, setFormValues] = useState({
     correo: "",
     nombre: "",
     password: "",
@@ -56,17 +55,22 @@ export default function User() {
     genero,
     estadoCivil,
     rol,
-  } = userValues;
+  } = formValues;
 
   useEffect(() => {
     loadUser();
   }, []);
+
+  const handleInputChange = ({ target: { name, value } }) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
 
   const loadUser = async () => {
     const id = window.location.pathname.split("/")[2];
     const dataResponse = await getServiceApp(`${endpoints.users}/${id}`);
     const validData = dataValidation(dataResponse, false);
     if (validData.ok) {
+      setFormValues(validData.usuario);
       setUser({ user: validData.usuario, loading: false });
     }
   };
@@ -78,15 +82,15 @@ export default function User() {
     e.preventDefault();
 
     const payload = {
-      correo: correo || user?.correo,
-      nombre: nombre || user?.nombre,
-      password: password || user?.password,
-      telefono: telefono || user?.telefono,
-      fechaNacimiento: fechaNacimiento || user?.fechaNacimiento,
-      direccion: direccion || user?.direccion,
-      genero: genero || user?.genero,
-      estadoCivil: estadoCivil || user?.estadoCivil,
-      rol: rol || user?.rol,
+      correo: correo,
+      nombre: nombre,
+      password: password,
+      telefono: telefono,
+      fechaNacimiento: fechaNacimiento,
+      direccion: direccion,
+      genero: genero,
+      estadoCivil: estadoCivil,
+      rol: rol,
     };
     const dataResponse = await updateServiceApp(
       payload,
@@ -95,7 +99,6 @@ export default function User() {
     );
     const validData = await dataValidation(dataResponse);
     if (validData.ok) {
-      reset();
       loadUser();
     }
   };
@@ -204,20 +207,6 @@ export default function User() {
                     inputProps={{ maxLength: "50" }}
                     size="small"
                     value={nombre}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="userUpdateItem">
-                  <TextField
-                    id="password"
-                    label="Contraseña"
-                    name="password"
-                    variant="outlined"
-                    inputProps={{ maxLength: "50" }}
-                    size="small"
-                    type={"password"}
-                    autoComplete="off"
-                    value={password}
                     onChange={handleInputChange}
                   />
                 </div>

@@ -9,7 +9,6 @@ import {
 import { Publish } from "@material-ui/icons";
 import "./category.css";
 import { useEffect, useState } from "react";
-import useForm from "../../hooks/useForm";
 import {
   getServiceApp,
   updateServiceApp,
@@ -24,32 +23,39 @@ export default function Category() {
     category: null,
     loading: true,
   });
-  const [categoryValues, handleInputChange, reset] = useForm({
+
+  const [formValues, setFormValues] = useState({
     img: "",
     nombre: "",
     descripcion: "",
     estado: true,
   });
-  const { img, nombre, descripcion, estado } = categoryValues;
+
+  const { img, nombre, descripcion, estado } = formValues;
 
   useEffect(() => {
     loadCategory();
   }, []);
+
+  const handleInputChange = ({ target: { name, value } }) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
 
   const loadCategory = async () => {
     const id = window.location.pathname.split("/")[2];
     const dataResponse = await getServiceApp(`${endpoints.categories}/${id}`);
     const validData = dataValidation(dataResponse, false);
     if (validData.ok) {
+      setFormValues(validData.categoria);
       setCategory({ category: validData.categoria, loading: false });
     }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      img: img || category.img,
-      nombre: nombre || category.nombre,
-      descripcion: descripcion || category.descripcion,
+      img: img,
+      nombre: nombre,
+      descripcion: descripcion,
       estado: estado,
     };
     const dataResponse = await updateServiceApp(
@@ -59,7 +65,6 @@ export default function Category() {
     );
     const validData = dataValidation(dataResponse);
     if (validData.ok) {
-      reset();
       loadCategory();
     }
   };

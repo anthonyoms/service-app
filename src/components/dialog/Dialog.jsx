@@ -51,7 +51,15 @@ export default function FormDialog({ isOpen, setOpen }) {
           <TextField
             margin="dense"
             id="name"
-            label="Logo Url"
+            label="Correo"
+            autoComplete="off"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            margin="dense"
+            id="name"
+            label="Teléfono"
             autoComplete="off"
             fullWidth
             variant="standard"
