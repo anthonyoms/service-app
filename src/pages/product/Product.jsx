@@ -8,7 +8,6 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import useForm from "../../hooks/useForm";
 import { useEffect, useState } from "react";
 import {
   getServiceApp,
@@ -25,7 +24,7 @@ export default function Product() {
     loading: true,
   });
   const [categories, setCategories] = useState([]);
-  const [productsValues, handleInputChange, reset] = useForm({
+  const [formValues, setFormValues] = useState({
     img: "",
     nombre: "",
     estado: true,
@@ -45,7 +44,7 @@ export default function Product() {
     disponible,
     descripcion,
     utilidad,
-  } = productsValues;
+  } = formValues;
   useEffect(() => {
     loadProducts();
   }, []);
@@ -57,8 +56,14 @@ export default function Product() {
       getServiceApp(`${endpoints.products}/${id}`),
     ]);
     setCategories(categorias);
+    setFormValues({ ...producto, categoria: producto.categoria._id });
     setProducts({ product: producto, loading: false });
   };
+
+  const handleInputChange = ({ target: { name, value } }) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
+
   const getPrecioVentas = () => {
     const precio = precio_compra || product.precio_compra;
     const utilidadActual = utilidad || product.utilidad;
@@ -67,15 +72,15 @@ export default function Product() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      img: img || product.img,
-      nombre: nombre || product.nombre,
-      estado: estado,
-      disponible: disponible,
-      precio_compra: precio_compra || product.precio,
-      utilidad: utilidad || product.utilidad,
+      img,
+      nombre,
+      estado,
+      disponible,
+      precio_compra,
+      utilidad,
       precio_venta: getPrecioVentas(),
-      categoria: categoria || product?.categoria?.uid,
-      descripcion: descripcion || product.descripcion,
+      categoria,
+      descripcion,
     };
 
     const dataResponse = await updateServiceApp(
@@ -85,7 +90,6 @@ export default function Product() {
     );
     const validData = dataValidation(dataResponse);
     if (validData.ok) {
-      reset();
       loadProducts();
     }
   };

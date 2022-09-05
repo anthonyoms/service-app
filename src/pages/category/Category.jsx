@@ -45,18 +45,20 @@ export default function Category() {
     const id = window.location.pathname.split("/")[2];
     const dataResponse = await getServiceApp(`${endpoints.categories}/${id}`);
     const validData = dataValidation(dataResponse, false);
-    if (validData.ok) {
-      setFormValues(validData.categoria);
-      setCategory({ category: validData.categoria, loading: false });
+    if (!validData.ok) {
+      setCategory({ loading: false });
+      return;
     }
+    setFormValues(validData.categoria);
+    setCategory({ category: validData.categoria, loading: false });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      img: img,
-      nombre: nombre,
-      descripcion: descripcion,
-      estado: estado,
+      img,
+      nombre,
+      descripcion,
+      estado,
     };
     const dataResponse = await updateServiceApp(
       payload,
@@ -118,10 +120,6 @@ export default function Category() {
                 <span className="categoryInfoValue">
                   {category?.estado ? "Activo" : "Inactivo"}
                 </span>
-              </div>
-              <div className="categoryInfoItem">
-                <span className="categoryInfoKey">in stock:&nbsp;</span>
-                <span className="categoryInfoValue">si</span>
               </div>
             </div>
           </div>

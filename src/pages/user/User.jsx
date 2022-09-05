@@ -44,6 +44,7 @@ export default function User() {
     genero: "",
     estadoCivil: "",
     rol: "",
+    cedula: "",
   });
   const {
     correo,
@@ -55,6 +56,7 @@ export default function User() {
     genero,
     estadoCivil,
     rol,
+    cedula,
   } = formValues;
 
   useEffect(() => {
@@ -69,10 +71,12 @@ export default function User() {
     const id = window.location.pathname.split("/")[2];
     const dataResponse = await getServiceApp(`${endpoints.users}/${id}`);
     const validData = dataValidation(dataResponse, false);
-    if (validData.ok) {
-      setFormValues(validData.usuario);
-      setUser({ user: validData.usuario, loading: false });
+    if (!validData.ok) {
+      setUser({ loading: false });
+      return;
     }
+    setFormValues(validData.usuario);
+    setUser({ user: validData.usuario, loading: false });
   };
 
   const handleChangeDate = (newValue) => {
@@ -82,15 +86,16 @@ export default function User() {
     e.preventDefault();
 
     const payload = {
-      correo: correo,
-      nombre: nombre,
-      password: password,
-      telefono: telefono,
-      fechaNacimiento: fechaNacimiento,
-      direccion: direccion,
-      genero: genero,
-      estadoCivil: estadoCivil,
-      rol: rol,
+      correo,
+      nombre,
+      password,
+      telefono,
+      fechaNacimiento,
+      direccion,
+      genero,
+      estadoCivil,
+      rol,
+      cedula,
     };
     const dataResponse = await updateServiceApp(
       payload,
@@ -186,6 +191,20 @@ export default function User() {
               <div className="userUpdateLeft">
                 <div className="userUpdateItem">
                   <TextField
+                    id="cedula"
+                    label="Cedula"
+                    name="cedula"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={cedula}
+                    disabled
+                    readOnly
+                  />
+                </div>
+                <div className="userUpdateItem">
+                  <TextField
                     id="correo"
                     label="Email"
                     name="correo"
@@ -194,7 +213,8 @@ export default function User() {
                     size="small"
                     inputProps={{ maxLength: "50" }}
                     value={correo}
-                    onChange={handleInputChange}
+                    disabled
+                    readOnly
                   />
                 </div>
                 <div className="userUpdateItem">

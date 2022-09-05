@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MyBackdrop } from "../../components/ui/Backdrop";
-import useForm from "../../hooks/useForm";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
@@ -28,7 +27,8 @@ export default function Supplier() {
     supplier: null,
     loading: true,
   });
-  const [supplierValues, handleInputChange, reset] = useForm({
+  const [formValues, setFormValues] = useState({
+    cedula_rnc: "",
     nombre: "",
     direccion: "",
     telefono: "",
@@ -47,7 +47,8 @@ export default function Supplier() {
     pais,
     estado,
     vendedor,
-  } = supplierValues;
+    cedula_rnc,
+  } = formValues;
 
   useEffect(() => {
     loadSupplier();
@@ -57,22 +58,29 @@ export default function Supplier() {
     const id = window.location.pathname.split("/")[2];
     const dataResponse = await getServiceApp(`${endpoints.suppliers}/${id}`);
     const validData = dataValidation(dataResponse, false);
-    if (validData.ok) {
-      setSupplier({ supplier: validData.suplidor, loading: false });
+    if (!validData.ok) {
+      setSupplier({ loading: false });
+      return; 
     }
+    setFormValues(validData.suplidor);
+    setSupplier({ supplier: validData.suplidor, loading: false });
+  };
+
+  const handleInputChange = ({ target: { name, value } }) => {
+    setFormValues({ ...formValues, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      nombre: nombre || supplier.nombre,
-      direccion: direccion || supplier.direccion,
-      telefono: telefono || supplier.telefono,
-      contacto: contacto || supplier.contacto,
-      ciudad: ciudad || supplier.ciudad,
-      pais: pais || supplier.pais,
-      estado: estado,
-      vendedor: vendedor || supplier.vendedor,
+      nombre,
+      direccion,
+      telefono,
+      contacto,
+      ciudad,
+      pais,
+      estado,
+      vendedor,
     };
     const dataResponse = await updateServiceApp(
       payload,
@@ -81,7 +89,6 @@ export default function Supplier() {
     );
     const validData = await dataValidation(dataResponse);
     if (validData.ok) {
-      reset();
       loadSupplier();
     }
   };
@@ -163,6 +170,21 @@ export default function Supplier() {
             <span className="supplierUpdateTitle">Editar</span>
             <form onSubmit={handleSubmit} className="supplierUpdateForm">
               <div className="supplierUpdateLeft">
+                <div className="supplierUpdateItem">
+                  <TextField
+                    id="cedula_rnc"
+                    label="Cedula/Rnc"
+                    name="cedula_rnc"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={cedula_rnc}
+                    onChange={handleInputChange}
+                    readOnly
+                    disabled
+                  />
+                </div>
                 <div className="supplierUpdateItem">
                   <TextField
                     id="nombre"
