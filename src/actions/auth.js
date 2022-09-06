@@ -1,24 +1,27 @@
 import Swal from "sweetalert2";
 import { types } from "../utils/constants/types";
 import { Login, revalidarToken } from "../services/auth";
+import { infoLogout, infoStartLoading } from "./info";
 
 export const StartLogin = (correo, password) => {
   return async (dispatch) => {
     const body = await Login(correo, password);
-    if (body.ok) {
-      localStorage.setItem("token", body.token);
-      localStorage.setItem("token-init-date", new Date().getTime());
-      dispatch(
-        login({
-          uid: body.uid,
-          nombre: body.nombre,
-          rol: body.rol,
-          img: body.img,
-        })
-      );
-    } else {
+    if (!body.ok) {
       Swal.fire("Error", body, "error");
+      return;
     }
+
+    localStorage.setItem("token", body.token);
+    localStorage.setItem("token-init-date", new Date().getTime());
+    dispatch(
+      login({
+        uid: body.uid,
+        nombre: body.nombre,
+        rol: body.rol,
+        img: body.img,
+      })
+    );
+    dispatch(infoStartLoading());
   };
 };
 
@@ -36,6 +39,7 @@ export const startChecking = () => {
           img: body.img,
         })
       );
+      dispatch(infoStartLoading());
     } else {
       dispatch(checkingFinish());
     }
@@ -52,6 +56,7 @@ export const login = (user) => ({
 export const startLogout = () => {
   return (dispatch) => {
     localStorage.clear();
+    dispatch(infoLogout());
     dispatch(logout());
   };
 };

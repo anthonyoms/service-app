@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -7,7 +8,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function FormDialog({ isOpen, setOpen }) {
+export default function FormDialog({ isOpen, setOpen, configuration }) {
+  const [formValues, setFormValues] = useState({
+    cedula_rnc: "",
+    nombre: "",
+    telefono: "",
+    correo: "",
+    direccion: "",
+    itbis: 0,
+  });
+
+  const { cedula_rnc, nombre, telefono, correo, direccion, itbis } = formValues;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setFormValues(configuration);
+  }, [configuration, isOpen]);
+
+  const handleInputChange = ({ target: { name, value } }) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -26,51 +47,69 @@ export default function FormDialog({ isOpen, setOpen }) {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="nombre"
+            name="nombre"
             label="Razón social"
             autoComplete="off"
             fullWidth
             variant="standard"
+            value={nombre}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
-            id="name"
+            id="cedula_rnc"
+            name="cedula_rnc"
             label="RNC"
             autoComplete="off"
             fullWidth
             variant="standard"
+            value={cedula_rnc}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
             id="name"
+            name="direccion"
             label="Dirección"
             autoComplete="off"
             fullWidth
             variant="standard"
+            value={direccion}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
-            id="name"
+            id="correo"
+            name="correo"
             label="Correo"
             autoComplete="off"
             fullWidth
             variant="standard"
+            value={correo}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
-            id="name"
+            id="telefono"
+            name="telefono"
             label="Teléfono"
             autoComplete="off"
             fullWidth
             variant="standard"
+            value={telefono}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
-            id="name"
+            id="itbis"
+            name="itbis"
             label="Itbis %"
             autoComplete="off"
             fullWidth
             variant="standard"
+            value={itbis}
+            onChange={handleInputChange}
           />
         </DialogContent>
         <DialogActions>

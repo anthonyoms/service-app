@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NotificationsNone, Settings, ExitToApp } from "@material-ui/icons";
 import Tooltip from "@mui/material/Tooltip";
@@ -11,13 +10,18 @@ export default function Topbar() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { nombre, img } = useSelector((state) => state.auth);
+  const { configuration } = useSelector((state) => state.info);
   const handle = () => {
     setOpen(true);
-    console.log(open);
   };
+
   return (
     <>
-      <FormDialog isOpen={open} setOpen={setOpen} />
+      <FormDialog
+        isOpen={open}
+        setOpen={setOpen}
+        configuration={configuration}
+      />
       <div className="topbar">
         <div className="topbarWrapper">
           <div className="topLeft">
@@ -29,7 +33,7 @@ export default function Topbar() {
               <span className="topIconBadge">2</span>
             </div>
             <div className="topbarIconContainer">
-              <Settings onClick={handle} />
+              <Settings onClick={() => handle()} />
             </div>
             <div
               onClick={() => dispatch(startLogout())}

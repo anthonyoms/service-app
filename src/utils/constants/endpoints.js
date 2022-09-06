@@ -6,4 +6,5 @@ export const endpoints = {
   suppliers: "/suplidores",
   ordenes: "/ordenes",
   detalleOrdenes: "/detalleOrdenes",
+  configuraciones: "/configuraciones",
 };
