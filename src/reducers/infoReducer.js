@@ -1,7 +1,13 @@
 import { types } from "../utils/constants/types";
 
 const initialState = {
-  configuration: {},
+  cedula_rnc: "",
+  nombre: "",
+  telefono: "",
+  correo: "",
+  direccion: "",
+  itbis: 0,
+  uid: "",
 };
 
 export const infoReducer = (state = initialState, action) => {
@@ -9,14 +15,14 @@ export const infoReducer = (state = initialState, action) => {
     case types.infoUpdated:
       return {
         ...state,
-        events: state.events.map((e) =>
-          e.id === action.payload.id ? action.payload : e
-        ),
+        ...action.payload,
+        itbisPercentage: action.payload.itbis / 100,
       };
     case types.infoLoaded:
       return {
         ...state,
-        configuration: action.payload,
+        ...action.payload,
+        itbisPercentage: action.payload.itbis / 100,
       };
     case types.infoLogout:
       return {

@@ -178,7 +178,7 @@ export default function Supplier() {
                     variant="outlined"
                     autoComplete="off"
                     size="small"
-                    inputProps={{ maxLength: "50" }}
+                    inputProps={{ maxLength: "11" }}
                     value={cedula_rnc}
                     onChange={handleInputChange}
                     readOnly

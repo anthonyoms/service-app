@@ -10,7 +10,7 @@ export default function Topbar() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { nombre, img } = useSelector((state) => state.auth);
-  const { configuration } = useSelector((state) => state.info);
+  const configuration = useSelector((state) => state.info);
   const handle = () => {
     setOpen(true);
   };
@@ -25,7 +25,7 @@ export default function Topbar() {
       <div className="topbar">
         <div className="topbarWrapper">
           <div className="topLeft">
-            <span className="logo">Service app</span>
+            <span className="logo">{configuration.nombre}</span>
           </div>
           <div className="topRight">
             <div className="topbarIconContainer">

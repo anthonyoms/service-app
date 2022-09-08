@@ -11,8 +11,11 @@ import moment from "moment";
 import { useRef } from "react";
 import useForm from "../../hooks/useForm";
 import { MyBackdrop } from "../../components/ui/Backdrop";
+import { useSelector } from "react-redux";
 
 export default function NewOrder() {
+  const { itbis, itbisPercentage } = useSelector((state) => state.info);
+
   const initialState = {
     loading: true,
     key: true,
@@ -128,7 +131,7 @@ export default function NewOrder() {
         suplidor: supplierSelected.uid,
         fechaEmision: moment(),
         fechaVencimineto: moment().add(1, "M"),
-        totalTax: supplierSelected?.total * 0.16,
+        totalTax: supplierSelected?.total * itbisPercentage,
         total: supplierSelected?.total,
       };
       const isSaveOrder = await postServiceApp(payload, endpoints.ordenes);
@@ -172,7 +175,9 @@ export default function NewOrder() {
           {
             ...currentProductSelected,
             totalTax:
-              currentProductSelected?.precio_compra * cantidadRequerida * 0.16,
+              currentProductSelected?.precio_compra *
+              cantidadRequerida *
+              itbisPercentage,
             totalPrice:
               currentProductSelected?.precio_compra * cantidadRequerida,
             cantidadRequerida,
@@ -349,14 +354,14 @@ export default function NewOrder() {
             />
             <TextField
               id="totalTax"
-              label="Total impuestos 16%"
+              label={`Total impuestos ${itbis}%`}
               name="totalTax"
               variant="outlined"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
               inputProps={{ readOnly: true }}
-              value={supplierSelected?.total * 0.16 || 0}
+              value={supplierSelected?.total * itbisPercentage || 0}
             />
             <TextField
               id="total"
@@ -437,7 +442,7 @@ export default function NewOrder() {
               <div className="newOrderItem">
                 <TextField
                   id="tax"
-                  label="Impuesto 16%"
+                  label={`Impuestos ${itbis}%`}
                   name="tax"
                   variant="outlined"
                   autoComplete="off"
@@ -446,7 +451,7 @@ export default function NewOrder() {
                   value={
                     currentProductSelected?.precio_compra *
                       cantidadRequerida *
-                      0.16 || 0
+                      itbisPercentage || 0
                   }
                 />
               </div>
