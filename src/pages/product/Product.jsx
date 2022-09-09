@@ -17,6 +17,7 @@ import {
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import { MyBackdrop } from "../../components/ui/Backdrop";
+import { getIdUrl } from "../../utils/helpers/getIdUrl";
 
 export default function Product() {
   const [{ product, loading }, setProducts] = useState({
@@ -50,7 +51,7 @@ export default function Product() {
   }, []);
 
   const loadProducts = async () => {
-    const id = window.location.pathname.split("/")[2];
+    const id = getIdUrl();
     const [{ categorias }, { producto }] = await Promise.all([
       getServiceApp(endpoints.categories),
       getServiceApp(`${endpoints.products}/${id}`),

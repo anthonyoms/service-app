@@ -27,6 +27,7 @@ import {
   uploadFileServiceApp,
 } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { getIdUrl } from "../../utils/helpers/getIdUrl";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
 import { dataValidation } from "../../utils/helpers/messages";
 
@@ -68,7 +69,7 @@ export default function User() {
   };
 
   const loadUser = async () => {
-    const id = window.location.pathname.split("/")[2];
+    const id = getIdUrl();
     const dataResponse = await getServiceApp(`${endpoints.users}/${id}`);
     const validData = dataValidation(dataResponse, false);
     if (!validData.ok) {

@@ -17,6 +17,7 @@ import {
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import { MyBackdrop } from "../../components/ui/Backdrop";
+import { getIdUrl } from "../../utils/helpers/getIdUrl";
 
 export default function Category() {
   const [{ category, loading }, setCategory] = useState({
@@ -42,7 +43,7 @@ export default function Category() {
   };
 
   const loadCategory = async () => {
-    const id = window.location.pathname.split("/")[2];
+    const id = getIdUrl();
     const dataResponse = await getServiceApp(`${endpoints.categories}/${id}`);
     const validData = dataValidation(dataResponse, false);
     if (!validData.ok) {

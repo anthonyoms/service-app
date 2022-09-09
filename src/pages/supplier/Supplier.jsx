@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { getServiceApp, updateServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
+import { getIdUrl } from "../../utils/helpers/getIdUrl";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
 import { dataValidation } from "../../utils/helpers/messages";
 import "./supplier.css";
@@ -55,12 +56,12 @@ export default function Supplier() {
   }, []);
 
   const loadSupplier = async () => {
-    const id = window.location.pathname.split("/")[2];
+    const id = getIdUrl();
     const dataResponse = await getServiceApp(`${endpoints.suppliers}/${id}`);
     const validData = dataValidation(dataResponse, false);
     if (!validData.ok) {
       setSupplier({ loading: false });
-      return; 
+      return;
     }
     setFormValues(validData.suplidor);
     setSupplier({ supplier: validData.suplidor, loading: false });

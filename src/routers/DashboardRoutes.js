@@ -26,7 +26,7 @@ import ServiceManagementList from "../pages/serviceManagementList/ServiceManagem
 import SalesManagementList from "../pages/salesManagementList/SalesManagementList";
 import NewOrder from "../pages/newOrder/NewOrder";
 import OrderList from "../pages/orderList/OrderList";
-import { Invoice } from "../pages/invoice/Invoice";
+import { Invoice } from "../pages/invoices/Invoice";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");

@@ -117,6 +117,12 @@ export default function NewOrder() {
     [supplierSelected]
   );
 
+  const setProductUid = (detalle = []) => {
+    return detalle.map((producto) => {
+      return { ...producto, producto: producto.uid };
+    });
+  };
+
   const saveOrder = async () => {
     if (!detalleOrden.length) return infoMsg(`Ningún producto agregado.`);
     if (!supplierSelected?.cedula_rnc) {
@@ -138,7 +144,7 @@ export default function NewOrder() {
       if (isSaveOrder.ok) {
         const detallePayload = {
           ordenCompra: isSaveOrder.ordenCompra.uid,
-          productos: detalleOrden,
+          productos: setProductUid(detalleOrden),
         };
         const isDetalleSave = await postServiceApp(
           detallePayload,
