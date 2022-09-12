@@ -10,7 +10,6 @@ export const Invoice = () => {
   const configuration = useSelector((state) => state.info);
   const [dataInvoice, setDataInvoice] = useState({
     type: "Orden de compra",
-    cliente: configuration,
   });
   useEffect(() => {
     loadDataInvoice();
@@ -22,9 +21,18 @@ export const Invoice = () => {
       `${endpoints.detalleOrdenes}/${id}`
     );
     const { ordeDetalles } = dataValidation(dataResponse, false);
-    console.log(ordeDetalles);
-    setDataInvoice((prevState) => ({ ...prevState, ...ordeDetalles }));
+    setDataInvoice((prevState) => ({
+      ...prevState,
+      creada: ordeDetalles.ordenCompra.fechaEmision,
+      vence: ordeDetalles.ordenCompra.fechaVencimiento,
+      numero: ordeDetalles.ordenCompra.id,
+      suplidor: ordeDetalles.ordenCompra.suplidor,
+      total: ordeDetalles.ordenCompra.total,
+      totalTax: ordeDetalles.ordenCompra.totalTax,
+      subTotal: ordeDetalles.ordenCompra.subTotal,
+      productos: ordeDetalles.productos,
+    }));
   };
 
-  return <InvoiceBox {...dataInvoice} />;
+  return <InvoiceBox dataInvoice={dataInvoice} cliente={configuration} />;
 };

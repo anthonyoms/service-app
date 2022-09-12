@@ -4,6 +4,7 @@ import {
   Category,
   LocalShipping,
   ListAlt,
+  AddShoppingCart,
 } from "@material-ui/icons";
 
 export const seguridad = {
@@ -22,6 +23,11 @@ export const inventario = {
       link: "/orders",
       Icon: ListAlt,
       sidebarItemName: "Ordenes de compra",
+    },
+    {
+      link: "/entries",
+      Icon: AddShoppingCart,
+      sidebarItemName: "Entrada de inventario",
     },
   ],
 };

@@ -11,8 +11,8 @@ import {
 } from "../../utils/helpers/messages";
 import moment from "moment";
 
-export default function OrderList() {
-  const [{ loading, ordenesData }, setordenesData] = useState({
+export default function EntryList() {
+  const [{ loading, ordenesData }, setOrdenesData] = useState({
     loading: true,
     ordenesData: [],
   });
@@ -22,16 +22,16 @@ export default function OrderList() {
   }, []);
 
   const loadOrder = async () => {
-    const { ordenes } = await getServiceApp(endpoints.ordenes);
-    setordenesData({
+    const { entradas } = await getServiceApp(endpoints.entrada);
+    setOrdenesData({
       loading: false,
-      ordenesData: ordenes,
+      ordenesData: entradas,
     });
   };
   const handleDelete = async (id) => {
     const result = await confirmActionMessage();
     if (result.isConfirmed) {
-      const dataResponse = await deleteServiceApp(id, endpoints.ordenes);
+      const dataResponse = await deleteServiceApp(id, endpoints.entrada);
       const validData = dataValidation(dataResponse);
       if (validData.ok) {
         loadOrder();
@@ -41,7 +41,7 @@ export default function OrderList() {
 
   const columns = [
     { field: "uid", headerName: "UID", flex: 1, hide: true },
-    { field: "id", headerName: "Orden ID", flex: 1 },
+    { field: "id", headerName: "Entrada ID", flex: 1 },
     {
       field: "suplidor",
       headerName: "Suplidor",
@@ -108,7 +108,7 @@ export default function OrderList() {
 
   return (
     <div className="serviceList">
-      <MyFab route="/neworder" />
+      <MyFab route="/newentry" />
       <div className="dataGrid">
         <DataGrid
           rows={ordenesData}

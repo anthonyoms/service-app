@@ -1,7 +1,6 @@
 import { Autocomplete, Fab, TextField } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Save, DeleteOutline } from "@material-ui/icons";
-import "./newOrder.css";
 import { useCallback, useEffect, useState } from "react";
 import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
@@ -11,8 +10,9 @@ import { useRef } from "react";
 import useForm from "../../hooks/useForm";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { useSelector } from "react-redux";
+import "../newOrder/newOrder.css";
 
-export default function NewOrder() {
+export default function Entry() {
   const { itbis, itbisPercentage } = useSelector((state) => state.info);
 
   const initialState = {
@@ -62,7 +62,7 @@ export default function NewOrder() {
   const loadSuppliers = async () => {
     const [ordenesDataResponse, suppliersDataResponse, productsDataResponse] =
       await Promise.all([
-        getServiceApp(endpoints.ordenes),
+        getServiceApp(endpoints.entrada),
         getServiceApp(endpoints.suppliers),
         getServiceApp(endpoints.products + `?estado=true`),
       ]);
@@ -125,51 +125,43 @@ export default function NewOrder() {
   const saveOrder = async () => {
     if (!detalleOrden.length) return infoMsg(`Ningún producto agregado.`);
     if (!supplierSelected?.cedula_rnc) {
-      infoMsg(`El campo "Suplidor" es requerido.`);
-    } else {
-      setDataState((data) => {
-        return { ...data, loading: true };
-      });
-      //save order
-      const payload = {
-        id: ordenes.total + 1,
-        suplidor: supplierSelected.uid,
-        fechaEmision: moment(),
-        fechaVencimiento: moment().add(1, "M"),
-        totalTax: supplierSelected?.total * itbisPercentage,
-        subTotal: supplierSelected?.total,
-        total:
-          supplierSelected?.total + supplierSelected?.total * itbisPercentage,
-      };
-      const isSaveOrder = await postServiceApp(payload, endpoints.ordenes);
-      if (isSaveOrder.ok) {
-        const detallePayload = {
-          ordenCompra: isSaveOrder.ordenCompra.uid,
-          productos: setProductUid(detalleOrden),
-        };
-        const isDetalleSave = await postServiceApp(
-          detallePayload,
-          endpoints.detalleOrdenes
-        );
-        setDataState((data) => {
-          return { ...data, loading: false };
-        });
-        if (isDetalleSave.ok) {
-          dataValidation(isSaveOrder);
-          setDataState({ ...initialState, loading: false });
-          totalRefence.current = 0;
-          setDetalleOrden([]);
-          loadSuppliers();
-        } else {
-          dataValidation(isDetalleSave, false);
-        }
-      } else {
-        setDataState((data) => {
-          return { ...data, loading: false };
-        });
-        dataValidation(isSaveOrder, false);
-      }
+      return infoMsg(`El campo "Suplidor" es requerido.`);
     }
+
+    setDataState((data) => {
+      return { ...data, loading: true };
+    });
+
+    //save order
+    const payload = {
+      id: ordenes.total + 1,
+      suplidor: supplierSelected.uid,
+      fechaEmision: moment(),
+      fechaVencimiento: moment().add(1, "M"),
+      totalTax: supplierSelected?.total * itbisPercentage,
+      subTotal: supplierSelected?.total,
+      productos: setProductUid(detalleOrden),
+      total:
+        supplierSelected?.total + supplierSelected?.total * itbisPercentage,
+    };
+
+    console.log(payload);
+
+    const isSaveOrder = await postServiceApp(payload, endpoints.entrada);
+
+    if (!isSaveOrder.ok) {
+      setDataState((data) => {
+        return { ...data, loading: false };
+      });
+      dataValidation(isSaveOrder, false);
+      return;
+    }
+
+    dataValidation(isSaveOrder);
+    setDataState({ ...initialState, loading: false });
+    totalRefence.current = 0;
+    setDetalleOrden([]);
+    loadSuppliers();
   };
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -283,7 +275,7 @@ export default function NewOrder() {
       <div className="newOrder">
         <div className="newOrderTitleContainer">
           <h1 className="newOrderTitle">
-            Orden de compra No. #{ordenes?.total + 1 || ""}
+            Entrada de inventario No. #{ordenes?.total + 1 || ""}
           </h1>
         </div>
         <div className="newOrderTop">

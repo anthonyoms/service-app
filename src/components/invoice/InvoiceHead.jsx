@@ -1,10 +1,19 @@
+import moment from "moment/moment";
 import React from "react";
 
-const InvoiceHead = () => {
+const InvoiceHead = ({
+  cliente,
+  suplidor,
+  numero,
+  type,
+  creada,
+  vence,
+  total,
+}) => {
   return (
     <>
       <tr className="top">
-        <td colSpan="5">
+        <td colSpan="6">
           <table>
             <tbody>
               <tr>
@@ -17,11 +26,11 @@ const InvoiceHead = () => {
                 </td>
 
                 <td>
-                  <strong>Orden de compra#:</strong> 123
+                  <strong>{type}#:</strong> {numero}
                   <br />
-                  <strong>Creada:</strong> January 1, 2015
+                  <strong>Creada:</strong> {moment(creada).format("DD/MM/YYYY")}
                   <br />
-                  <strong>Vence:</strong> February 1, 2015
+                  <strong>Vence:</strong> {moment(vence).format("DD/MM/YYYY")}
                 </td>
               </tr>
             </tbody>
@@ -30,30 +39,29 @@ const InvoiceHead = () => {
       </tr>
 
       <tr className="information">
-        <td colSpan="5">
+        <td colSpan="6">
           <table>
             <tbody>
               <tr>
                 <td>
                   <strong>Datos cliente:</strong>
                   <br />
-                  <strong>Nombre:</strong> Sparksuite, Inc.
+                  <strong>Nombre: </strong>
+                  {cliente.nombre}
                   <br />
-                  <strong>Cedula/Rnc:</strong> 402-00455430-0
+                  <strong>Cedula/Rnc: </strong> {cliente.cedula_rnc}
                   <br />
-                  <strong>Dirección:</strong> Expreso John F. Kennedy Km. 16,
-                  Santo Domingo 10203
+                  <strong>Dirección:</strong> {cliente.direccion}
                 </td>
 
                 <td>
                   <strong>Datos Proveedor:</strong>
                   <br />
-                  <strong>Nombre:</strong> Acme Corp.
+                  <strong>Nombre:</strong> {suplidor?.nombre}
                   <br />
-                  <strong>Cedula/Rnc:</strong> 402-00455430-0
+                  <strong>Cedula/Rnc:</strong> {suplidor?.cedula_rnc}
                   <br />
-                  <strong>Dirección:</strong> Expreso John F. Kennedy Km. 16,
-                  Santo Domingo 10203
+                  <strong>Dirección:</strong> {suplidor?.direccion}
                 </td>
               </tr>
             </tbody>
@@ -66,6 +74,7 @@ const InvoiceHead = () => {
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
         <td>Al contado</td>
       </tr>
       <tr className="details">
@@ -74,7 +83,8 @@ const InvoiceHead = () => {
         <td></td>
         <td></td>
         <td></td>
-        <td>$385.00</td>
+        <td></td>
+        <td>${total}</td>
       </tr>
     </>
   );

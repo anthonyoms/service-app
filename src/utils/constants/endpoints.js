@@ -7,4 +7,5 @@ export const endpoints = {
   ordenes: "/ordenes",
   detalleOrdenes: "/detalleOrdenes",
   configuraciones: "/configuraciones",
+  entrada: "/entradas",
 };

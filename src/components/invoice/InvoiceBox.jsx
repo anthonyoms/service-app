@@ -2,13 +2,7 @@ import React from "react";
 import InvoiceDetail from "./InvoiceDetail";
 import InvoiceHead from "./InvoiceHead";
 
-const InvoiceBox = ({
-  cliente,
-  suplidor,
-  type,
-  fechaEmision,
-  fechaVencimineto,
-}) => {
+const InvoiceBox = ({ cliente, dataInvoice }) => {
   return (
     <div className="divBody">
       <br />
@@ -17,8 +11,8 @@ const InvoiceBox = ({
       <div className="invoice-box">
         <table>
           <tbody>
-            <InvoiceHead />
-            <InvoiceDetail />
+            <InvoiceHead cliente={cliente} {...dataInvoice} />
+            <InvoiceDetail {...dataInvoice} />
           </tbody>
         </table>
       </div>

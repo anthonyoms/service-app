@@ -52,12 +52,17 @@ export default function Product() {
 
   const loadProducts = async () => {
     const id = getIdUrl();
-    const [{ categorias }, { producto }] = await Promise.all([
+    const [{ categorias }, { producto, ...data }] = await Promise.all([
       getServiceApp(endpoints.categories),
       getServiceApp(`${endpoints.products}/${id}`),
     ]);
+    if (!data.ok) {
+      dataValidation(data);
+      setProducts({ loading: false });
+      return;
+    }
     setCategories(categorias);
-    setFormValues({ ...producto, categoria: producto.categoria._id });
+    setFormValues({ ...producto, categoria: producto?.categoria._id });
     setProducts({ product: producto, loading: false });
   };
 
