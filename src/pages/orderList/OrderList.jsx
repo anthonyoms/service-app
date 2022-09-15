@@ -25,7 +25,9 @@ export default function OrderList() {
     const { ordenes } = await getServiceApp(endpoints.ordenes);
     setordenesData({
       loading: false,
-      ordenesData: ordenes,
+      ordenesData: ordenes.map((orden) => {
+        return { ...orden, nombreSuplidor: orden.suplidor.nombre };
+      }),
     });
   };
   const handleDelete = async (id) => {
@@ -43,10 +45,9 @@ export default function OrderList() {
     { field: "uid", headerName: "UID", flex: 1, hide: true },
     { field: "id", headerName: "Orden ID", flex: 1 },
     {
-      field: "suplidor",
+      field: "nombreSuplidor",
       headerName: "Suplidor",
       flex: 1,
-      renderCell: (params) => params.row.suplidor.nombre,
     },
     {
       field: "fechaEmision",
@@ -96,10 +97,12 @@ export default function OrderList() {
             <Link to={"/invoice/" + params.row.uid} target="_blank">
               <button className="serviceListEdit">Ver</button>
             </Link>
-            <DeleteOutline
-              className="serviceListDelete"
-              onClick={() => handleDelete(params.row.uid)}
-            />
+            {params.row.estado && (
+              <DeleteOutline
+                className="serviceListDelete"
+                onClick={() => handleDelete(params.row.uid)}
+              />
+            )}
           </>
         );
       },

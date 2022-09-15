@@ -11,14 +11,12 @@ import { getServiceApp, saveWithImage } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import "./newProduct.css";
+import { MyBackdrop } from "../../components/ui/Backdrop";
 
 export default function NewProduct() {
+  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
 
   const [
     {
@@ -30,6 +28,8 @@ export default function NewProduct() {
       descripcion,
       precio_compra,
       utilidad,
+      codigo,
+      codigoBarras,
     },
     handleInputChange,
     reset,
@@ -42,17 +42,38 @@ export default function NewProduct() {
     categoria: "",
     descripcion: "",
     disponible: true,
+    codigo: "",
+    codigoBarras: "",
   });
+
+  if (!codigo) {
+    getServiceApp(endpoints.products).then((dataResponse) => {
+      const validData = dataValidation(dataResponse, false);
+      if (validData.ok) {
+        const target = {
+          target: { name: "codigo", value: dataResponse.total + 1 },
+        };
+        handleInputChange(target);
+      }
+    });
+  }
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
   const loadCategories = async () => {
     const dataResponse = await getServiceApp(endpoints.categories);
     const validData = dataValidation(dataResponse, false);
     if (validData.ok) {
       setCategories(validData.categorias);
     }
+    setLoading(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const payload = {
       img,
       nombre,
@@ -65,13 +86,16 @@ export default function NewProduct() {
       ),
       precio_compra,
       utilidad,
+      codigo,
+      codigoBarras,
     };
     const isSaveProduct = await saveWithImage(
       payload,
       image,
       endpoints.products
     );
-    if (isSaveProduct.ok) {
+    setLoading(false);
+    if (isSaveProduct?.ok) {
       reset();
     }
   };
@@ -83,113 +107,142 @@ export default function NewProduct() {
     }
   };
   return (
-    <div className="newProduct">
-      <h1 className="addProductTitle">Producto Nuevo</h1>
-      <form onSubmit={handleSubmit} className="addProductForm">
-        <div className="addProductItem">
-          <InputLabel htmlFor="img">Imagen del producto</InputLabel>
-          <TextField
-            id="img"
-            name="img"
-            variant="outlined"
-            type="file"
-            autoComplete="off"
-            value={img}
-            onChange={(e) => {
-              handleInputChange(e);
-              setImage(e.target.files[0]);
-            }}
-          />
-        </div>
-        <div className="addProductItem">
-          <TextField
-            id="nombre"
-            label="Nombre"
-            name="nombre"
-            variant="outlined"
-            autoComplete="off"
-            inputProps={{ maxLength: "50" }}
-            value={nombre}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="addProductItem">
-          <TextField
-            id="outlined-multiline-flexible"
-            name="descripcion"
-            label="Descripción"
-            multiline
-            inputProps={{ maxLength: "50" }}
-            rows={5}
-            value={descripcion}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="addProductItem">
-          <TextField
-            id="precio_venta"
-            label="Precio compra"
-            name="precio_compra"
-            variant="outlined"
-            autoComplete="off"
-            inputProps={{ maxLength: "12" }}
-            size="small"
-            value={precio_compra}
-            onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
-          />
-        </div>
-        <div className="addProductItem">
-          <TextField
-            id="utilidad"
-            label="Utilidad %"
-            name="utilidad"
-            variant="outlined"
-            autoComplete="off"
-            size="small"
-            inputProps={{ maxLength: "12" }}
-            value={utilidad}
-            onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
-          />
-        </div>
-        <div className="addProductItem">
-          <TextField
-            id="precio_venta"
-            label="Precio venta"
-            name="precio_venta"
-            variant="outlined"
-            autoComplete="off"
-            size="small"
-            inputProps={{ maxLength: "12", readOnly: true }}
-            value={((utilidad / 100) * precio_compra + +precio_compra).toFixed(
-              2
-            )}
-          />
-        </div>
-        <div className="addProductItem">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label-categoria">
-              Categoria
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label-categoria"
-              id="demo-simple-select-categoria"
-              name="categoria"
-              label="Categoría"
-              value={categoria}
+    <>
+      <MyBackdrop loading={loading} />
+      <div className="newProduct">
+        <h1 className="addProductTitle">Producto Nuevo</h1>
+        <form onSubmit={handleSubmit} className="addProductForm">
+          <div className="addProductItem">
+            <InputLabel htmlFor="img">Imagen del producto</InputLabel>
+            <TextField
+              id="img"
+              name="img"
+              variant="outlined"
+              type="file"
+              autoComplete="off"
+              value={img}
+              onChange={(e) => {
+                handleInputChange(e);
+                setImage(e.target.files[0]);
+              }}
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="codigo"
+              label="Codigo"
+              name="codigo"
+              variant="outlined"
+              autoComplete="off"
+              size="small"
+              readOnly
+              value={codigo}
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="codigoBarras"
+              label="Codigo de barras"
+              name="codigoBarras"
+              variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "50" }}
+              size="small"
+              value={codigoBarras}
               onChange={handleInputChange}
-            >
-              {categories.map((category) => {
-                return (
-                  <MenuItem key={category?.uid} value={category?.uid}>
-                    {category?.nombre}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </div>
-        <button className="addProductButton">Crear</button>
-      </form>
-    </div>
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="nombre"
+              label="Nombre"
+              name="nombre"
+              variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "50" }}
+              value={nombre}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="outlined-multiline-flexible"
+              name="descripcion"
+              label="Descripción"
+              multiline
+              inputProps={{ maxLength: "50" }}
+              rows={5}
+              value={descripcion}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="precio_venta"
+              label="Precio compra"
+              name="precio_compra"
+              variant="outlined"
+              autoComplete="off"
+              inputProps={{ maxLength: "12" }}
+              size="small"
+              value={precio_compra}
+              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="utilidad"
+              label="Utilidad %"
+              name="utilidad"
+              variant="outlined"
+              autoComplete="off"
+              size="small"
+              inputProps={{ maxLength: "12" }}
+              value={utilidad}
+              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+            />
+          </div>
+          <div className="addProductItem">
+            <TextField
+              id="precio_venta"
+              label="Precio venta"
+              name="precio_venta"
+              variant="outlined"
+              autoComplete="off"
+              size="small"
+              inputProps={{ maxLength: "12", readOnly: true }}
+              value={(
+                (utilidad / 100) * precio_compra +
+                +precio_compra
+              ).toFixed(2)}
+            />
+          </div>
+          <div className="addProductItem">
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label-categoria">
+                Categoria
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label-categoria"
+                id="demo-simple-select-categoria"
+                name="categoria"
+                label="Categoría"
+                value={categoria}
+                onChange={handleInputChange}
+              >
+                {categories.map((category) => {
+                  return (
+                    <MenuItem key={category?.uid} value={category?.uid}>
+                      {category?.nombre}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <button className="addProductButton">Crear</button>
+        </form>
+      </div>
+    </>
   );
 }

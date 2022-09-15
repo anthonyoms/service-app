@@ -29,6 +29,7 @@ import OrderList from "../pages/orderList/OrderList";
 import { Invoice } from "../pages/invoices/Invoice";
 import Entry from "../pages/entry/Entry";
 import EntryList from "../pages/entryList/EntryList";
+import { EntryInvoice } from "../pages/invoices/EntryInvoice";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -36,6 +37,7 @@ export const DashboardRoutes = () => {
     return (
       <Routes>
         <Route path="/invoice/:invoiceId" element={<Invoice />} />
+        <Route path="/entryinvoice/:invoiceId" element={<EntryInvoice />} />
       </Routes>
     );
   }
@@ -51,6 +53,7 @@ export const DashboardRoutes = () => {
           {/*User routes */}
           <Route path="/users" element={<UserList />} />
           <Route path="/user/:userId" element={<User />} />
+          <Route path="/myuser" element={<User />} />
           <Route path="/newuser" element={<NewUser />} />
 
           {/*Products routes */}

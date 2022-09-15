@@ -20,7 +20,10 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import { MyBackdrop } from "../../components/ui/Backdrop";
+import { Login } from "../../services/auth";
 import {
   getServiceApp,
   updateServiceApp,
@@ -34,6 +37,10 @@ import { dataValidation } from "../../utils/helpers/messages";
 import "./user.css";
 
 export default function User() {
+  const { uid } = useSelector((state) => state.auth);
+  const IdUrl = window.location.pathname.split("/")[1];
+  const userId = IdUrl === "myuser" ? uid : getIdUrl();
+  const url = `${endpoints.users}/${userId}`;
   const [{ user, loading }, setUser] = useState({ user: null, loading: true });
   const [formValues, setFormValues] = useState({
     correo: "",
@@ -46,6 +53,8 @@ export default function User() {
     estadoCivil: "",
     rol: "",
     cedula: "",
+    currentPassword: "",
+    confirmPassword: "",
   });
   const {
     correo,
@@ -58,19 +67,20 @@ export default function User() {
     estadoCivil,
     rol,
     cedula,
+    currentPassword,
+    confirmPassword,
   } = formValues;
 
   useEffect(() => {
-    loadUser();
-  }, []);
+    loadUser(url);
+  }, [url]);
 
   const handleInputChange = ({ target: { name, value } }) => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const loadUser = async () => {
-    const id = getIdUrl();
-    const dataResponse = await getServiceApp(`${endpoints.users}/${id}`);
+  const loadUser = async (url) => {
+    const dataResponse = await getServiceApp(url);
     const validData = dataValidation(dataResponse, false);
     if (!validData.ok) {
       setUser({ loading: false });
@@ -105,7 +115,40 @@ export default function User() {
     );
     const validData = await dataValidation(dataResponse);
     if (validData.ok) {
-      loadUser();
+      loadUser(url);
+    }
+  };
+
+  const handleUpdatePws = async () => {
+    const isValidPws = await Login(correo, currentPassword);
+    if (!isValidPws.ok) {
+      Swal.fire("Error", isValidPws, "error");
+      return;
+    }
+    if (!password || !confirmPassword) {
+      Swal.fire("Error", "Todos los campos son obligatorios", "error");
+      return;
+    }
+    if (password !== confirmPassword) {
+      Swal.fire("Error", "Las contraseñas no coinciden", "error");
+      return;
+    }
+    const payload = {
+      correo,
+      nombre,
+      password,
+      telefono,
+      fechaNacimiento,
+      direccion,
+      genero,
+      estadoCivil,
+      rol,
+      cedula,
+    };
+    const dataResponse = await updateServiceApp(payload, endpoints.users, uid);
+    const validData = await dataValidation(dataResponse);
+    if (validData.ok) {
+      loadUser(url);
     }
   };
 
@@ -120,7 +163,7 @@ export default function User() {
     );
     const validData = dataValidation(data);
     if (validData.ok) {
-      loadUser();
+      loadUser(url);
     } else {
       setUser((user) => {
         return { ...user, loading: false };
@@ -184,6 +227,59 @@ export default function User() {
                 <Group className="userShowIcon" />
                 <span className="userShowInfoTitle">{user?.estadoCivil}</span>
               </div>
+            </div>
+            <div>
+              <span className="userUpdateTitle">Cambiar contraseña</span>
+              <div className="userUpdateItem">
+                <TextField
+                  id="currentPassword"
+                  label="Contraseña actual"
+                  name="currentPassword"
+                  variant="outlined"
+                  autoComplete="off"
+                  inputProps={{ maxLength: "50" }}
+                  size="small"
+                  type={"password"}
+                  value={currentPassword || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="userUpdateItem">
+                <TextField
+                  id="password"
+                  label="Contraseña Nueva"
+                  name="password"
+                  variant="outlined"
+                  autoComplete="off"
+                  inputProps={{ maxLength: "50" }}
+                  size="small"
+                  type={"password"}
+                  value={password || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="userUpdateItem">
+                <TextField
+                  id="confirmPassword"
+                  label="Confirmar contraseña"
+                  name="confirmPassword"
+                  variant="outlined"
+                  autoComplete="off"
+                  inputProps={{ maxLength: "50" }}
+                  size="small"
+                  type={"password"}
+                  value={confirmPassword || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <br />
+              <button
+                className="userUpdateButton2"
+                onClick={handleUpdatePws}
+                color="success"
+              >
+                Actulizar contraseña
+              </button>
             </div>
           </div>
           <div className="userUpdate">
@@ -290,9 +386,9 @@ export default function User() {
                       value={genero}
                       onChange={handleInputChange}
                     >
-                      <MenuItem value={"Masculino"}>Masculino</MenuItem>
-                      <MenuItem value={"Femenino"}>Femenino</MenuItem>
-                      <MenuItem value={"Otro"}>Otro</MenuItem>
+                      <MenuItem value={"masculino"}>Masculino</MenuItem>
+                      <MenuItem value={"femenino"}>Femenino</MenuItem>
+                      <MenuItem value={"otro"}>Otro</MenuItem>
                     </Select>
                   </FormControl>
                 </div>

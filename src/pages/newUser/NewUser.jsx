@@ -102,9 +102,10 @@ export default function NewUser() {
             <div className="newUserItem">
               <TextField
                 id="cedula"
-                label="Cedula*"
+                label="Cedula"
                 name="cedula"
                 variant="outlined"
+                required
                 autoComplete="off"
                 inputProps={{ maxLength: "11" }}
                 value={cedula}

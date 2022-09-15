@@ -76,6 +76,7 @@ export default function Product() {
     return ((utilidadActual / 100) * precio + +precio).toFixed(2);
   };
   const handleSubmit = async (e) => {
+    setProducts((prevState) => ({ ...prevState, loading: true }));
     e.preventDefault();
     const payload = {
       img,
@@ -95,9 +96,11 @@ export default function Product() {
       product.uid
     );
     const validData = dataValidation(dataResponse);
-    if (validData.ok) {
-      loadProducts();
+    if (!validData.ok) {
+      setProducts((prevState) => ({ ...prevState, loading: false }));
+      return;
     }
+    loadProducts();
   };
   const handleUploadImage = async (e) => {
     setProducts((product) => {
@@ -141,6 +144,16 @@ export default function Product() {
               <span className="productName">{product?.nombre}</span>
             </div>
             <div className="productInfoBottom">
+              <div className="productInfoItem">
+                <span className="productInfoKey">Codigo:&nbsp;</span>
+                <span className="productInfoValue">{product?.codigo}</span>
+              </div>
+              <div className="productInfoItem">
+                <span className="productInfoKey">Codigo de barras:&nbsp;</span>
+                <span className="productInfoValue">
+                  {product?.codigoBarras}
+                </span>
+              </div>
               <div className="productInfoItem">
                 <span className="productInfoKey">Cantidad:&nbsp;</span>
                 <span className="productInfoValue">{product?.cantidad}</span>

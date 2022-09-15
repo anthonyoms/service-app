@@ -93,19 +93,20 @@ export default function EntryList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/invoice/" + params.row.uid} target="_blank">
+            <Link to={"/entryinvoice/" + params.row.uid} target="_blank">
               <button className="serviceListEdit">Ver</button>
             </Link>
-            <DeleteOutline
-              className="serviceListDelete"
-              onClick={() => handleDelete(params.row.uid)}
-            />
+            {params.row.estado && (
+              <DeleteOutline
+                className="serviceListDelete"
+                onClick={() => handleDelete(params.row.uid)}
+              />
+            )}
           </>
         );
       },
     },
   ];
-
   return (
     <div className="serviceList">
       <MyFab route="/newentry" />

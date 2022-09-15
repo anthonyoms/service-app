@@ -3,6 +3,7 @@ import InvoiceDetail from "./InvoiceDetail";
 import InvoiceHead from "./InvoiceHead";
 
 const InvoiceBox = ({ cliente, dataInvoice }) => {
+  console.log(cliente, dataInvoice )
   return (
     <div className="divBody">
       <br />

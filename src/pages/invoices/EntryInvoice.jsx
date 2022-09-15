@@ -6,10 +6,10 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { getIdUrl } from "../../utils/helpers/getIdUrl";
 import { dataValidation } from "../../utils/helpers/messages";
 
-export const Invoice = () => {
+export const EntryInvoice = () => {
   const configuration = useSelector((state) => state.info);
   const [dataInvoice, setDataInvoice] = useState({
-    type: "Orden de compra",
+    type: "Entrada de inventario",
   });
   useEffect(() => {
     loadDataInvoice();
@@ -17,22 +17,20 @@ export const Invoice = () => {
 
   const loadDataInvoice = async () => {
     const id = getIdUrl();
-    const dataResponse = await getServiceApp(
-      `${endpoints.detalleOrdenes}/${id}`
-    );
-    const { ordenDetalles } = dataValidation(dataResponse, false);
-    console.log(ordenDetalles)
+    const dataResponse = await getServiceApp(`${endpoints.entrada}/${id}`);
+    const { entrada } = dataValidation(dataResponse, false);
+    console.log(entrada);
     setDataInvoice((prevState) => ({
       ...prevState,
-      creada: ordenDetalles.ordenCompra.fechaEmision,
-      vence: ordenDetalles.ordenCompra.fechaVencimiento,
-      numero: ordenDetalles.ordenCompra.id,
-      suplidor: ordenDetalles.ordenCompra.suplidor,
-      total: ordenDetalles.ordenCompra.total,
-      totalTax: ordenDetalles.ordenCompra.totalTax,
-      subTotal: ordenDetalles.ordenCompra.subTotal,
-      productos: ordenDetalles.productos,
-      estado: ordenDetalles.ordenCompra.estado,
+      creada: entrada.fechaEmision,
+      vence: entrada.fechaVencimiento,
+      numero: entrada.id,
+      suplidor: entrada.suplidor,
+      total: entrada.total,
+      totalTax: entrada.totalTax,
+      subTotal: entrada.subTotal,
+      productos: entrada.productos,
+      estado: entrada.estado,
     }));
   };
 

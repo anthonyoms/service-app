@@ -6,10 +6,6 @@ export default function NewService() {
       <h1 className="addServiceTitle">Servicio Nuevo</h1>
       <form className="addServiceForm">
         <div className="addServiceItem">
-          <label>Imagen</label>
-          <input type="file" id="file" />
-        </div>
-        <div className="addServiceItem">
           <label>Nombre</label>
           <input type="text" placeholder="Apple Airpods" />
         </div>

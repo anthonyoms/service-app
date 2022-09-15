@@ -1,16 +1,23 @@
 import {
   PermIdentity,
+  People,
   Storefront,
   Category,
   LocalShipping,
   ListAlt,
   AddShoppingCart,
+  RssFeed,
 } from "@material-ui/icons";
 
 export const seguridad = {
   title: "Seguridad",
   listItem: [
-    { link: "/users", Icon: PermIdentity, sidebarItemName: "Usuarios" },
+    { link: "/users", Icon: People, sidebarItemName: "Usuarios" },
+    {
+      link: "/myuser",
+      Icon: PermIdentity,
+      sidebarItemName: "Mi perfil",
+    },
   ],
 };
 export const inventario = {
@@ -28,6 +35,11 @@ export const inventario = {
       link: "/entries",
       Icon: AddShoppingCart,
       sidebarItemName: "Entrada de inventario",
+    },
+    {
+      link: "/services",
+      Icon: RssFeed,
+      sidebarItemName: "Servicios",
     },
   ],
 };

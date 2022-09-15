@@ -135,3 +135,12 @@
   color: white;
   font-weight: 600;
 }
+.userUpdateButton2 {
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgb(66, 186, 150);
+  color: white;
+  font-weight: 600;
+}

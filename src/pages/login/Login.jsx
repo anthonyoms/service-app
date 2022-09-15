@@ -82,7 +82,6 @@ export default function SignIn() {
               name="correo"
               autoComplete="off"
               autoFocus
-              value={"anthony.otoniel@hotmail.com"}
             />
             <TextField
               margin="normal"
@@ -93,7 +92,6 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-              value={12345}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

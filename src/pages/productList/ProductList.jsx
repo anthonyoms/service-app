@@ -34,6 +34,7 @@ export default function ProductList() {
   };
   const columns = [
     { field: "uid", headerName: "ID", hide: true, flex: 1 },
+    { field: "codigo", headerName: "codigo", flex: 1 },
     {
       field: "product",
       headerName: "Producto",

@@ -9,6 +9,7 @@ const InvoiceHead = ({
   creada,
   vence,
   total,
+  estado,
 }) => {
   return (
     <>
@@ -28,9 +29,19 @@ const InvoiceHead = ({
                 <td>
                   <strong>{type}#:</strong> {numero}
                   <br />
-                  <strong>Creada:</strong> {moment(creada).format("DD/MM/YYYY")}
-                  <br />
-                  <strong>Vence:</strong> {moment(vence).format("DD/MM/YYYY")}
+                  {estado ? (
+                    <>
+                      <strong>Creada:</strong>{" "}
+                      {moment(creada).format("DD/MM/YYYY")}
+                      <br />
+                      <strong>Vence:</strong>{" "}
+                      {moment(vence).format("DD/MM/YYYY")}
+                    </>
+                  ) : (
+                    <>
+                      <strong style={{ color: "red" }}>Estado: Anulada</strong>
+                    </>
+                  )}
                 </td>
               </tr>
             </tbody>
