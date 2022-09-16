@@ -38,9 +38,7 @@ import "./user.css";
 
 export default function User() {
   const { uid } = useSelector((state) => state.auth);
-  const IdUrl = window.location.pathname.split("/")[1];
-  const userId = IdUrl === "myuser" ? uid : getIdUrl();
-  const url = `${endpoints.users}/${userId}`;
+  const userId = window.location.pathname.split("/")[1];
   const [{ user, loading }, setUser] = useState({ user: null, loading: true });
   const [formValues, setFormValues] = useState({
     correo: "",
@@ -72,15 +70,16 @@ export default function User() {
   } = formValues;
 
   useEffect(() => {
-    loadUser(url);
-  }, [url]);
+    loadUser(uid, userId);
+  }, [uid, userId]);
 
   const handleInputChange = ({ target: { name, value } }) => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const loadUser = async (url) => {
-    const dataResponse = await getServiceApp(url);
+  const loadUser = async (id, userId) => {
+    const user = userId === "myuser" ? id : getIdUrl();
+    const dataResponse = await getServiceApp(`${endpoints.users}/${user}`);
     const validData = dataValidation(dataResponse, false);
     if (!validData.ok) {
       setUser({ loading: false });
@@ -115,7 +114,7 @@ export default function User() {
     );
     const validData = await dataValidation(dataResponse);
     if (validData.ok) {
-      loadUser(url);
+      loadUser(uid, userId);
     }
   };
 
@@ -148,7 +147,7 @@ export default function User() {
     const dataResponse = await updateServiceApp(payload, endpoints.users, uid);
     const validData = await dataValidation(dataResponse);
     if (validData.ok) {
-      loadUser(url);
+      loadUser(uid, userId);
     }
   };
 
@@ -163,7 +162,7 @@ export default function User() {
     );
     const validData = dataValidation(data);
     if (validData.ok) {
-      loadUser(url);
+      loadUser(uid, userId);
     } else {
       setUser((user) => {
         return { ...user, loading: false };
@@ -228,59 +227,61 @@ export default function User() {
                 <span className="userShowInfoTitle">{user?.estadoCivil}</span>
               </div>
             </div>
-            <div>
-              <span className="userUpdateTitle">Cambiar contraseña</span>
-              <div className="userUpdateItem">
-                <TextField
-                  id="currentPassword"
-                  label="Contraseña actual"
-                  name="currentPassword"
-                  variant="outlined"
-                  autoComplete="off"
-                  inputProps={{ maxLength: "50" }}
-                  size="small"
-                  type={"password"}
-                  value={currentPassword || ""}
-                  onChange={handleInputChange}
-                />
+            {userId === "myuser" && (
+              <div>
+                <span className="userUpdateTitle">Cambiar contraseña</span>
+                <div className="userUpdateItem">
+                  <TextField
+                    id="currentPassword"
+                    label="Contraseña actual"
+                    name="currentPassword"
+                    variant="outlined"
+                    autoComplete="off"
+                    inputProps={{ maxLength: "50" }}
+                    size="small"
+                    type={"password"}
+                    value={currentPassword || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="userUpdateItem">
+                  <TextField
+                    id="password"
+                    label="Contraseña Nueva"
+                    name="password"
+                    variant="outlined"
+                    autoComplete="off"
+                    inputProps={{ maxLength: "50" }}
+                    size="small"
+                    type={"password"}
+                    value={password || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="userUpdateItem">
+                  <TextField
+                    id="confirmPassword"
+                    label="Confirmar contraseña"
+                    name="confirmPassword"
+                    variant="outlined"
+                    autoComplete="off"
+                    inputProps={{ maxLength: "50" }}
+                    size="small"
+                    type={"password"}
+                    value={confirmPassword || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <br />
+                <button
+                  className="userUpdateButton2"
+                  onClick={handleUpdatePws}
+                  color="success"
+                >
+                  Actulizar contraseña
+                </button>
               </div>
-              <div className="userUpdateItem">
-                <TextField
-                  id="password"
-                  label="Contraseña Nueva"
-                  name="password"
-                  variant="outlined"
-                  autoComplete="off"
-                  inputProps={{ maxLength: "50" }}
-                  size="small"
-                  type={"password"}
-                  value={password || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="userUpdateItem">
-                <TextField
-                  id="confirmPassword"
-                  label="Confirmar contraseña"
-                  name="confirmPassword"
-                  variant="outlined"
-                  autoComplete="off"
-                  inputProps={{ maxLength: "50" }}
-                  size="small"
-                  type={"password"}
-                  value={confirmPassword || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <br />
-              <button
-                className="userUpdateButton2"
-                onClick={handleUpdatePws}
-                color="success"
-              >
-                Actulizar contraseña
-              </button>
-            </div>
+            )}
           </div>
           <div className="userUpdate">
             <span className="userUpdateTitle">Editar</span>
