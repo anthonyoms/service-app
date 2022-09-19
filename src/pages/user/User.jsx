@@ -133,16 +133,16 @@ export default function User() {
       return;
     }
     const payload = {
-      correo,
-      nombre,
+      correo: user.correo,
+      nombre: user.nombre,
       password,
-      telefono,
-      fechaNacimiento,
-      direccion,
-      genero,
-      estadoCivil,
-      rol,
-      cedula,
+      telefono: user.telefono,
+      fechaNacimiento: user.fechaNacimiento,
+      direccion: user.direccion,
+      genero: user.genero,
+      estadoCivil: user.estadoCivil,
+      rol: user.rol,
+      cedula: user.cedula,
     };
     const dataResponse = await updateServiceApp(payload, endpoints.users, uid);
     const validData = await dataValidation(dataResponse);

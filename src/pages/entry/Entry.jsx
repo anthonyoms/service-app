@@ -1,6 +1,6 @@
-import { Autocomplete, Fab, TextField } from "@mui/material";
+import { Autocomplete, Fab, TextField, Tooltip } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Save, DeleteOutline } from "@material-ui/icons";
+import { Save, DeleteOutline, Refresh } from "@material-ui/icons";
 import { useCallback, useEffect, useState } from "react";
 import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
@@ -11,6 +11,8 @@ import useForm from "../../hooks/useForm";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { useSelector } from "react-redux";
 import "../newOrder/newOrder.css";
+import { textFieldValidation } from "../../utils/helpers/textFieldValidation";
+import Swal from "sweetalert2";
 
 export default function Entry() {
   const { itbis, itbisPercentage } = useSelector((state) => state.info);
@@ -34,9 +36,19 @@ export default function Entry() {
     left: "auto",
     position: "fixed",
   };
-  const [{ cantidadRequerida }, handleInputChange, reset] = useForm({
-    cantidadRequerida: 0,
-  });
+  const styleFabProducts = {
+    margin: 0,
+    top: "auto",
+    right: "10em",
+    bottom: "6em",
+    left: "auto",
+    position: "fixed",
+  };
+  const [{ cantidadRequerida, ordenCompra }, handleInputChange, reset] =
+    useForm({
+      cantidadRequerida: "",
+      ordenCompra: "",
+    });
   const [
     {
       loading,
@@ -93,7 +105,10 @@ export default function Entry() {
     setDataState((data) => {
       return { ...data, currentProductSelected: params };
     });
-    reset();
+    resetCantidadRequerida();
+  };
+  const resetCantidadRequerida = () => {
+    handleInputChange({ target: { name: "cantidadRequerida", value: "" } });
   };
   const handleDelete = useCallback(
     ({ uid, totalPrice }) => {
@@ -162,6 +177,7 @@ export default function Entry() {
     totalRefence.current = 0;
     setDetalleOrden([]);
     loadSuppliers();
+    reset();
   };
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -201,7 +217,8 @@ export default function Entry() {
             key: !key,
           };
         });
-        reset();
+
+        resetCantidadRequerida();
       } else {
         infoMsg(
           `El producto ${isExistingProduct.nombre} ya existe en la orden.`
@@ -212,6 +229,57 @@ export default function Entry() {
         `Los campos: "Nombre del produto" y "Cantidad requerida" deben ser completados.`
       );
     }
+  };
+
+  const validation = (e, regex) => {
+    const validEntry = textFieldValidation(e, regex);
+    if (!validEntry) {
+      return;
+    }
+    handleInputChange(validEntry);
+  };
+
+  const getOrdenCompraHead = async () => {
+    const dataResponse = await getServiceApp(
+      `${endpoints.ordenes}/${ordenCompra}`
+    );
+    const { orden } = dataValidation(dataResponse, false);
+    return orden?.uid;
+  };
+
+  const handleLoadProductsFromOrder = async () => {
+    if (!ordenCompra) {
+      return Swal.fire(
+        "Información",
+        "Para cargar los productos el numero de orden de compra es obligatorio.",
+        "info"
+      );
+    }
+    setDataState((prevState) => ({ ...prevState, loading: true }));
+    const orderId = await getOrdenCompraHead();
+    if (!orderId) {
+      setDataState((prevState) => ({ ...prevState, loading: false }));
+      return;
+    }
+    const dataResponse = await getServiceApp(
+      `${endpoints.detalleOrdenes}/${orderId}`
+    );
+    const { ordenDetalles } = dataValidation(dataResponse, false);
+    console.log(ordenDetalles);
+    setDataState((prevState) => ({ ...prevState, loading: false }));
+    totalRefence.current = ordenDetalles.ordenCompra.subTotal;
+    setDetalleOrden(
+      ordenDetalles.productos.map(({ producto, ...data }) => {
+        setDataState(({ supplierSelected, ...prevState }) => ({
+          ...prevState,
+          supplierSelected: {
+            ...supplierSelected,
+            total: totalRefence.current,
+          },
+        }));
+        return { ...producto, ...data, uid: producto._id };
+      })
+    );
   };
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
@@ -269,9 +337,22 @@ export default function Entry() {
   return (
     <>
       <MyBackdrop loading={loading} />
-      <Fab onClick={saveOrder} style={style} color="success" aria-label="add">
-        <Save />
-      </Fab>
+      <Tooltip title="Guardar.">
+        <Fab onClick={saveOrder} style={style} color="success" aria-label="add">
+          <Save />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="Cargar productos desde orden de compra.">
+        <Fab
+          onClick={handleLoadProductsFromOrder}
+          style={styleFabProducts}
+          color="primary"
+          aria-label="add"
+        >
+          <Refresh />
+        </Fab>
+      </Tooltip>
+
       <div className="newOrder">
         <div className="newOrderTitleContainer">
           <h1 className="newOrderTitle">
@@ -294,6 +375,19 @@ export default function Entry() {
               renderInput={(params) => (
                 <TextField size="small" {...params} label="Suplidor*" />
               )}
+            />
+            <TextField
+              id="ordenCompra"
+              label="Numero orden de compra"
+              name="ordenCompra"
+              variant="outlined"
+              autoComplete="off"
+              sx={{ m: 1 }}
+              size="small"
+              inputProps={{ maxLength: "10" }}
+              value={ordenCompra}
+              onBlur={getOrdenCompraHead}
+              onChange={(e) => validation(e, /^[0-9\b]+$/)}
             />
             <TextField
               id="vendedor"
@@ -374,7 +468,7 @@ export default function Entry() {
             />
             <TextField
               id="subTotal"
-              label="Sub-total orden de compra"
+              label="Sub-total Entrada"
               name="subTotal"
               variant="outlined"
               autoComplete="off"
@@ -385,7 +479,7 @@ export default function Entry() {
             />
             <TextField
               id="total"
-              label="Total orden de compra"
+              label="Total Entrada"
               name="total"
               variant="outlined"
               autoComplete="off"
@@ -447,7 +541,7 @@ export default function Entry() {
                   autoComplete="off"
                   size="small"
                   value={cantidadRequerida}
-                  onChange={handleInputChange}
+                  onChange={(e) => validation(e, /^[0-9\b]+$/)}
                 />
               </div>
               <div className="newOrderItem">
