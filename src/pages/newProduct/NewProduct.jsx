@@ -1,3 +1,4 @@
+import { NumericFormat } from "react-number-format";
 import {
   FormControl,
   InputLabel,
@@ -177,16 +178,21 @@ export default function NewProduct() {
             />
           </div>
           <div className="addProductItem">
-            <TextField
-              id="precio_venta"
-              label="Precio compra"
+            <NumericFormat
               name="precio_compra"
-              variant="outlined"
+              customInput={TextField}
+              label="Precio compra"
               autoComplete="off"
+              defaultValue={0}
               inputProps={{ maxLength: "12" }}
-              size="small"
-              value={precio_compra}
-              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+              prefix={"$"}
+              type="text"
+              thousandSeparator={true}
+              onValueChange={({ value }) =>
+                handleInputChange({
+                  target: { name: "precio_compra", value },
+                })
+              }
             />
           </div>
           <div className="addProductItem">
