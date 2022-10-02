@@ -60,7 +60,7 @@
 .productInfoItem {
   width: "100%";
   display: flex;
-  justify-content:left;
+  justify-content: left;
 }
 
 .productInfoValue {

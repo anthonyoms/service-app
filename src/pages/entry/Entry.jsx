@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import "../newOrder/newOrder.css";
 import { textFieldValidation } from "../../utils/helpers/textFieldValidation";
 import Swal from "sweetalert2";
+import { NumericFormat } from "react-number-format";
 
 export default function Entry() {
   const { itbis, itbisPercentage } = useSelector((state) => state.info);
@@ -46,7 +47,7 @@ export default function Entry() {
   };
   const [{ cantidadRequerida, ordenCompra }, handleInputChange, reset] =
     useForm({
-      cantidadRequerida: "",
+      cantidadRequerida: 0,
       ordenCompra: "",
     });
   const [
@@ -108,7 +109,7 @@ export default function Entry() {
     resetCantidadRequerida();
   };
   const resetCantidadRequerida = () => {
-    handleInputChange({ target: { name: "cantidadRequerida", value: "" } });
+    handleInputChange({ target: { name: "cantidadRequerida", value: 0 } });
   };
   const handleDelete = useCallback(
     ({ uid, totalPrice }) => {
@@ -455,7 +456,8 @@ export default function Entry() {
               inputProps={{ readOnly: true }}
               defaultValue={moment().add(1, "M").format("DD/MM/YYYY")}
             />
-            <TextField
+            <NumericFormat
+              customInput={TextField}
               id="totalTax"
               label={`Total impuestos ${itbis}%`}
               name="totalTax"
@@ -463,28 +465,39 @@ export default function Entry() {
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
+              prefix={"$"}
+              type="text"
+              thousandSeparator={true}
               inputProps={{ readOnly: true }}
               value={supplierSelected?.total * itbisPercentage || 0}
             />
-            <TextField
+            <NumericFormat
+              customInput={TextField}
               id="subTotal"
-              label="Sub-total Entrada"
+              label="Sub-total orden de compra"
               name="subTotal"
               variant="outlined"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
+              prefix={"$"}
+              type="text"
+              thousandSeparator={true}
               inputProps={{ readOnly: true }}
               value={supplierSelected?.total || 0}
             />
-            <TextField
+            <NumericFormat
+              customInput={TextField}
               id="total"
-              label="Total Entrada"
+              label="Total orden de compra"
               name="total"
               variant="outlined"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
+              prefix={"$"}
+              type="text"
+              thousandSeparator={true}
               inputProps={{ readOnly: true }}
               value={
                 supplierSelected?.total +
@@ -520,19 +533,24 @@ export default function Entry() {
                 />
               </div>
               <div className="newOrderItem">
-                <TextField
+                <NumericFormat
+                  customInput={TextField}
                   id="precioCompra"
                   label="Costo unidad"
                   name="precioCompra"
                   variant="outlined"
                   autoComplete="off"
                   size="small"
+                  prefix={"$"}
+                  type="text"
+                  thousandSeparator={true}
                   inputProps={{ readOnly: true }}
                   value={currentProductSelected?.precio_compra || 0}
                 />
               </div>
               <div className="newOrderItem">
-                <TextField
+                <NumericFormat
+                  customInput={TextField}
                   id="cantidadRequerida"
                   label="Cantidad requerida*"
                   name="cantidadRequerida"
@@ -541,29 +559,41 @@ export default function Entry() {
                   autoComplete="off"
                   size="small"
                   value={cantidadRequerida}
-                  onChange={(e) => validation(e, /^[0-9\b]+$/)}
+                  onValueChange={({ value }) =>
+                    handleInputChange({
+                      target: { name: "cantidadRequerida", value },
+                    })
+                  }
                 />
               </div>
               <div className="newOrderItem">
-                <TextField
+                <NumericFormat
+                  customInput={TextField}
                   id="precioVenta"
                   label="Precio de venta"
                   name="precioVenta"
                   variant="outlined"
                   autoComplete="off"
                   size="small"
+                  prefix={"$"}
+                  type="text"
+                  thousandSeparator={true}
                   inputProps={{ readOnly: true }}
                   value={currentProductSelected?.precio_venta || 0}
                 />
               </div>
               <div className="newOrderItem">
-                <TextField
+                <NumericFormat
+                  customInput={TextField}
                   id="tax"
                   label={`Impuestos ${itbis}%`}
                   name="tax"
                   variant="outlined"
                   autoComplete="off"
                   size="small"
+                  prefix={"$"}
+                  type="text"
+                  thousandSeparator={true}
                   inputProps={{ readOnly: true }}
                   value={
                     currentProductSelected?.precio_compra *
@@ -573,13 +603,17 @@ export default function Entry() {
                 />
               </div>
               <div className="newOrderItem">
-                <TextField
+                <NumericFormat
+                  customInput={TextField}
                   id="totalProducto"
                   label="Sub-total"
                   name="totalProducto"
                   variant="outlined"
                   autoComplete="off"
                   size="small"
+                  prefix={"$"}
+                  type="text"
+                  thousandSeparator={true}
                   inputProps={{ readOnly: true }}
                   value={
                     currentProductSelected?.precio_compra * cantidadRequerida ||
@@ -588,13 +622,17 @@ export default function Entry() {
                 />
               </div>
               <div className="newOrderItem">
-                <TextField
+                <NumericFormat
+                  customInput={TextField}
                   id="total"
                   label="Total"
                   name="total"
                   variant="outlined"
                   autoComplete="off"
                   size="small"
+                  prefix={"$"}
+                  type="text"
+                  thousandSeparator={true}
                   inputProps={{ readOnly: true }}
                   value={
                     currentProductSelected?.precio_compra * cantidadRequerida +

@@ -1,5 +1,6 @@
 import moment from "moment/moment";
 import React from "react";
+import { formatter } from "../../utils/constants/formatNumber";
 
 const InvoiceHead = ({
   cliente,
@@ -95,7 +96,7 @@ const InvoiceHead = ({
         <td></td>
         <td></td>
         <td></td>
-        <td>${total}</td>
+        <td>{formatter.format(total)}</td>
       </tr>
     </>
   );

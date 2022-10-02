@@ -18,6 +18,8 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { getIdUrl } from "../../utils/helpers/getIdUrl";
+import { NumericFormat } from "react-number-format";
+import { formatter } from "../../utils/constants/formatNumber";
 
 export default function Product() {
   const [{ product, loading }, setProducts] = useState({
@@ -120,13 +122,7 @@ export default function Product() {
       });
     }
   };
-  const textFieldValidation = (e, regex) => {
-    // if value is not blank, then test the regex
 
-    if (e.target.value === "" || regex.test(e.target.value)) {
-      handleInputChange(e);
-    }
-  };
   return (
     <>
       <MyBackdrop loading={loading} />
@@ -169,13 +165,13 @@ export default function Product() {
               <div className="productInfoItem">
                 <span className="productInfoKey">Precio compra:&nbsp;</span>
                 <span className="productInfoValue">
-                  {product?.precio_compra}
+                  {formatter.format(product?.precio_compra)}
                 </span>
               </div>
               <div className="productInfoItem">
                 <span className="productInfoKey">Precio venta:&nbsp;</span>
                 <span className="productInfoValue">
-                  {product?.precio_venta}
+                  {formatter.format(product?.precio_venta)}
                 </span>
               </div>
               <div className="productInfoItem">
@@ -230,36 +226,53 @@ export default function Product() {
                 value={descripcion}
                 onChange={handleInputChange}
               />
-              <TextField
-                id="precio_compra"
-                label="Precio compra"
+              <NumericFormat
                 name="precio_compra"
-                variant="outlined"
+                customInput={TextField}
+                label="Precio compra"
                 autoComplete="off"
+                value={product?.precio_compra}
+                inputProps={{ maxLength: "12" }}
                 sx={{ m: 1 }}
                 size="small"
-                value={precio_compra}
-                onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+                prefix={"$"}
+                type="text"
+                thousandSeparator={true}
+                onValueChange={({ value }) =>
+                  handleInputChange({
+                    target: { name: "precio_compra", value },
+                  })
+                }
               />
-              <TextField
-                id="utilidad"
-                label="Utilidad %"
+              <NumericFormat
                 name="utilidad"
-                variant="outlined"
+                customInput={TextField}
+                label="Utilidad %"
                 autoComplete="off"
+                value={product?.utilidad}
+                inputProps={{ maxLength: "3" }}
                 sx={{ m: 1 }}
                 size="small"
-                value={utilidad}
-                onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+                type="text"
+                thousandSeparator={true}
+                onValueChange={({ value }) =>
+                  handleInputChange({
+                    target: { name: "utilidad", value },
+                  })
+                }
               />
-              <TextField
-                id="precio_ventas"
-                label="Precio ventas"
-                name="precio_ventas"
-                variant="outlined"
+              <NumericFormat
+                name="precio_venta"
+                customInput={TextField}
+                label="Precio venta"
                 autoComplete="off"
-                sx={{ m: 1 }}
+                defaultValue={0}
+                inputProps={{ maxLength: "12" }}
                 size="small"
+                prefix={"$"}
+                sx={{ m: 1 }}
+                type="text"
+                thousandSeparator={true}
                 value={(
                   (utilidad / 100) * precio_compra +
                   +precio_compra

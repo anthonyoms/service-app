@@ -1,4 +1,5 @@
 import React from "react";
+import { formatter } from "../../utils/constants/formatNumber";
 
 const InvoiceDetail = ({ productos = [], subTotal, totalTax, total }) => {
   return (
@@ -20,10 +21,10 @@ const InvoiceDetail = ({ productos = [], subTotal, totalTax, total }) => {
                 <td>{producto?.nombre}</td>
 
                 <td>{cantidadRequerida}</td>
-                <td>${producto.precio_compra}</td>
-                <td>${totalPrice}</td>
-                <td>${totalTax}</td>
-                <td>${total}</td>
+                <td>{formatter.format(producto.precio_compra)}</td>
+                <td>{formatter.format(totalPrice)}</td>
+                <td>{formatter.format(totalTax)}</td>
+                <td>{formatter.format(total)}</td>
               </tr>
             );
           }
@@ -33,9 +34,9 @@ const InvoiceDetail = ({ productos = [], subTotal, totalTax, total }) => {
         <td></td>
         <td></td>
         <td></td>
-        <td>Neto: ${subTotal}</td>
-        <td>Itbis: ${totalTax}</td>
-        <td>Total: ${total}</td>
+        <td>Neto: {formatter.format(subTotal)}</td>
+        <td>Itbis: {formatter.format(totalTax)}</td>
+        <td>Total: {formatter.format(total)}</td>
       </tr>
     </>
   );

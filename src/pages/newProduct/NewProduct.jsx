@@ -100,13 +100,6 @@ export default function NewProduct() {
       reset();
     }
   };
-  const textFieldValidation = (e, regex) => {
-    // if value is not blank, then test the regex
-
-    if (e.target.value === "" || regex.test(e.target.value)) {
-      handleInputChange(e);
-    }
-  };
   return (
     <>
       <MyBackdrop loading={loading} />
@@ -147,7 +140,7 @@ export default function NewProduct() {
               name="codigoBarras"
               variant="outlined"
               autoComplete="off"
-              inputProps={{ maxLength: "50" }}
+              inputProps={{ maxLength: "15" }}
               size="small"
               value={codigoBarras}
               onChange={handleInputChange}
@@ -196,27 +189,33 @@ export default function NewProduct() {
             />
           </div>
           <div className="addProductItem">
-            <TextField
-              id="utilidad"
-              label="Utilidad %"
+            <NumericFormat
               name="utilidad"
-              variant="outlined"
+              customInput={TextField}
+              label="Utilidad %"
               autoComplete="off"
-              size="small"
-              inputProps={{ maxLength: "12" }}
-              value={utilidad}
-              onChange={(e) => textFieldValidation(e, /^[0-9,.\b]+$/)}
+              defaultValue={0}
+              inputProps={{ maxLength: "3" }}
+              type="text"
+              thousandSeparator={true}
+              onValueChange={({ value }) =>
+                handleInputChange({
+                  target: { name: "utilidad", value },
+                })
+              }
             />
           </div>
           <div className="addProductItem">
-            <TextField
-              id="precio_venta"
-              label="Precio venta"
+            <NumericFormat
               name="precio_venta"
-              variant="outlined"
+              customInput={TextField}
+              label="Precio venta"
               autoComplete="off"
-              size="small"
-              inputProps={{ maxLength: "12", readOnly: true }}
+              defaultValue={0}
+              inputProps={{ maxLength: "12" }}
+              prefix={"$"}
+              type="text"
+              thousandSeparator={true}
               value={(
                 (utilidad / 100) * precio_compra +
                 +precio_compra
