@@ -87,7 +87,7 @@ const InvoiceHead = ({
         <td></td>
         <td></td>
         <td></td>
-        <td>Al contado</td>
+        <td>Monto</td>
       </tr>
       <tr className="details">
         <td>Transferencia bancaria</td>

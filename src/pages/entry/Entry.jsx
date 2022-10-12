@@ -374,14 +374,19 @@ export default function Entry() {
               sx={{ marginLeft: "8px", marginBottom: "6px" }}
               size="small"
               renderInput={(params) => (
-                <TextField size="small" {...params} label="Suplidor*" />
+                <TextField
+                  size="small"
+                  {...params}
+                  label="Suplidor*"
+                  variant="standard"
+                />
               )}
             />
             <TextField
               id="ordenCompra"
               label="Numero orden de compra"
               name="ordenCompra"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -394,7 +399,7 @@ export default function Entry() {
               id="vendedor"
               label="Vendedor"
               name="vendedor"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -405,7 +410,7 @@ export default function Entry() {
               id="cedulaRnc"
               label="Cedula/Rnc"
               name="cedulaRnc"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -416,7 +421,7 @@ export default function Entry() {
               id="contacto"
               label="Contacto"
               name="contacto"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -427,7 +432,7 @@ export default function Entry() {
               id="telefono"
               label="Teléfono"
               name="telefono"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -438,7 +443,7 @@ export default function Entry() {
               id="fechaEmision"
               label="Fecha de emisión"
               name="fechaEmision"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -449,7 +454,7 @@ export default function Entry() {
               id="vence"
               label="Vence"
               name="vence"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -461,7 +466,7 @@ export default function Entry() {
               id="totalTax"
               label={`Total impuestos ${itbis}%`}
               name="totalTax"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -476,7 +481,7 @@ export default function Entry() {
               id="subTotal"
               label="Sub-total orden de compra"
               name="subTotal"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -491,7 +496,7 @@ export default function Entry() {
               id="total"
               label="Total orden de compra"
               name="total"
-              variant="outlined"
+              variant="standard"
               autoComplete="off"
               sx={{ m: 1 }}
               size="small"
@@ -514,9 +519,13 @@ export default function Entry() {
               getOptionLabel={(option) => option.nombre}
               onChange={(e, params) => handleProducts(e, params)}
               size="small"
-              sx={{ marginBottom: "6px" }}
+              sx={{ marginLeft: "8px", marginBottom: "6px" }}
               renderInput={(params) => (
-                <TextField {...params} label="Nombre del producto*" />
+                <TextField
+                  {...params}
+                  label="Nombre del producto*"
+                  variant="standard"
+                />
               )}
             />
             <div className="newOrderForm">
@@ -525,9 +534,10 @@ export default function Entry() {
                   id="cantidadActual"
                   label="Cantidad Actual"
                   name="cantidadActual"
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   inputProps={{ readOnly: true }}
                   value={currentProductSelected?.cantidad || 0}
                 />
@@ -538,9 +548,10 @@ export default function Entry() {
                   id="precioCompra"
                   label="Costo unidad"
                   name="precioCompra"
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -555,9 +566,10 @@ export default function Entry() {
                   label="Cantidad requerida*"
                   name="cantidadRequerida"
                   inputProps={{ maxLength: "5" }}
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   value={cantidadRequerida}
                   onValueChange={({ value }) =>
                     handleInputChange({
@@ -572,9 +584,10 @@ export default function Entry() {
                   id="precioVenta"
                   label="Precio de venta"
                   name="precioVenta"
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -588,9 +601,10 @@ export default function Entry() {
                   id="tax"
                   label={`Impuestos ${itbis}%`}
                   name="tax"
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -608,9 +622,10 @@ export default function Entry() {
                   id="totalProducto"
                   label="Sub-total"
                   name="totalProducto"
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -627,9 +642,10 @@ export default function Entry() {
                   id="total"
                   label="Total"
                   name="total"
-                  variant="outlined"
+                  variant="standard"
                   autoComplete="off"
                   size="small"
+                  sx={{ m: 1 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
