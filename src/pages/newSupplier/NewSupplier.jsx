@@ -148,14 +148,15 @@ export default function NewSupplier() {
               onChange={handleInputChange}
             />
           </div>
-          <div className="newSupplierItemAdress">
+          <div className="newSupplierItem">
             <TextField
               id="direccion"
               label="Dirección"
               name="direccion"
               variant="outlined"
               autoComplete="off"
-              inputProps={{ maxLength: "100" }}
+              maxRows={5}
+              inputProps={{ maxLength: "50" }}
               value={direccion}
               onChange={handleInputChange}
             />

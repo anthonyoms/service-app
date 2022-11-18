@@ -1,4 +1,4 @@
-import { Autocomplete, Fab, TextField } from "@mui/material";
+import { Autocomplete, Fab, TextField, Tooltip } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Save, DeleteOutline } from "@material-ui/icons";
 import "./newOrder.css";
@@ -278,9 +278,11 @@ export default function NewOrder() {
   return (
     <>
       <MyBackdrop loading={loading} />
-      <Fab onClick={saveOrder} style={style} color="success" aria-label="add">
-        <Save />
-      </Fab>
+      <Tooltip title="Guardar.">
+        <Fab onClick={saveOrder} style={style} color="success" aria-label="add">
+          <Save />
+        </Fab>
+      </Tooltip>
       <div className="newOrder">
         <div className="newOrderTitleContainer">
           <h1 className="newOrderTitle">
@@ -298,7 +300,7 @@ export default function NewOrder() {
                 `${option.nombre} -${option.cedula_rnc}`
               }
               onChange={(e, params) => handleSupplier(e, params)}
-              sx={{ marginLeft: "8px", marginBottom: "6px" }}
+              sx={{ marginLeft: "8px", marginBottom: "6px", width: "100%" }}
               size="small"
               renderInput={(params) => (
                 <TextField
@@ -315,7 +317,7 @@ export default function NewOrder() {
               name="vendedor"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.vendedor || ""}
@@ -326,7 +328,7 @@ export default function NewOrder() {
               name="cedulaRnc"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.cedula_rnc || ""}
@@ -337,7 +339,7 @@ export default function NewOrder() {
               name="contacto"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.contacto || ""}
@@ -348,7 +350,7 @@ export default function NewOrder() {
               name="telefono"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.telefono || ""}
@@ -359,7 +361,7 @@ export default function NewOrder() {
               name="fechaEmision"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               defaultValue={moment().format("DD/MM/YYYY")}
@@ -370,7 +372,7 @@ export default function NewOrder() {
               name="vence"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               defaultValue={moment().add(1, "M").format("DD/MM/YYYY")}
@@ -382,7 +384,7 @@ export default function NewOrder() {
               name="totalTax"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               prefix={"$"}
               type="text"
@@ -397,7 +399,7 @@ export default function NewOrder() {
               name="subTotal"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               prefix={"$"}
               type="text"
@@ -412,7 +414,7 @@ export default function NewOrder() {
               name="total"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               prefix={"$"}
               type="text"
@@ -433,7 +435,7 @@ export default function NewOrder() {
               getOptionLabel={(option) => option.nombre}
               onChange={(e, params) => handleProducts(e, params)}
               size="small"
-              sx={{ marginLeft: "8px", marginBottom: "6px" }}
+              sx={{ marginLeft: "8px", marginBottom: "6px", width: "100%" }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -451,7 +453,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   inputProps={{ readOnly: true }}
                   value={currentProductSelected?.cantidad || 0}
                 />
@@ -465,7 +467,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -483,7 +485,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   value={cantidadRequerida}
                   onValueChange={({ value }) =>
                     handleInputChange({
@@ -501,7 +503,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -518,7 +520,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -539,7 +541,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -559,7 +561,7 @@ export default function NewOrder() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}

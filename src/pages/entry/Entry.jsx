@@ -252,7 +252,7 @@ export default function Entry() {
     if (!ordenCompra) {
       return Swal.fire(
         "Información",
-        "Para cargar los productos el numero de orden de compra es obligatorio.",
+        "Para cargar los productos el número de orden de compra es obligatorio.",
         "info"
       );
     }
@@ -371,7 +371,7 @@ export default function Entry() {
                 `${option.nombre} -${option.cedula_rnc}`
               }
               onChange={(e, params) => handleSupplier(e, params)}
-              sx={{ marginLeft: "8px", marginBottom: "6px" }}
+              sx={{ marginLeft: "8px", marginBottom: "6px", width: "100%" }}
               size="small"
               renderInput={(params) => (
                 <TextField
@@ -388,7 +388,7 @@ export default function Entry() {
               name="ordenCompra"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ maxLength: "10" }}
               value={ordenCompra}
@@ -401,7 +401,7 @@ export default function Entry() {
               name="vendedor"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.vendedor || ""}
@@ -412,7 +412,7 @@ export default function Entry() {
               name="cedulaRnc"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.cedula_rnc || ""}
@@ -423,7 +423,7 @@ export default function Entry() {
               name="contacto"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.contacto || ""}
@@ -434,7 +434,7 @@ export default function Entry() {
               name="telefono"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               value={supplierSelected?.telefono || ""}
@@ -445,7 +445,7 @@ export default function Entry() {
               name="fechaEmision"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               defaultValue={moment().format("DD/MM/YYYY")}
@@ -456,7 +456,7 @@ export default function Entry() {
               name="vence"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               inputProps={{ readOnly: true }}
               defaultValue={moment().add(1, "M").format("DD/MM/YYYY")}
@@ -468,7 +468,7 @@ export default function Entry() {
               name="totalTax"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               prefix={"$"}
               type="text"
@@ -483,7 +483,7 @@ export default function Entry() {
               name="subTotal"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               prefix={"$"}
               type="text"
@@ -498,7 +498,7 @@ export default function Entry() {
               name="total"
               variant="standard"
               autoComplete="off"
-              sx={{ m: 1 }}
+              sx={{ m: 1, mr: 6 }}
               size="small"
               prefix={"$"}
               type="text"
@@ -519,7 +519,7 @@ export default function Entry() {
               getOptionLabel={(option) => option.nombre}
               onChange={(e, params) => handleProducts(e, params)}
               size="small"
-              sx={{ marginLeft: "8px", marginBottom: "6px" }}
+              sx={{ marginLeft: "8px", marginBottom: "6px", width: "100%" }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -537,7 +537,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   inputProps={{ readOnly: true }}
                   value={currentProductSelected?.cantidad || 0}
                 />
@@ -551,7 +551,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -569,7 +569,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   value={cantidadRequerida}
                   onValueChange={({ value }) =>
                     handleInputChange({
@@ -587,7 +587,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -604,7 +604,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -625,7 +625,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}
@@ -645,7 +645,7 @@ export default function Entry() {
                   variant="standard"
                   autoComplete="off"
                   size="small"
-                  sx={{ m: 1 }}
+                  sx={{ m: 1, mr: 6 }}
                   prefix={"$"}
                   type="text"
                   thousandSeparator={true}

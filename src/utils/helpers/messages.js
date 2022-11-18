@@ -35,13 +35,13 @@ export const confirmActionMessage = async () => {
 };
 
 export const dataValidation = (data, isSuccessMsg = true) => {
-  if (data.ok) {
-    if (isSuccessMsg) {
-      successMsg(data.msg);
-    }
-    return data;
-  } else {
+  if (!data.ok) {
     errorMsg(data.errorMsg);
     return { data: { ok: false } };
   }
+
+  if (isSuccessMsg) {
+    successMsg(data.msg);
+  }
+  return data;
 };

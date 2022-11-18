@@ -126,9 +126,10 @@
 .newOrderUpload {
   display: flex;
   align-items: center;
+  
 }
 
-.orderListDelete{
+.orderListDelete {
   color: red;
   cursor: pointer;
 }
