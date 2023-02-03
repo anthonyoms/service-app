@@ -10,6 +10,7 @@ import {
   Group,
 } from "@material-ui/icons";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -37,7 +38,7 @@ import { dataValidation } from "../../utils/helpers/messages";
 import "./user.css";
 
 export default function User() {
-  const { uid } = useSelector((state) => state.auth);
+  const { uid, rol: userRol } = useSelector((state) => state.auth);
   const userId = window.location.pathname.split("/")[1];
   const [{ user, loading }, setUser] = useState({ user: null, loading: true });
   const [formValues, setFormValues] = useState({
@@ -132,10 +133,14 @@ export default function User() {
       Swal.fire("Error", "Las contraseñas no coinciden", "error");
       return;
     }
+    await updateUserPws(password);
+  };
+
+  const updateUserPws = async (pws = "1234") => {
     const payload = {
       correo: user.correo,
       nombre: user.nombre,
-      password,
+      password: pws,
       telefono: user.telefono,
       fechaNacimiento: user.fechaNacimiento,
       direccion: user.direccion,
@@ -144,7 +149,11 @@ export default function User() {
       rol: user.rol,
       cedula: user.cedula,
     };
-    const dataResponse = await updateServiceApp(payload, endpoints.users, uid);
+    const dataResponse = await updateServiceApp(
+      payload,
+      endpoints.users,
+      user.uid
+    );
     const validData = await dataValidation(dataResponse);
     if (validData.ok) {
       loadUser(uid, userId);
@@ -173,6 +182,9 @@ export default function User() {
     const target = handleFormatNumber(e);
     handleInputChange(target);
   };
+
+  const restartUserConfiguration = async () => updateUserPws();
+
   return (
     <>
       <MyBackdrop loading={loading} />
@@ -226,6 +238,15 @@ export default function User() {
                 <Group className="userShowIcon" />
                 <span className="userShowInfoTitle">{user?.estadoCivil}</span>
               </div>
+              {userRol === "ADMIN_ROLE" && userId !== "myuser" && (
+                <Button
+                  onClick={restartUserConfiguration}
+                  sx={{ mt: 6 }}
+                  variant="contained"
+                >
+                  Reiniciar configuración de usuario
+                </Button>
+              )}
             </div>
             {userId === "myuser" && (
               <div>

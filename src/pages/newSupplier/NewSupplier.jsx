@@ -69,6 +69,7 @@ export default function NewSupplier() {
               id="cedula_rnc"
               label="Cedula/Rnc"
               name="cedula_rnc"
+              required
               variant="outlined"
               autoComplete="off"
               inputProps={{ maxLength: "11" }}
