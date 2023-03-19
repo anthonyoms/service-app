@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar,esES } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
@@ -49,7 +49,7 @@ export default function UserList() {
       renderCell: (params) => {
         return (
           <div className="userListUser">
-            { <img className="userListImg" src={params.row.img} alt="" /> }
+            {<img className="userListImg" src={params.row.img} alt="" />}
             {params.row.usuario}
           </div>
         );
@@ -91,6 +91,7 @@ export default function UserList() {
           getRowId={(e) => e.uid}
           loading={loading}
           filterMode="client"
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         />
       </div>
     </div>

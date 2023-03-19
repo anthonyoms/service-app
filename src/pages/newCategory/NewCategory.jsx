@@ -4,11 +4,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import "./newCategory.css";
 import useForm from "../../hooks/useForm";
 import { endpoints } from "../../utils/constants/endpoints";
 import { saveWithImage } from "../../services/serviceApp";
 import { MyBackdrop } from "../../components/ui/Backdrop";
+import "./newCategory.css";
 
 export default function NewCategory() {
   const [loading, setLoading] = useState(false);
@@ -23,21 +23,26 @@ export default function NewCategory() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const payload = {
-      nombre,
-      descripcion,
-      img,
-      estado,
-    };
-    const isSaveCategory = await saveWithImage(
-      payload,
-      image,
-      endpoints.categories
-    );
-    if (isSaveCategory.ok) {
+    try {
+      const payload = {
+        nombre,
+        descripcion,
+        img,
+        estado,
+      };
+      const isSaveCategory = await saveWithImage(
+        payload,
+        image,
+        endpoints.categories
+      );
+      if (!!isSaveCategory.ok) {
+        reset();
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
       reset();
     }
-    setLoading(false);
   };
   return (
     <>

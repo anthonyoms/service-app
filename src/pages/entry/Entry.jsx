@@ -1,5 +1,5 @@
 import { Autocomplete, Fab, TextField, Tooltip } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid";
 import { Save, DeleteOutline, Refresh } from "@material-ui/icons";
 import { useCallback, useEffect, useState } from "react";
 import { getServiceApp, postServiceApp } from "../../services/serviceApp";
@@ -673,6 +673,7 @@ export default function Entry() {
             getRowId={(e) => e.uid}
             components={{ Toolbar: GridToolbar }}
             filterMode="client"
+            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
           />
         </div>
       </div>

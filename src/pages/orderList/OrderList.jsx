@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -121,6 +121,7 @@ export default function OrderList() {
           rowsPerPageOptions={[10]}
           loading={loading}
           filterMode="client"
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         />
       </div>
     </div>

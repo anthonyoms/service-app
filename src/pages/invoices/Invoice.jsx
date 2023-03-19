@@ -5,6 +5,7 @@ import { getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { getIdUrl } from "../../utils/helpers/getIdUrl";
 import { dataValidation } from "../../utils/helpers/messages";
+import "../../assets/style/invoiceStyle.css";
 
 export const Invoice = () => {
   const configuration = useSelector((state) => state.info);

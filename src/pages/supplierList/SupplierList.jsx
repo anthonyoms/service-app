@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 
 import "./supplierList.css";
@@ -93,6 +93,7 @@ export default function SupplierList() {
           getRowId={(e) => e.uid}
           loading={loading}
           filterMode="client"
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         />
       </div>
     </div>

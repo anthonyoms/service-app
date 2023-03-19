@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { NotificationsNone, Settings, ExitToApp } from "@material-ui/icons";
+import {
+  NotificationsNone,
+  Settings,
+  ExitToAppTwoTone,
+} from "@material-ui/icons";
 import Tooltip from "@mui/material/Tooltip";
 import "./topbar.css";
 import { startLogout } from "../../actions/auth";
@@ -40,7 +44,7 @@ export default function Topbar() {
               className="topbarIconContainer"
             >
               <Tooltip title="Salir">
-                <ExitToApp />
+                <ExitToAppTwoTone />
               </Tooltip>
             </div>
             <div className="topbarIconContainer">{nombre}</div>

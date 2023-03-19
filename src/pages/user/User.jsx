@@ -10,6 +10,7 @@ import {
   Group,
 } from "@material-ui/icons";
 import {
+  Box,
   Button,
   FormControl,
   InputLabel,
@@ -239,13 +240,15 @@ export default function User() {
                 <span className="userShowInfoTitle">{user?.estadoCivil}</span>
               </div>
               {userRol === "ADMIN_ROLE" && userId !== "myuser" && (
-                <Button
-                  onClick={restartUserConfiguration}
-                  sx={{ mt: 6 }}
-                  variant="contained"
-                >
-                  Reiniciar configuración de usuario
-                </Button>
+                <Box textAlign="left">
+                  <Button
+                    onClick={restartUserConfiguration}
+                    sx={{ mt: 6 }}
+                    variant="contained"
+                  >
+                    Reiniciar configuración de usuario
+                  </Button>
+                </Box>
               )}
             </div>
             {userId === "myuser" && (
