@@ -1,5 +1,6 @@
 export const endpoints = {
   users: "/usuarios",
+  services: "/servicios",
   categories: "/categorias",
   products: "/productos",
   uploads: "/uploads",

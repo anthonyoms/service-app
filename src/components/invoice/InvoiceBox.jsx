@@ -17,7 +17,7 @@ const InvoiceBox = ({ cliente, dataInvoice }) => {
           </tbody>
         </table>
         <h5>nota:</h5>
-        <h5>prestar atención a la fecha de vencimineto.</h5>
+        <h5>Prestar atención a la fecha de vencimiento.</h5>
       </div>
     </div>
   );

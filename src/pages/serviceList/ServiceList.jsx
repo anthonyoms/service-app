@@ -1,10 +1,9 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, esES } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./serviceList.css";
-import { TextField } from "@mui/material";
 import MyFab from "../../components/fab/MyFab";
 
 export default function ServiceList() {
@@ -15,11 +14,11 @@ export default function ServiceList() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", flex: 1 },
     {
       field: "product",
       headerName: "Servicio",
-      width: 200,
+      flex: 1,
       renderCell: (params) => {
         return (
           <div className="serviceListItem">
@@ -29,21 +28,22 @@ export default function ServiceList() {
         );
       },
     },
-    { field: "stock", headerName: "Stock", width: 200 },
+    { field: "stock", headerName: "Stock", flex: 1 },
     {
       field: "status",
       headerName: "Estatus",
-      width: 120,
+      flex: 1,
     },
     {
       field: "price",
       headerName: "Precio",
-      width: 160,
+      type : "number",
+      flex: 1,
     },
     {
       field: "action",
       headerName: "Acciones",
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -62,21 +62,17 @@ export default function ServiceList() {
 
   return (
     <div className="serviceList">
-      <TextField
-        id="outlined-search"
-        label="Search field"
-        type="search"
-        sx={{ mb: 1 }}
-      />
       <MyFab route="/newservice" />
       <div className="dataGrid">
         <DataGrid
           rows={data}
-          disableSelectionOnClick
           columns={columns}
-          pageSize={8}
-          rowsPerPageOptions={[8]}
-          checkboxSelection
+          components={{ Toolbar: GridToolbar }}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          loading={false}
+          filterMode="client"
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         />
       </div>
     </div>

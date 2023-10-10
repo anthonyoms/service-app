@@ -12,11 +12,12 @@ import "./newCategory.css";
 
 export default function NewCategory() {
   const [loading, setLoading] = useState(false);
-  const [{ nombre, descripcion, img, estado }, handleInputChange, reset] =
+  const [{ nombre, descripcion, img, estado, tipo }, handleInputChange, reset] =
     useForm({
       nombre: "",
       descripcion: "",
       img: "",
+      tipo: "",
       estado: true,
     });
   const [image, setImage] = useState(null);
@@ -29,6 +30,7 @@ export default function NewCategory() {
         descripcion,
         img,
         estado,
+        tipo,
       };
       const isSaveCategory = await saveWithImage(
         payload,
@@ -77,6 +79,25 @@ export default function NewCategory() {
               value={nombre}
               onChange={handleInputChange}
             />
+          </div>
+          <div className="addCategoryItem">
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label-tipo">Tipo</InputLabel>
+              <Select
+                labelId="demo-simple-select-label-tipo"
+                id="demo-simple-select-tipo"
+                name="tipo"
+                label="Tipo"
+                autoComplete="off"
+                value={tipo}
+                onChange={handleInputChange}
+              >
+                <MenuItem value={"Producto"} defaultValue={true}>
+                  Producto
+                </MenuItem>
+                <MenuItem value={"Servicio"}>Servicio</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div className="addCategoryItem">
             <TextField

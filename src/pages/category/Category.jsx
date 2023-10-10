@@ -30,9 +30,10 @@ export default function Category() {
     nombre: "",
     descripcion: "",
     estado: true,
+    tipo: "",
   });
 
-  const { img, nombre, descripcion, estado } = formValues;
+  const { img, nombre, descripcion, estado, tipo } = formValues;
 
   useEffect(() => {
     loadCategory();
@@ -60,6 +61,7 @@ export default function Category() {
       nombre,
       descripcion,
       estado,
+      tipo,
     };
     const dataResponse = await updateServiceApp(
       payload,
@@ -111,6 +113,10 @@ export default function Category() {
                 <span className="categoryInfoValue">{category?.nombre}</span>
               </div>
               <div className="categoryInfoItem">
+                <span className="categoryInfoKey">Tipo:&nbsp;</span>
+                <span className="categoryInfoValue">{category?.tipo}</span>
+              </div>
+              <div className="categoryInfoItem">
                 <span className="categoryInfoKey">Descripción:&nbsp;</span>
                 <span className="categoryInfoValue">
                   {category?.descripcion}
@@ -140,6 +146,22 @@ export default function Category() {
                 value={nombre}
                 onChange={handleInputChange}
               />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-tipo">Tipo</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-tipo"
+                  id="demo-simple-select-tipo"
+                  name="tipo"
+                  label="Tipo"
+                  sx={{ m: 1 }}
+                  autoComplete="off"
+                  value={tipo}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value={"Producto"}>Producto</MenuItem>
+                  <MenuItem value={"Servicio"}>Servicio</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
                 id="outlined-multiline-flexible"
                 name="descripcion"

@@ -148,7 +148,7 @@ export default function NewProduct() {
                 customInput={TextField}
                 label="Precio compra"
                 autoComplete="off"
-                defaultValue={0}
+                value={precio_compra}
                 inputProps={{ maxLength: "12" }}
                 prefix={"$"}
                 type="text"
@@ -166,7 +166,7 @@ export default function NewProduct() {
                 customInput={TextField}
                 label="Utilidad %"
                 autoComplete="off"
-                defaultValue={0}
+                value={utilidad}
                 inputProps={{ maxLength: "3" }}
                 type="text"
                 thousandSeparator={true}
