@@ -58,13 +58,13 @@
 }
 
 .serviceInfoItem {
-  width: 150px;
+  width: "100%";
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
 }
 
 .serviceInfoValue {
-  font-weight: 300;
+  font-weight: 600;
 }
 
 .serviceBottom {

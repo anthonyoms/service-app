@@ -91,6 +91,7 @@ export default function UserList() {
           getRowId={(e) => e.uid}
           loading={loading}
           filterMode="client"
+          density="comfortable"
           localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         />
       </div>

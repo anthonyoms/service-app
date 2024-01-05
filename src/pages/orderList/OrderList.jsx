@@ -121,6 +121,7 @@ export default function OrderList() {
           rowsPerPageOptions={[10]}
           loading={loading}
           filterMode="client"
+          density="comfortable"
           localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         />
       </div>

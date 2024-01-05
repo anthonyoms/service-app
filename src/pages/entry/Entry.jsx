@@ -673,6 +673,7 @@ export default function Entry() {
             getRowId={(e) => e.uid}
             components={{ Toolbar: GridToolbar }}
             filterMode="client"
+            density="compact"
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
           />
         </div>
