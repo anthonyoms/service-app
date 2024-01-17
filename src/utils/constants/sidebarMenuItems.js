@@ -7,7 +7,14 @@ import {
   ListAlt,
   AddShoppingCart,
   RssFeed,
+  Timeline,
+  PeopleAlt,
 } from "@material-ui/icons";
+
+export const home = {
+  title: "Dashboard",
+  listItem: [{ link: "/", Icon: Timeline, sidebarItemName:"Estadísticas" }],
+};
 
 export const seguridad = {
   title: "Seguridad",
@@ -40,6 +47,11 @@ export const inventario = {
       link: "/services",
       Icon: RssFeed,
       sidebarItemName: "Servicios",
+    },
+    {
+      link: "/customers",
+      Icon: PeopleAlt,
+      sidebarItemName: "Clientes",
     },
   ],
 };

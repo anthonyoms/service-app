@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { DataGrid, GridToolbar,esES } from "@mui/x-data-grid";
+import { Link, useLocation } from "react-router-dom";
+import { DataGrid, GridToolbar, esES } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import "./userList.css";
 import MyFab from "../../components/fab/MyFab";
@@ -12,21 +12,26 @@ import {
 } from "../../utils/helpers/messages";
 
 export default function UserList() {
+  const location = useLocation();
   const [{ loading, userData }, setUserData] = useState({
     loading: true,
     userData: [],
   });
   useEffect(() => {
-    loadUser();
-  }, []);
+    loadUser(location);
+  }, [location]);
 
-  const loadUser = async () => {
+  const loadUser = async ({ pathname }) => {
     const dataResponse = await getServiceApp(endpoints.users);
     const validData = dataValidation(dataResponse, false);
     if (validData.ok) {
       setUserData({
         loading: false,
-        userData: validData.usuarios,
+        userData: pathname.includes("customers")
+          ? validData.usuarios.filter(
+              (usuario) => usuario.rol === "CUSTOMER_ROLE"
+            )
+          : validData.usuarios,
       });
     }
   };
@@ -35,7 +40,7 @@ export default function UserList() {
     if (result.isConfirmed) {
       const dataResponse = await deleteServiceApp(id, endpoints.users);
       dataValidation(dataResponse);
-      loadUser();
+      loadUser(location);
     }
   };
   const columns = [
@@ -79,7 +84,11 @@ export default function UserList() {
 
   return (
     <div className="userList">
-      <MyFab route="/newuser" />
+      <MyFab
+        route={
+          location.pathname.includes("customers") ? "/newcustomer" : "/newuser"
+        }
+      />
 
       <div className="dataGrid">
         <DataGrid

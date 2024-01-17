@@ -15,8 +15,10 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { saveWithImage } from "../../services/serviceApp";
 import { handleFormatNumber } from "../../utils/helpers/handleFormatNumber";
 import { MyBackdrop } from "../../components/ui/Backdrop";
+import { useLocation } from "react-router-dom";
 
 export default function NewUser() {
+  const location = useLocation();
   const [
     {
       cedula,
@@ -96,7 +98,11 @@ export default function NewUser() {
     <>
       <MyBackdrop loading={loading} />
       <div className="newUser">
-        <h1 className="newUserTitle">Registro de usuario</h1>
+        <h1 className="newUserTitle">
+          {location.pathname.includes("newcustomer")
+            ? "Registro de clientes"
+            : "Registro de usuario"}
+        </h1>
         <form onSubmit={handleSubmit}>
           <div className="newUserForm">
             <div className="newUserItem">
@@ -199,12 +205,17 @@ export default function NewUser() {
                   value={rol}
                   onChange={handleInputChange}
                 >
-                  <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
-                  <MenuItem value={"TECNICO_MESA"}>
-                    Técnico mesa de ayuda
-                  </MenuItem>
-                  <MenuItem value={"CAJERO"}>Cajero</MenuItem>
-                  <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
+                  {!location.pathname.includes("newcustomer") && (
+                    <>
+                      <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
+                      <MenuItem value={"TECNICO_MESA"}>
+                        Técnico mesa de ayuda
+                      </MenuItem>
+                      <MenuItem value={"CAJERO"}>Cajero</MenuItem>
+                      <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
+                    </>
+                  )}
+                  <MenuItem value={"CUSTOMER_ROLE"}>Cliente</MenuItem>
                 </Select>
               </FormControl>
             </div>

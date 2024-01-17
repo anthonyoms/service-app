@@ -55,6 +55,7 @@ export default function User() {
     cedula: "",
     currentPassword: "",
     confirmPassword: "",
+    fechaRegistro:"",
   });
   const {
     correo,
@@ -69,6 +70,7 @@ export default function User() {
     cedula,
     currentPassword,
     confirmPassword,
+    fechaRegistro,
   } = formValues;
 
   useEffect(() => {
@@ -341,6 +343,20 @@ export default function User() {
                 </div>
                 <div className="userUpdateItem">
                   <TextField
+                    id="fechaRegistro"
+                    label="Fecha registro"
+                    name="fechaRegistro"
+                    variant="outlined"
+                    autoComplete="off"
+                    size="small"
+                    inputProps={{ maxLength: "50" }}
+                    value={moment(fechaRegistro).format("DD/MM/YYYY")}
+                    disabled
+                    readOnly
+                  />
+                </div>
+                <div className="userUpdateItem">
+                  <TextField
                     id="nombre"
                     label="Nombre"
                     name="nombre"
@@ -442,6 +458,7 @@ export default function User() {
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Rol</InputLabel>
                     <Select
+                      disabled = {rol.includes("CUSTOMER_ROLE")}
                       labelId="demo-simple-select-label-rol"
                       id="demo-simple-select-rol"
                       name="rol"
@@ -456,6 +473,7 @@ export default function User() {
                         Técnico mesa de ayuda
                       </MenuItem>
                       <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
+                      <MenuItem value={"CUSTOMER_ROLE"}>Cliente</MenuItem>
                     </Select>
                   </FormControl>
                 </div>

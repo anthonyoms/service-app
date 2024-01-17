@@ -4,9 +4,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { Home } from "../pages/home/Home";
 import Topbar from "../components/topbar/Topbar";
-import Customer from "../pages/customer/Customer";
-import CustomerList from "../pages/customerList/CustomerList";
-import NewCustomer from "../pages/newCustomer/NewCustomer";
 import NewProduct from "../pages/newProduct/NewProduct";
 import NewUser from "../pages/newUser/NewUser";
 import Product from "../pages/product/Product";
@@ -62,9 +59,9 @@ export const DashboardRoutes = () => {
           <Route path="/newproduct" element={<NewProduct />} />
 
           {/*Customers routes */}
-          <Route path="/customers" element={<CustomerList />} />
-          <Route path="/customer/:userId" element={<Customer />} />
-          <Route path="/newcustomer" element={<NewCustomer />} />
+          <Route path="/customers" element={<UserList />} />
+          <Route path="/customer/:userId" element={<User />} />
+          <Route path="/newcustomer" element={<NewUser />} />
 
           {/*Categories routes */}
           <Route path="/categories" element={<CategoryList />} />
