@@ -27,6 +27,7 @@ import { Invoice } from "../pages/invoices/Invoice";
 import Entry from "../pages/entry/Entry";
 import EntryList from "../pages/entryList/EntryList";
 import { EntryInvoice } from "../pages/invoices/EntryInvoice";
+import { SellScreen } from "../pages/sell/SellScreen";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -87,14 +88,8 @@ export const DashboardRoutes = () => {
           <Route path="/newentry" element={<Entry />} />
           <Route path="/entries" element={<EntryList />} />
 
-          <Route
-            path="/servicemanagement"
-            element={<ServiceManagementList />}
-          />
-          <Route
-            path="/salesmanagementlist"
-            element={<SalesManagementList />}
-          />
+          {/*Orders routes */}
+          <Route path="/sell" element={<SellScreen />} />
 
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />

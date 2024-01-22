@@ -9,11 +9,12 @@ import {
   RssFeed,
   Timeline,
   PeopleAlt,
+  MonetizationOn,
 } from "@material-ui/icons";
 
 export const home = {
   title: "Dashboard",
-  listItem: [{ link: "/", Icon: Timeline, sidebarItemName:"Estadísticas" }],
+  listItem: [{ link: "/", Icon: Timeline, sidebarItemName: "Estadísticas" }],
 };
 
 export const seguridad = {
@@ -52,6 +53,11 @@ export const inventario = {
       link: "/customers",
       Icon: PeopleAlt,
       sidebarItemName: "Clientes",
+    },
+    {
+      link: "/sell",
+      Icon: MonetizationOn,
+      sidebarItemName: "Facturación",
     },
   ],
 };
