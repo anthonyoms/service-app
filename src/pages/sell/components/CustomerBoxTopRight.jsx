@@ -47,6 +47,12 @@ export const CustomerBoxTopRight = ({
       return infoMsg(`Producto no tiene existencia`);
     }
 
+    if (invoiceProduct.cantidad < invoiceProduct.cantidadRequerida) {
+      return infoMsg(
+        `Importante: Al generar tu venta, asegúrate de que la cantidad a vender no supere la existencia disponible. `
+      );
+    }
+
     if (
       !!invoiceProductsData.find(
         (product) => product.uid === invoiceProduct.uid
@@ -62,8 +68,11 @@ export const CustomerBoxTopRight = ({
         ...data,
         customerKey: !data.customerKey,
         invoiceProductsData: [...data.invoiceProductsData, data.invoiceProduct],
-        subTotal: data.subTotal + data.invoiceProduct.subTotal,
-        total: data.total + data.invoiceProduct.total,
+        subTotal:
+          parseFloat(data.subTotal) + parseFloat(data.invoiceProduct.subTotal),
+        total: parseFloat(data.total) + parseFloat(data.invoiceProduct.total),
+        itbis:
+          parseFloat(data.itbis) + parseFloat(data.invoiceProduct.impuestos),
       };
     });
     resetInvoiceProduct();
@@ -137,16 +146,20 @@ export const CustomerBoxTopRight = ({
               invoiceProduct: {
                 ...data.invoiceProduct,
                 cantidadRequerida: e.target.value,
-                impuestos:
-                  (e.target.value *
-                  invoiceProduct.precio_venta *
-                  itbisPercentage).toFixed(2),
-                subTotal: e.target.value * invoiceProduct.precio_venta,
+                impuestos: (
+                  parseFloat(e.target.value) *
+                  parseFloat(invoiceProduct.precio_venta) *
+                  itbisPercentage
+                ).toFixed(2),
+                subTotal:
+                  parseFloat(e.target.value) *
+                  parseFloat(invoiceProduct.precio_venta),
                 total:
-                  e.target.value *
-                    invoiceProduct.precio_venta *
+                  parseFloat(e.target.value) *
+                    parseFloat(invoiceProduct.precio_venta) *
                     itbisPercentage +
-                  e.target.value * invoiceProduct.precio_venta,
+                  parseFloat(e.target.value) *
+                    parseFloat(invoiceProduct.precio_venta),
               },
             };
           });

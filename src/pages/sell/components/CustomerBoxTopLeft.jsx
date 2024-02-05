@@ -9,6 +9,7 @@ export const CustomerBoxTopLeft = ({
   invoiceCustomer,
   total,
   subTotal,
+  itbis,
 }) => {
   const handleCustomer = async (e, params) => {
     setDataState((data) => {
@@ -56,17 +57,6 @@ export const CustomerBoxTopLeft = ({
         value={invoiceCustomer?.cedula || ""}
       />
       <TextField
-        id="telefono"
-        label="Télefono"
-        name="telefono"
-        variant="standard"
-        autoComplete="off"
-        sx={{ m: 1, mr: 6 }}
-        size="small"
-        inputProps={{ readOnly: true }}
-        value={invoiceCustomer?.telefono || ""}
-      />
-      <TextField
         id="fechaEmision"
         label="Fecha de emisión"
         name="fechaEmision"
@@ -102,6 +92,21 @@ export const CustomerBoxTopLeft = ({
         thousandSeparator={true}
         inputProps={{ readOnly: true }}
         value={subTotal}
+      />
+      <NumericFormat
+        customInput={TextField}
+        id="itbis"
+        label={`Itbis`}
+        name="itbis"
+        variant="standard"
+        autoComplete="off"
+        size="small"
+        sx={{ m: 1, mr: 6 }}
+        prefix={"$"}
+        type="text"
+        thousandSeparator={true}
+        inputProps={{ readOnly: true }}
+        value={itbis}
       />
       <NumericFormat
         customInput={TextField}

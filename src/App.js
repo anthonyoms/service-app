@@ -7,9 +7,7 @@ import { AppRouter } from "./routers/AppRouter";
 function App() {
   return (
     <Provider store={store}>
-      <div>
-        <AppRouter />
-      </div>
+      <AppRouter />
     </Provider>
   );
 }

@@ -5,15 +5,16 @@ import React from "react";
 
 export const InvoiceDatagrid = ({ invoiceProductsData, setDataState }) => {
   const handleDelete = (id) => {
-    const { subTotal, total } = invoiceProductsData.find(
+    const { subTotal, total,impuestos } = invoiceProductsData.find(
       (item) => item.uid === id
     );
     setTimeout(() => {
       setDataState((data) => {
         return {
           ...data,
-          subTotal: (data.subTotal - subTotal).toFixed(2),
-          total: (data.total - total).toFixed(2),
+          subTotal: (parseFloat(data.subTotal) - parseFloat(subTotal)).toFixed(2),
+          total: (parseFloat(data.total) - parseFloat(total)).toFixed(2),
+          itbis: (parseFloat(data.itbis) - parseFloat(impuestos)).toFixed(2),
           invoiceProductsData: invoiceProductsData.filter(
             (item) => item.uid !== id
           ),

@@ -1,6 +1,7 @@
 .newOrder {
   flex: 4;
   padding: 20px;
+  overflow: auto;
 }
 
 .newOrderTitleContainer {

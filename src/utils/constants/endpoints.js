@@ -9,4 +9,5 @@ export const endpoints = {
   detalleOrdenes: "/detalleOrdenes",
   configuraciones: "/configuraciones",
   entrada: "/entradas",
+  facuracion: "/facturas",
 };
