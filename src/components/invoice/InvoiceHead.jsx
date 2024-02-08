@@ -4,13 +4,16 @@ import { formatter } from "../../utils/constants/formatNumber";
 
 const InvoiceHead = ({
   cliente,
-  suplidor,
+  suplidorOcliente,
   numero,
   type,
   creada,
   vence,
   total,
   estado,
+  rightTitle,
+  tipoPago,
+  ncf,
 }) => {
   return (
     <>
@@ -32,11 +35,11 @@ const InvoiceHead = ({
                   <br />
                   {estado ? (
                     <>
-                      <strong>Creada:</strong>{" "}
-                      {moment(creada).format("DD/MM/YYYY")}
+                      Creada: {moment(creada).format("DD/MM/YYYY")}
                       <br />
-                      <strong>Vence:</strong>{" "}
-                      {moment(vence).format("DD/MM/YYYY")}
+                      Vence: {moment(vence).format("DD/MM/YYYY")}
+                      <br />
+                      {ncf && <>NCF: {ncf}</>}
                     </>
                   ) : (
                     <>
@@ -56,24 +59,17 @@ const InvoiceHead = ({
             <tbody>
               <tr>
                 <td>
-                  <strong>Datos cliente:</strong>
-                  <br />
-                  <strong>Nombre: </strong>
                   {cliente.nombre}
                   <br />
-                  <strong>Cedula/Rnc: </strong> {cliente.cedula_rnc}
+                  {cliente.cedula_rnc}
                   <br />
-                  <strong>Dirección:</strong> {cliente.direccion}
+                  {cliente.direccion}
                 </td>
-
                 <td>
-                  <strong>Datos Proveedor:</strong>
+                  <strong> {rightTitle}</strong>
                   <br />
-                  <strong>Nombre:</strong> {suplidor?.nombre}
-                  <br />
-                  <strong>Cedula/Rnc:</strong> {suplidor?.cedula_rnc}
-                  <br />
-                  <strong>Dirección:</strong> {suplidor?.direccion}
+                  {suplidorOcliente?.nombre}
+                  <br /> {suplidorOcliente?.cedula_rnc}
                 </td>
               </tr>
             </tbody>
@@ -90,7 +86,7 @@ const InvoiceHead = ({
         <td>Monto</td>
       </tr>
       <tr className="details">
-        <td>Transferencia bancaria</td>
+        <td>{tipoPago}</td>
 
         <td></td>
         <td></td>

@@ -28,6 +28,7 @@ import Entry from "../pages/entry/Entry";
 import EntryList from "../pages/entryList/EntryList";
 import { EntryInvoice } from "../pages/invoices/EntryInvoice";
 import { SellScreen } from "../pages/sell/SellScreen";
+import { SellInvoice } from "../pages/invoices/SellInvoice";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -36,6 +37,7 @@ export const DashboardRoutes = () => {
       <Routes>
         <Route path="/invoice/:invoiceId" element={<Invoice />} />
         <Route path="/entryinvoice/:invoiceId" element={<EntryInvoice />} />
+        <Route path="/sellinvoice/:invoiceId" element={<SellInvoice />} />
       </Routes>
     );
   }

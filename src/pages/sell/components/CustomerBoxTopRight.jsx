@@ -129,42 +129,42 @@ export const CustomerBoxTopRight = ({
         inputProps={{ readOnly: true }}
         value={invoiceProduct?.precio_venta || "0"}
       />
-      <TextField
+      <NumericFormat
+        customInput={TextField}
         id="cantidadRequerida"
         label="Cantidad"
         name="cantidadRequerida"
-        inputProps={{ maxLength: "5" }}
+        inputProps={{ maxLength: "2" }}
         variant="standard"
         autoComplete="off"
-        sx={{ m: 1, mr: 6 }}
         size="small"
+        sx={{ m: 1, mr: 6 }}
         value={invoiceProduct?.cantidadRequerida}
-        onChange={(e) => {
+        onValueChange={({ value }) => {
           setDataState((data) => {
             return {
               ...data,
               invoiceProduct: {
                 ...data.invoiceProduct,
-                cantidadRequerida: e.target.value,
+                cantidadRequerida: value,
                 impuestos: (
-                  parseFloat(e.target.value) *
+                  parseFloat(value) *
                   parseFloat(invoiceProduct.precio_venta) *
                   itbisPercentage
                 ).toFixed(2),
                 subTotal:
-                  parseFloat(e.target.value) *
-                  parseFloat(invoiceProduct.precio_venta),
+                  parseFloat(value) * parseFloat(invoiceProduct.precio_venta),
                 total:
-                  parseFloat(e.target.value) *
+                  parseFloat(value) *
                     parseFloat(invoiceProduct.precio_venta) *
                     itbisPercentage +
-                  parseFloat(e.target.value) *
-                    parseFloat(invoiceProduct.precio_venta),
+                  parseFloat(value) * parseFloat(invoiceProduct.precio_venta),
               },
             };
           });
         }}
       />
+
       <NumericFormat
         customInput={TextField}
         id="impuestos"

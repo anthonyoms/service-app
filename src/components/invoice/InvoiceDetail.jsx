@@ -1,7 +1,14 @@
 import React from "react";
 import { formatter } from "../../utils/constants/formatNumber";
 
-const InvoiceDetail = ({ productos = [], subTotal, totalTax, total }) => {
+const InvoiceDetail = ({
+  productos = [],
+  subTotal,
+  totalTax,
+  total,
+  descuento,
+  totalAfterdiscount,
+}) => {
   return (
     <>
       <tr className="heading">
@@ -34,10 +41,41 @@ const InvoiceDetail = ({ productos = [], subTotal, totalTax, total }) => {
         <td></td>
         <td></td>
         <td></td>
-        <td>Neto: {formatter.format(subTotal)}</td>
-        <td>Itbis: {formatter.format(totalTax)}</td>
-        <td>Total: {formatter.format(total)}</td>
+        <td>{formatter.format(subTotal)}</td>
+        <td>{formatter.format(totalTax)}</td>
+        <td>{formatter.format(total)}</td>
       </tr>
+      {descuento > 0 ? (
+        <>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Descuento:</td>
+            <td>{descuento} %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total:</td>
+            <td>{formatter.format(totalAfterdiscount)}</td>
+          </tr>
+        </>
+      ) : (
+        <>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total:</td>
+            <td>{formatter.format(total)}</td>
+          </tr>
+        </>
+      )}
     </>
   );
 };

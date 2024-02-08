@@ -10,6 +10,7 @@ export const CustomerBoxTopLeft = ({
   total,
   subTotal,
   itbis,
+  prodctKey,
 }) => {
   const handleCustomer = async (e, params) => {
     setDataState((data) => {
@@ -32,6 +33,7 @@ export const CustomerBoxTopLeft = ({
         disablePortal
         id="combo-box-demo"
         options={customersData}
+        key={prodctKey}
         getOptionLabel={(option) => `${option.nombre} - ${option.cedula}`}
         onChange={(e, params) => handleCustomer(e, params)}
         sx={{ padding: "8px", marginBottom: "6px" }}

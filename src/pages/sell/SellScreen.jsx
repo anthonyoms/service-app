@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./sellScreen.css";
+import { Navigate } from "react-router-dom";
 import { Box, Fab, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
-import { getServiceApp } from "../../services/serviceApp";
+import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation, infoMsg } from "../../utils/helpers/messages";
 import { MyBackdrop } from "../../components/ui/Backdrop";
@@ -11,6 +12,7 @@ import { CustomerBoxTopRight } from "./components/CustomerBoxTopRight";
 import { InvoiceDatagrid } from "./components/InvoiceDatagrid";
 import CustomerDialog from "./components/CustomerDialog";
 import { MonetizationOn } from "@material-ui/icons";
+import moment from "moment";
 
 export const SellScreen = () => {
   const configuration = useSelector((state) => state.info);
@@ -27,14 +29,20 @@ export const SellScreen = () => {
   const initialState = {
     loading: true,
     subTotal: 0,
+    sequenceDataResponse: 0,
     total: 0,
     itbis: 0,
+    discount: 0,
+    totalAfterDiscount: 0,
     lastInvoiceNumber: 0,
     customersData: [],
     productsData: [],
     invoiceCustomer: [],
+    tipoComprobante: "B01",
+    tipoPago: "Tarjeta",
     invoiceProductsData: [],
     customerKey: true,
+    prodctKey: true,
     invoiceProduct: {
       cantidadRequerida: 0,
       impuestos: 0,
@@ -52,10 +60,15 @@ export const SellScreen = () => {
       invoiceProduct,
       invoiceProductsData,
       customerKey,
+      prodctKey,
       subTotal,
+      sequenceDataResponse,
       total,
       itbis,
       lastInvoiceNumber,
+      discount,
+      totalAfterDiscount,
+      tipoPago,
     },
     setDataState,
   ] = useState(initialState);
@@ -83,24 +96,81 @@ export const SellScreen = () => {
     setOpen(true);
   };
 
-  const sendInvoice = () => {
+  const setFormatProduct = (detalle = []) => {
+    return detalle.map((producto) => {
+      return {
+        producto: producto.uid,
+        itbisProducto: Number(producto.impuestos),
+        totalProducto: producto.total,
+        subTotalProducto: producto.subTotal,
+        cantidadRequerida: producto.cantidadRequerida,
+      };
+    });
+  };
+
+  const sendInvoice = async (sequence) => {
+    setOpen(false);
+    setDataState((data) => {
+      return { ...data, loading: true };
+    });
     const payload = {
       id: lastInvoiceNumber,
-      cliente:invoiceCustomer,
-      fechaEmision:
+      cliente: invoiceCustomer.uid,
+      fechaEmision: moment().format("DD/MM/YYYY"),
+      fechaVencimiento: moment().add(1, "M").format("DD/MM/YYYY"),
+      itbis,
+      total,
+      subTotal,
+      tipoComprobante: sequence.substring(0, 3),
+      numeroComprobante: sequence,
+      tipoPago,
+      productos: setFormatProduct(invoiceProductsData),
+      discount,
+      totalAfterdiscount: totalAfterDiscount,
     };
+    const isSaveInvoice = await postServiceApp(payload, endpoints.facuracion);
+
+    if (!isSaveInvoice.ok) {
+      setDataState((data) => {
+        return { ...data, loading: false };
+      });
+      return dataValidation(isSaveInvoice, false);
+    }
+    const { factura } = dataValidation(isSaveInvoice);
+    setDataState((data) => ({
+      ...initialState,
+      customerKey: !data.customerKey,
+      prodctKey: !data.prodctKey,
+      loading: false,
+    }));
+    loadCustomers();
+
+    window.open("/sellinvoice/" + factura.uid, "_blank");
+    return <Navigate to={"/"} replace={true} />;
   };
 
   const loadCustomers = async () => {
-    const [customersDataResponse, productsDataResponse, invocieDataResponse] =
-      await Promise.all([
-        getServiceApp(endpoints.users),
-        getServiceApp(endpoints.products + `?estado=true`),
-        getServiceApp(endpoints.facuracion),
-      ]);
+    const [
+      customersDataResponse,
+      productsDataResponse,
+      invocieDataResponse,
+      sequenceDataResponse,
+    ] = await Promise.all([
+      getServiceApp(endpoints.users),
+      getServiceApp(endpoints.products + `?estado=true`),
+      getServiceApp(endpoints.facuracion),
+      getServiceApp(endpoints.secuencial + `?tipoComprobante=B01`),
+    ]);
     const validDataCustomers = dataValidation(customersDataResponse, false);
     const validDataProduct = dataValidation(productsDataResponse, false);
-    if (validDataCustomers.ok && validDataProduct.ok) {
+    const validDataSequence = dataValidation(sequenceDataResponse, false);
+    const validDataInvoice = dataValidation(invocieDataResponse, false);
+    if (
+      validDataCustomers.ok &&
+      validDataProduct.ok &&
+      validDataInvoice.ok &&
+      validDataSequence.ok
+    ) {
       setDataState((data) => ({
         ...data,
         customersData: validDataCustomers.usuarios.filter(
@@ -108,6 +178,7 @@ export const SellScreen = () => {
         ),
         productsData: validDataProduct.productos,
         lastInvoiceNumber: invocieDataResponse?.total + 1,
+        sequenceDataResponse: `B010000000${sequenceDataResponse.secuencial.length + 1}`,
         loading: false,
       }));
     }
@@ -146,6 +217,7 @@ export const SellScreen = () => {
             setDataState={setDataState}
             customersData={customersData}
             invoiceCustomer={invoiceCustomer}
+            prodctKey={prodctKey}
             subTotal={subTotal}
             total={total}
             itbis={itbis}
@@ -173,7 +245,16 @@ export const SellScreen = () => {
           <MonetizationOn />
         </Fab>
       </Tooltip>
-      <CustomerDialog open={open} setOpen={setOpen} />
+      <CustomerDialog
+        open={open}
+        setOpen={setOpen}
+        total={total}
+        setDataState={setDataState}
+        discount={discount}
+        totalAfterDiscount={totalAfterDiscount}
+        sendInvoice={sendInvoice}
+        sequenceDataResponse={sequenceDataResponse}
+      />
     </>
   );
 };

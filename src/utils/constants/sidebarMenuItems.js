@@ -10,6 +10,7 @@ import {
   Timeline,
   PeopleAlt,
   MonetizationOn,
+  Refresh,
 } from "@material-ui/icons";
 
 export const home = {
@@ -49,6 +50,12 @@ export const inventario = {
       Icon: RssFeed,
       sidebarItemName: "Servicios",
     },
+  ],
+};
+
+export const ventas = {
+  title: "Ventas",
+  listItem: [
     {
       link: "/customers",
       Icon: PeopleAlt,
@@ -58,6 +65,11 @@ export const inventario = {
       link: "/sell",
       Icon: MonetizationOn,
       sidebarItemName: "Facturación",
+    },
+    {
+      link: "/refunds",
+      Icon: Refresh,
+      sidebarItemName: "Devolución",
     },
   ],
 };

@@ -10,4 +10,5 @@ export const endpoints = {
   configuraciones: "/configuraciones",
   entrada: "/entradas",
   facuracion: "/facturas",
+  secuencial: "/secuencial",
 };

@@ -20,18 +20,19 @@ export const EntryInvoice = () => {
     const id = getIdUrl();
     const dataResponse = await getServiceApp(`${endpoints.entrada}/${id}`);
     const { entrada } = dataValidation(dataResponse, false);
-    console.log(entrada);
     setDataInvoice((prevState) => ({
       ...prevState,
+      tipoPago: "Transferencia bancaria",
       creada: entrada.fechaEmision,
       vence: entrada.fechaVencimiento,
       numero: entrada.id,
-      suplidor: entrada.suplidor,
+      suplidorOcliente: entrada.suplidor,
       total: entrada.total,
       totalTax: entrada.totalTax,
       subTotal: entrada.subTotal,
       productos: entrada.productos,
       estado: entrada.estado,
+      rightTitle: "Comprado a:",
     }));
   };
 

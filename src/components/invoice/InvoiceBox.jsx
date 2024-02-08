@@ -3,7 +3,6 @@ import InvoiceDetail from "./InvoiceDetail";
 import InvoiceHead from "./InvoiceHead";
 
 const InvoiceBox = ({ cliente, dataInvoice }) => {
-  console.log(cliente, dataInvoice);
   return (
     <div className="divBody">
       <br />
@@ -16,8 +15,8 @@ const InvoiceBox = ({ cliente, dataInvoice }) => {
             <InvoiceDetail {...dataInvoice} />
           </tbody>
         </table>
-        <h5>nota:</h5>
-        <h5>Prestar atención a la fecha de vencimiento.</h5>
+        <h5>Nota: Prestar atención a la fecha de vencimiento.</h5>
+        {dataInvoice?.vendedor && <h5>Vendedor: {dataInvoice.vendedor}</h5>}
       </div>
     </div>
   );

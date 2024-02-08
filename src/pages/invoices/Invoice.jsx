@@ -22,18 +22,19 @@ export const Invoice = () => {
       `${endpoints.detalleOrdenes}/${id}`
     );
     const { ordenDetalles } = dataValidation(dataResponse, false);
-    console.log(ordenDetalles)
     setDataInvoice((prevState) => ({
       ...prevState,
+      tipoPago: "Transferencia bancaria",
       creada: ordenDetalles.ordenCompra.fechaEmision,
       vence: ordenDetalles.ordenCompra.fechaVencimiento,
       numero: ordenDetalles.ordenCompra.id,
-      suplidor: ordenDetalles.ordenCompra.suplidor,
+      suplidorOcliente: ordenDetalles.ordenCompra.suplidor,
       total: ordenDetalles.ordenCompra.total,
       totalTax: ordenDetalles.ordenCompra.totalTax,
       subTotal: ordenDetalles.ordenCompra.subTotal,
       productos: ordenDetalles.productos,
       estado: ordenDetalles.ordenCompra.estado,
+      rightTitle: "Pedido a:",
     }));
   };
 

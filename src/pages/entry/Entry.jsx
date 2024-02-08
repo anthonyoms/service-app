@@ -160,9 +160,6 @@ export default function Entry() {
       total:
         supplierSelected?.total + supplierSelected?.total * itbisPercentage,
     };
-
-    console.log(payload);
-
     const isSaveOrder = await postServiceApp(payload, endpoints.entrada);
 
     if (!isSaveOrder.ok) {
@@ -266,7 +263,6 @@ export default function Entry() {
       `${endpoints.detalleOrdenes}/${orderId}`
     );
     const { ordenDetalles } = dataValidation(dataResponse, false);
-    console.log(ordenDetalles);
     setDataState((prevState) => ({ ...prevState, loading: false }));
     totalRefence.current = ordenDetalles.ordenCompra.subTotal;
     setDetalleOrden(
