@@ -116,8 +116,8 @@ export const SellScreen = () => {
     const payload = {
       id: lastInvoiceNumber,
       cliente: invoiceCustomer.uid,
-      fechaEmision: moment().format("DD/MM/YYYY"),
-      fechaVencimiento: moment().add(1, "M").format("DD/MM/YYYY"),
+      fechaEmision: moment().format("MM/DD/YYYY"),
+      fechaVencimiento: moment().add(1, "M").format("MM/DD/YYYY"),
       itbis,
       total,
       subTotal,

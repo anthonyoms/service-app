@@ -11,4 +11,5 @@ export const endpoints = {
   entrada: "/entradas",
   facuracion: "/facturas",
   secuencial: "/secuencial",
+  generica: "/generica",
 };

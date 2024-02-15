@@ -1,16 +1,15 @@
 .refunds {
   display: flex;
   flex: 4;
-  align-items: center;
-  justify-content: center;
 }
 .refunds-contend {
   display: flex;
   flex-direction: column;
   padding: 40px;
   width: 50%;
+  margin-left: 16%;
 }
 
 .title {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }

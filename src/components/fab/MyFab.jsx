@@ -4,11 +4,11 @@ import { Fab } from "@mui/material";
 
 import { Link } from "react-router-dom";
 
-const MyFab = ({ route }) => {
+const MyFab = ({ route, icon = <Add /> }) => {
   const style = {
     margin: 0,
     top: "auto",
-    right: '2em',
+    right: "2em",
     bottom: "6em",
     left: "auto",
     position: "fixed",
@@ -16,7 +16,7 @@ const MyFab = ({ route }) => {
   return (
     <Link to={route}>
       <Fab style={style} color="primary" aria-label="add">
-        <Add />
+        {icon}
       </Fab>
     </Link>
   );
