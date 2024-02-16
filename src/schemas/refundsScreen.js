@@ -10,8 +10,7 @@ export const refundsSchema = yup.object().shape({
     .typeError("Datos incorrectos, por favor escribir un número")
     .required(errorMessage),
   cantidad: yup
-    .number()
-    .integer("Por favor escribir un número entero")
-    .typeError("Datos incorrectos, por favor escribir un número"),
+    .string()
+    .matches(/^\d+$/, "Datos incorrectos, por favor escribir un número"),
   cliente: yup.string().required(errorMessage),
 });

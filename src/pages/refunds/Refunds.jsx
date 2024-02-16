@@ -26,14 +26,21 @@ import { dataValidation, infoMsg } from "../../utils/helpers/messages";
 import { refundsSchema } from "../../schemas/refundsScreen";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { InvoiceDatagrid } from "../sell/components/InvoiceDatagrid";
-import { AddBox, RemoveRedEyeSharp } from "@material-ui/icons";
+import { AddBox, RemoveRedEyeSharp, Send } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { formatter } from "../../utils/constants/formatNumber";
-import MyFab from "../../components/fab/MyFab";
 export const Refunds = () => {
   const [open, setOpen] = React.useState(false);
   const { itbis, itbisPercentage } = useSelector((state) => state.info);
   const style = {
+    margin: 0,
+    top: "auto",
+    right: "10em",
+    bottom: "6em",
+    left: "auto",
+    position: "fixed",
+  };
+  const style2 = {
     margin: 0,
     top: "auto",
     right: "5em",
@@ -44,7 +51,7 @@ export const Refunds = () => {
   const styleMyFab = {
     margin: 0,
     top: "auto",
-    right: "10em",
+    right: "15em",
     bottom: "6em",
     left: "auto",
     position: "fixed",
@@ -227,16 +234,24 @@ export const Refunds = () => {
     });
   };
 
+  const showError = (msg = "") => {
+    setDataState((data) => {
+      return {
+        ...data,
+        error: true,
+        errorMessage: msg,
+      };
+    });
+  };
+
   const handleAddProduct = () => {
+    if (errors.cantidad) {
+      return showError("Datos incorrectos, por favor verificar");
+    }
     if (!refundsProduct.nombre || values.cantidad <= 0) {
-      setDataState((data) => {
-        return {
-          ...data,
-          error: true,
-          errorMessage: `Los campos: "Produto" y "Cantidad" deben ser completados.`,
-        };
-      });
-      return;
+      return showError(
+        `Los campos: "Produto" y "Cantidad" deben ser completados.`
+      );
     }
 
     if (
@@ -244,28 +259,21 @@ export const Refunds = () => {
         (product) => product.uid === refundsProduct.uid
       )
     ) {
-      setDataState((data) => {
-        return {
-          ...data,
-          error: true,
-          errorMessage: `El producto ya existe en la devolución, por favor verificar`,
-        };
-      });
-      return;
+      return showError(
+        `El producto ya existe en la devolución, por favor verificar`
+      );
+    }
+    const productoOld = productosOld.find(
+      (product) => product.producto._id === refundsProduct.uid
+    );
+    if (!productoOld) {
+      return showError(
+        `El producto no existe en la factura, por favor verificar`
+      );
     }
 
-    if (
-      productosOld.find(
-        (product) => product.producto._id !== refundsProduct.uid
-      )
-    ) {
-      return setDataState((data) => {
-        return {
-          ...data,
-          error: true,
-          errorMessage: `El producto no existe en la factura, por favor verificar`,
-        };
-      });
+    if (productoOld.cantidadRequerida < values.cantidad) {
+      return showError(`La cantidad excede la de la factura`);
     }
     setDataState((data) => {
       return {
@@ -278,12 +286,58 @@ export const Refunds = () => {
     resetInvoiceProduct();
   };
 
+  const handleSendRefund = (e) => {
+    handleSubmit(e);
+    if (invoiceProductsData.length <= 0) {
+      return infoMsg(
+        `Antes de proceder con la devolución, por favor, 
+        asegúrate de agregar al menos un producto a la lista. 
+        Tu atención a este paso es fundamental para completar 
+        la transacción con éxito!`
+      );
+    }
+  };
+
   return (
     <>
       <MyBackdrop loading={isSubmitting || loading} />
-      <form onSubmit={handleSubmit} className="refunds">
+      <form onSubmit={(e) => handleSendRefund(e)} className="refunds">
         <Paper className="refunds-contend">
           <h2 className="title">Devoluciones</h2>
+          <TextField
+            id="factura"
+            name="factura"
+            label="Factura ID"
+            autoFocus
+            size="small"
+            inputProps={{ maxLength: "20" }}
+            value={values.factura}
+            error={!!errors.factura && !!touched.factura}
+            helperText={!!errors.factura && !!touched.factura && errors.factura}
+            onChange={handleChange}
+            onBlur={(e) => {
+              handleBlur(e);
+              setFieldValue("cliente", ``);
+              loadCustomerInvoice(e);
+            }}
+            autoComplete="off"
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            id="cliente"
+            name="cliente"
+            label="Cliente"
+            size="small"
+            inputProps={{ maxLength: "20", readOnly: true }}
+            value={values.cliente}
+            error={!!errors.cliente && !!touched.cliente}
+            helperText={!!errors.cliente && !!touched.cliente && errors.cliente}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            autoComplete="off"
+            sx={{ marginBottom: 2 }}
+          />
+
           <FormControl fullWidth>
             <InputLabel size="small" id="demo-simple-select-label">
               Tipo
@@ -350,39 +404,6 @@ export const Refunds = () => {
               </FormHelperText>
             )}
           </FormControl>
-          <TextField
-            id="factura"
-            name="factura"
-            label="Factura ID"
-            size="small"
-            inputProps={{ maxLength: "20" }}
-            value={values.factura}
-            error={!!errors.factura && !!touched.factura}
-            helperText={!!errors.factura && !!touched.factura && errors.factura}
-            onChange={handleChange}
-            onBlur={(e) => {
-              handleBlur(e);
-              setFieldValue("cliente", ``);
-              loadCustomerInvoice(e);
-            }}
-            autoComplete="off"
-            sx={{ marginBottom: 2 }}
-          />
-          <TextField
-            id="cliente"
-            name="cliente"
-            label="Cliente"
-            size="small"
-            inputProps={{ maxLength: "20", readOnly: true }}
-            value={values.cliente}
-            error={!!errors.cliente && !!touched.cliente}
-            helperText={!!errors.cliente && !!touched.cliente && errors.cliente}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            autoComplete="off"
-            sx={{ marginBottom: 2 }}
-          />
-
           <InvoiceDatagrid
             invoiceProductsData={invoiceProductsData}
             setDataState={setDataState}
@@ -390,7 +411,17 @@ export const Refunds = () => {
         </Paper>
         {productosOld.length !== 0 ? (
           <>
-            <Tooltip title="Agregar producto">
+            <Tooltip title="Enviar">
+              <Fab
+                type="submit"
+                style={style2}
+                color="success"
+                aria-label="add"
+              >
+                <Send />
+              </Fab>
+            </Tooltip>
+            <Tooltip title="Agregar Producto">
               <Fab
                 onClick={handleClickOpen}
                 style={style}
@@ -517,7 +548,7 @@ export const Refunds = () => {
                 {errorMessage}
               </Alert>
             )}
-            {!!values.cantidad ? (
+            {!!values.cantidad && !errors.cantidad ? (
               <>
                 <h3>Impuestos: {formatter.format(refundsProduct.impuestos)}</h3>
                 <h3>Subtotal: {formatter.format(refundsProduct.subTotal)}</h3>
