@@ -31,7 +31,7 @@ import { useSelector } from "react-redux";
 import { formatter } from "../../utils/constants/formatNumber";
 export const Refunds = () => {
   const [open, setOpen] = React.useState(false);
-  const { itbis, itbisPercentage } = useSelector((state) => state.info);
+  const { itbisPercentage } = useSelector((state) => state.info);
   const style = {
     margin: 0,
     top: "auto",
@@ -70,6 +70,9 @@ export const Refunds = () => {
       errorMessage,
       uid,
       productosOld,
+      subTotal,
+      total,
+      itbis,
     },
     setDataState,
   ] = useState({
@@ -79,6 +82,9 @@ export const Refunds = () => {
     invoiceProductsData: [],
     loading: true,
     customerKey: true,
+    subTotal: 0,
+    total: 0,
+    itbis: 0,
     refundsProduct: {
       cantidadRequerida: 0,
       impuestos: 0,
@@ -280,6 +286,11 @@ export const Refunds = () => {
         ...data,
         customerKey: !data.customerKey,
         invoiceProductsData: [data.refundsProduct, ...data.invoiceProductsData],
+        subTotal:
+          parseFloat(data.subTotal) + parseFloat(data.refundsProduct.subTotal),
+        total: parseFloat(data.total) + parseFloat(data.refundsProduct.total),
+        itbis:
+          parseFloat(data.itbis) + parseFloat(data.refundsProduct.impuestos),
       };
     });
     setFieldValue("cantidad", "");
@@ -404,6 +415,17 @@ export const Refunds = () => {
               </FormHelperText>
             )}
           </FormControl>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <h4 style={{ marginRight: 20 }}>
+              Itbis : {formatter.format(itbis)}
+            </h4>
+            <h4 style={{ marginRight: 20 }}>
+              Subtotal :{formatter.format(subTotal)}
+            </h4>
+            <h4 style={{ marginRight: 20 }}>
+              Total : {formatter.format(total)}
+            </h4>
+          </div>
           <InvoiceDatagrid
             invoiceProductsData={invoiceProductsData}
             setDataState={setDataState}
