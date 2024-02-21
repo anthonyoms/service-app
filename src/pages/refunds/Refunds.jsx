@@ -26,10 +26,11 @@ import { dataValidation, infoMsg } from "../../utils/helpers/messages";
 import { refundsSchema } from "../../schemas/refundsScreen";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { InvoiceDatagrid } from "../sell/components/InvoiceDatagrid";
-import { AddBox, RemoveRedEyeSharp, Send } from "@material-ui/icons";
+import { AddBox, RemoveRedEyeSharp, Search, Send } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { formatter } from "../../utils/constants/formatNumber";
 import moment from "moment";
+import { Link } from "react-router-dom";
 export const Refunds = () => {
   const [open, setOpen] = React.useState(false);
   const { itbisPercentage } = useSelector((state) => state.info);
@@ -391,6 +392,16 @@ export const Refunds = () => {
       <MyBackdrop loading={isSubmitting || loading} />
       <form onSubmit={(e) => handleSendRefund(e)} className="refunds">
         <Paper className="refunds-contend">
+          <Link to={"/refundslist"}>
+            <Button
+              sx={{ width: "50%", marginLeft: "50%" }}
+              variant="contained"
+              startIcon={<Search />}
+            >
+              Buscar devoluciones
+            </Button>
+          </Link>
+
           <h2 className="title">Devolucion #{lastRefunds}</h2>
           <TextField
             id="factura"

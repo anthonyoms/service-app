@@ -19,8 +19,6 @@ import Supplier from "../pages/supplier/Supplier";
 import ServiceList from "../pages/serviceList/ServiceList";
 import Service from "../pages/productService/Service";
 import NewService from "../pages/newService/NewService";
-import ServiceManagementList from "../pages/serviceManagementList/ServiceManagementList";
-import SalesManagementList from "../pages/salesManagementList/SalesManagementList";
 import NewOrder from "../pages/newOrder/NewOrder";
 import OrderList from "../pages/orderList/OrderList";
 import { Invoice } from "../pages/invoices/Invoice";
@@ -30,6 +28,7 @@ import { EntryInvoice } from "../pages/invoices/EntryInvoice";
 import { SellScreen } from "../pages/sell/SellScreen";
 import { SellInvoice } from "../pages/invoices/SellInvoice";
 import { Refunds } from "../pages/refunds/Refunds";
+import { RefundsList } from "../pages/refundsList/RefundsList";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -96,6 +95,7 @@ export const DashboardRoutes = () => {
 
           {/*refunds*/}
           <Route path="/refunds" element={<Refunds />} />
+          <Route path="/refundslist" element={<RefundsList />} />
 
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
