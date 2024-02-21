@@ -116,8 +116,8 @@ export const SellScreen = () => {
     const payload = {
       id: lastInvoiceNumber,
       cliente: invoiceCustomer.uid,
-      fechaEmision: moment().format("MM/DD/YYYY"),
-      fechaVencimiento: moment().add(1, "M").format("MM/DD/YYYY"),
+      fechaEmision: moment().toDate(),
+      fechaVencimiento: moment().add(1, "M").toDate(),
       itbis,
       total,
       subTotal,
@@ -128,7 +128,7 @@ export const SellScreen = () => {
       discount,
       totalAfterdiscount: totalAfterDiscount,
     };
-    const isSaveInvoice = await postServiceApp(payload, endpoints.facuracion);
+    const isSaveInvoice = await postServiceApp(payload, endpoints.facturacion);
 
     if (!isSaveInvoice.ok) {
       setDataState((data) => {
@@ -158,7 +158,7 @@ export const SellScreen = () => {
     ] = await Promise.all([
       getServiceApp(endpoints.users),
       getServiceApp(endpoints.products + `?estado=true`),
-      getServiceApp(endpoints.facuracion),
+      getServiceApp(endpoints.facturacion),
       getServiceApp(endpoints.secuencial + `?tipoComprobante=B01`),
     ]);
     const validDataCustomers = dataValidation(customersDataResponse, false);
@@ -178,7 +178,9 @@ export const SellScreen = () => {
         ),
         productsData: validDataProduct.productos,
         lastInvoiceNumber: invocieDataResponse?.total + 1,
-        sequenceDataResponse: `B010000000${sequenceDataResponse.secuencial.length + 1}`,
+        sequenceDataResponse: `B010000000${
+          sequenceDataResponse.secuencial.length + 1
+        }`,
         loading: false,
       }));
     }

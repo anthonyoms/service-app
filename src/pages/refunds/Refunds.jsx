@@ -20,7 +20,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { getServiceApp } from "../../services/serviceApp";
+import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation, infoMsg } from "../../utils/helpers/messages";
 import { refundsSchema } from "../../schemas/refundsScreen";
@@ -29,6 +29,7 @@ import { InvoiceDatagrid } from "../sell/components/InvoiceDatagrid";
 import { AddBox, RemoveRedEyeSharp, Send } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { formatter } from "../../utils/constants/formatNumber";
+import moment from "moment";
 export const Refunds = () => {
   const [open, setOpen] = React.useState(false);
   const { itbisPercentage } = useSelector((state) => state.info);
@@ -73,18 +74,24 @@ export const Refunds = () => {
       subTotal,
       total,
       itbis,
+      lastRefunds,
+      clienteUid,
+      facturaUid,
     },
     setDataState,
   ] = useState({
     reasonData: [],
     typeData: [],
     products: [],
+    clienteUid: null,
+    facturaUid: null,
     invoiceProductsData: [],
     loading: true,
     customerKey: true,
     subTotal: 0,
     total: 0,
     itbis: 0,
+    lastRefunds: 0,
     refundsProduct: {
       cantidadRequerida: 0,
       impuestos: 0,
@@ -114,8 +121,40 @@ export const Refunds = () => {
       cantidad: "",
     },
     validationSchema: refundsSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      const payload = {
+        id: lastRefunds,
+        cliente: clienteUid,
+        factura: facturaUid,
+        fechaEmision: moment().toDate(),
+        fechaVencimiento: moment().add(1, "M").toDate(),
+        itbis,
+        total,
+        subTotal,
+        productosDevueltos: setFormatProduct(invoiceProductsData),
+        tipo: values.refundsType,
+        motivo: values.refundsReason,
+      };
+
+      const isSaveRefund = await postServiceApp(
+        payload,
+        endpoints.devoluciones
+      );
+
+      if (!isSaveRefund.ok) {
+        setDataState((data) => {
+          return { ...data, loading: false };
+        });
+        return dataValidation(isSaveRefund, false);
+      }
+      dataValidation(isSaveRefund);
+
+      setFieldValue("cliente", ``);
+      setFieldValue("factura", ``);
+      setFieldValue("refundsType", ``);
+      setFieldValue("refundsReason", ``);
+      resetForm();
+      loadRefundsDropdowns();
     },
   });
 
@@ -132,15 +171,21 @@ export const Refunds = () => {
     resetInvoiceProduct();
     setOpen(false);
   };
-  const loadCustomerInvoice = async ({ target }) => {
+  const resetForm = () => {
     setDataState((prevState) => {
       return {
         ...prevState,
         uid: "",
+        subTotal: 0,
+        total: 0,
+        itbis: 0,
         productosOld: [],
         invoiceProductsData: [],
       };
     });
+  };
+  const loadCustomerInvoice = async ({ target }) => {
+    resetForm();
     if (!target.value || errors.factura) {
       return;
     }
@@ -151,10 +196,10 @@ export const Refunds = () => {
         loading: true,
       };
     });
-
     const result = await getServiceApp(
-      endpoints.facuracion + `?id=${target.value}`
+      endpoints.facturacion + `?id=${target.value}`
     );
+
     setDataState((prevState) => {
       return {
         ...prevState,
@@ -163,8 +208,15 @@ export const Refunds = () => {
     });
     const validResult = dataValidation(result, false);
 
-    if (!validResult.ok || validResult.facturas.length <= 0) {
-      infoMsg(`Factura #${target.value} no encontrada`);
+    if (
+      !validResult.ok ||
+      validResult.facturas.length <= 0 ||
+      moment(validResult.facturas[0].fechaVencimiento).isBefore() ||
+      !validResult.facturas[0].estado
+    ) {
+      infoMsg(
+        `Factura #${target.value} no encontrada o vencida, por favor verificar`
+      );
       setFieldValue("cliente", ``);
       setFieldValue("factura", ``);
       return;
@@ -172,33 +224,45 @@ export const Refunds = () => {
 
     const cedula = validResult.facturas[0].cliente.cedula;
     const nombre = validResult.facturas[0].cliente.nombre;
+    const clienteUid = validResult.facturas[0].cliente._id;
+    const facturaUid = validResult.facturas[0].uid;
     setDataState((prevState) => {
       return {
         ...prevState,
         uid: validResult.facturas[0].uid,
         productosOld: validResult.facturas[0].productos,
+        clienteUid,
+        facturaUid,
       };
     });
     setFieldValue("cliente", `${cedula} - ${nombre}`);
   };
 
   const loadRefundsDropdowns = async () => {
-    const [reasonDataResult, typeDataResult, productsDataResponse] =
+    const [reasonDataResult, typeDataResult, productsDataResponse, lastRefund] =
       await Promise.all([
         getServiceApp(endpoints.generica + `?id=2`),
         getServiceApp(endpoints.generica + `?id=1`),
         getServiceApp(endpoints.products + `?estado=true`),
+        getServiceApp(endpoints.devoluciones),
       ]);
     const validReasonData = dataValidation(reasonDataResult, false);
     const validtypeData = dataValidation(typeDataResult, false);
     const validDataProduct = dataValidation(productsDataResponse, false);
-    if (validReasonData.ok && validtypeData.ok && validDataProduct.ok) {
+    const validLastRefund = dataValidation(lastRefund, false);
+    if (
+      validReasonData.ok &&
+      validtypeData.ok &&
+      validDataProduct.ok &&
+      validLastRefund.ok
+    ) {
       setDataState((prevState) => {
         return {
           ...prevState,
           reasonData: validReasonData.generica[0].items,
           typeData: validtypeData.generica[0].items,
           products: validDataProduct.productos,
+          lastRefunds: validLastRefund.total + 1,
           loading: false,
         };
       });
@@ -215,6 +279,18 @@ export const Refunds = () => {
           subTotal: 0,
           total: 0,
         },
+      };
+    });
+  };
+
+  const setFormatProduct = (detalle = []) => {
+    return detalle.map((producto) => {
+      return {
+        producto: producto.uid,
+        itbisProducto: Number(producto.impuestos),
+        totalProducto: producto.total,
+        subTotalProducto: producto.subTotal,
+        cantidadDevuelta: producto.cantidadRequerida,
       };
     });
   };
@@ -298,7 +374,7 @@ export const Refunds = () => {
   };
 
   const handleSendRefund = (e) => {
-    handleSubmit(e);
+    e.preventDefault();
     if (invoiceProductsData.length <= 0) {
       return infoMsg(
         `Antes de proceder con la devolución, por favor, 
@@ -307,6 +383,7 @@ export const Refunds = () => {
         la transacción con éxito!`
       );
     }
+    handleSubmit(e);
   };
 
   return (
@@ -314,7 +391,7 @@ export const Refunds = () => {
       <MyBackdrop loading={isSubmitting || loading} />
       <form onSubmit={(e) => handleSendRefund(e)} className="refunds">
         <Paper className="refunds-contend">
-          <h2 className="title">Devoluciones</h2>
+          <h2 className="title">Devolucion #{lastRefunds}</h2>
           <TextField
             id="factura"
             name="factura"
@@ -367,7 +444,7 @@ export const Refunds = () => {
             >
               {typeData.map((items) => {
                 return (
-                  <MenuItem key={items?._id} value={items?.item_id}>
+                  <MenuItem key={items?._id} value={items?._id}>
                     {items?.item_text}
                   </MenuItem>
                 );
@@ -400,7 +477,7 @@ export const Refunds = () => {
             >
               {reasonData.map((items) => {
                 return (
-                  <MenuItem key={items?._id} value={items?.item_id}>
+                  <MenuItem key={items?._id} value={items?._id}>
                     {items?.item_text}
                   </MenuItem>
                 );

@@ -18,7 +18,7 @@ export const SellInvoice = () => {
 
   const loadDataInvoice = async () => {
     const id = getIdUrl();
-    const dataResponse = await getServiceApp(`${endpoints.facuracion}/${id}`);
+    const dataResponse = await getServiceApp(`${endpoints.facturacion}/${id}`);
     const { factura } = dataValidation(dataResponse, false);
     setDataInvoice((prevState) => ({
       ...prevState,
