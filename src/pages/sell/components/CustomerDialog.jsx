@@ -7,6 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { formatter } from "../../../utils/constants/formatNumber";
 import {
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -26,6 +27,10 @@ export default function CustomerDialog({
   totalAfterDiscount,
   sendInvoice,
   sequenceDataResponse,
+  codigoDevolucion,
+  secuencialLoading,
+  devolucionLoading,
+  devolucionLoadingError,
 }) {
   const handleClose = () => {
     setOpen(false);
@@ -41,7 +46,10 @@ export default function CustomerDialog({
       0,
       nuevaCadena.length - String(secuencial.length + 1).length
     )}${String(secuencial.length + 1)}`;
-    setDataState((data) => ({ ...data, sequenceDataResponse: cadenaFinal }));
+    setDataState((data) => ({
+      ...data,
+      sequenceDataResponse: cadenaFinal,
+    }));
   };
 
   const handlePayType = ({ target }) => {
@@ -62,6 +70,43 @@ export default function CustomerDialog({
         totalAfterDiscount: total - total * perncentDiscount,
       };
     });
+  };
+
+  const resetDiscount = (error = false) => {
+    console.log(error);
+    setDataState((prev) => ({
+      ...prev,
+      totalAfterDiscount: prev.total,
+      discount: 0,
+      devolucionLoading: false,
+      devolucionLoadingError: error,
+    }));
+  };
+
+  const handleOnBlur = async ({ target: { value } }) => {
+    if (!value) {
+      return resetDiscount();
+    }
+    setDataState((prev) => ({
+      ...prev,
+      devolucionLoading: true,
+    }));
+    const { ok, ...data } = await getServiceApp(
+      endpoints.devoluciones + `?id=${value}`
+    );
+    if (!ok) {
+      return resetDiscount(true);
+    }
+    if (!data?.devolucion[0]?.total) {
+      return resetDiscount(true);
+    }
+    setDataState((prev) => ({
+      ...prev,
+      totalAfterDiscount: prev.total - data?.devolucion[0].total,
+      discount: 0,
+      devolucionLoading: false,
+      devolucionLoadingError: false,
+    }));
   };
 
   return (
@@ -115,16 +160,53 @@ export default function CustomerDialog({
             autoComplete="off"
             fullWidth
             InputProps={{
+              endAdornment: secuencialLoading ? (
+                <CircularProgress size={30} thickness={4} />
+              ) : (
+                <></>
+              ),
+            }}
+            inputProps={{
               readOnly: true,
             }}
             sx={{ mt: 2 }}
             value={sequenceDataResponse}
+          />
+          <TextField
+            margin="dense"
+            id="codigoDevolucion"
+            name="codigoDevolucion"
+            label="Codigo Devolución"
+            autoComplete="off"
+            fullWidth
+            error={!!devolucionLoadingError ? true : false}
+            helperText={
+              !!devolucionLoadingError ? "Devolución no encontrada " : ""
+            }
+            InputProps={{
+              endAdornment: devolucionLoading && (
+                <CircularProgress size={30} thickness={4} />
+              ),
+            }}
+            inputProps={{ maxLength: "20" }}
+            onBlur={handleOnBlur}
+            sx={{ mt: 2 }}
+            value={codigoDevolucion}
+            onChange={({ target }) => {
+              setDataState((prevState) => {
+                return {
+                  ...prevState,
+                  codigoDevolucion: target.value,
+                };
+              });
+            }}
           />
           <NumericFormat
             customInput={TextField}
             id="discount"
             label="Descuento %*"
             name="discount"
+            disabled={!!codigoDevolucion}
             inputProps={{ maxLength: "2" }}
             variant="standard"
             autoComplete="off"
@@ -134,15 +216,16 @@ export default function CustomerDialog({
             onValueChange={handleDiscount}
           />
           <h3>Total: {formatter.format(total)}</h3>
-          {Number(discount) !== 0 ? (
-            <h3>Total con descuento {formatter.format(totalAfterDiscount)}</h3>
-          ) : (
-            <></>
-          )}
+
+          <h3>Total con descuento {formatter.format(totalAfterDiscount)}</h3>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={() => sendInvoice(sequenceDataResponse)} autoFocus>
+          <Button
+            disabled={devolucionLoading}
+            onClick={() => sendInvoice(sequenceDataResponse)}
+            autoFocus
+          >
             Facturar
           </Button>
         </DialogActions>

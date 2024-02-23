@@ -139,7 +139,7 @@ export default function NewUser() {
                 variant="outlined"
                 autoComplete="off"
                 value={usuario}
-                InputProps={{
+                inputProps={{
                   readOnly: true,
                 }}
               />

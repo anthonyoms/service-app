@@ -30,6 +30,10 @@ export const SellScreen = () => {
     loading: true,
     subTotal: 0,
     sequenceDataResponse: 0,
+    secuencialLoading: true,
+    devolucionLoading: false,
+    devolucionLoadingError: false,
+    codigoDevolucion: "",
     total: 0,
     itbis: 0,
     discount: 0,
@@ -54,6 +58,10 @@ export const SellScreen = () => {
   const [
     {
       loading,
+      secuencialLoading,
+      devolucionLoading,
+      devolucionLoadingError,
+      codigoDevolucion,
       customersData,
       invoiceCustomer,
       productsData,
@@ -181,6 +189,7 @@ export const SellScreen = () => {
         sequenceDataResponse: `B010000000${
           sequenceDataResponse.secuencial.length + 1
         }`,
+        secuencialLoading: false,
         loading: false,
       }));
     }
@@ -256,6 +265,10 @@ export const SellScreen = () => {
         totalAfterDiscount={totalAfterDiscount}
         sendInvoice={sendInvoice}
         sequenceDataResponse={sequenceDataResponse}
+        codigoDevolucion={codigoDevolucion}
+        secuencialLoading={secuencialLoading}
+        devolucionLoading={devolucionLoading}
+        devolucionLoadingError={devolucionLoadingError}
       />
     </>
   );
