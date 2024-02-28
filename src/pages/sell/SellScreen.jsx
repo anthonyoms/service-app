@@ -34,6 +34,8 @@ export const SellScreen = () => {
     devolucionLoading: false,
     devolucionLoadingError: false,
     codigoDevolucion: "",
+    devolucion: null,
+    devolucionLoadingErrorMsg: "",
     total: 0,
     itbis: 0,
     discount: 0,
@@ -77,6 +79,8 @@ export const SellScreen = () => {
       discount,
       totalAfterDiscount,
       tipoPago,
+      devolucionLoadingErrorMsg,
+      devolucion,
     },
     setDataState,
   ] = useState(initialState);
@@ -135,6 +139,7 @@ export const SellScreen = () => {
       productos: setFormatProduct(invoiceProductsData),
       discount,
       totalAfterdiscount: totalAfterDiscount,
+      devolucion,
     };
     const isSaveInvoice = await postServiceApp(payload, endpoints.facturacion);
 
@@ -269,6 +274,7 @@ export const SellScreen = () => {
         secuencialLoading={secuencialLoading}
         devolucionLoading={devolucionLoading}
         devolucionLoadingError={devolucionLoadingError}
+        devolucionLoadingErrorMsg={devolucionLoadingErrorMsg}
       />
     </>
   );

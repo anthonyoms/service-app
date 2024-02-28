@@ -9,7 +9,10 @@ export const Login = async (correo, password) => {
     });
     return data;
   } catch (error) {
-    const errors = error.response.data.msg || error.response.data.errors[0].msg;
+    const errors =
+      error?.response?.data?.msg ||
+      error?.response?.data?.errors[0]?.msg ||
+      "En este momento, el sistema no está disponible. Por favor, inténtelo de nuevo en unos minutos";
     console.log(errors);
     return errors;
   }

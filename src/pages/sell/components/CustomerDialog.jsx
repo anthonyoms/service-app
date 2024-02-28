@@ -31,6 +31,7 @@ export default function CustomerDialog({
   secuencialLoading,
   devolucionLoading,
   devolucionLoadingError,
+  devolucionLoadingErrorMsg,
 }) {
   const handleClose = () => {
     setOpen(false);
@@ -72,20 +73,23 @@ export default function CustomerDialog({
     });
   };
 
-  const resetDiscount = (error = false) => {
-    console.log(error);
+  const resetDiscount = (error = false, errorMsg = "") => {
+    console.log(error, errorMsg);
     setDataState((prev) => ({
       ...prev,
       totalAfterDiscount: prev.total,
       discount: 0,
       devolucionLoading: false,
       devolucionLoadingError: error,
+      devolucionLoadingErrorMsg: errorMsg,
     }));
   };
 
-  const handleOnBlur = async ({ target: { value } }) => {
+  const handleOnBlurRefund = async ({ target: { value } }) => {
+    const errorMsg = "Codigo devolución no encontrado";
     if (!value) {
-      return resetDiscount();
+      resetDiscount(true, "Campo requerido");
+      return;
     }
     setDataState((prev) => ({
       ...prev,
@@ -95,18 +99,36 @@ export default function CustomerDialog({
       endpoints.devoluciones + `?id=${value}`
     );
     if (!ok) {
-      return resetDiscount(true);
+      return resetDiscount(true, errorMsg);
     }
     if (!data?.devolucion[0]?.total) {
-      return resetDiscount(true);
+      return resetDiscount(true, errorMsg);
     }
-    setDataState((prev) => ({
-      ...prev,
-      totalAfterDiscount: prev.total - data?.devolucion[0].total,
-      discount: 0,
-      devolucionLoading: false,
-      devolucionLoadingError: false,
-    }));
+    if (!!data?.devolucion[0]?.canjeada) {
+      return resetDiscount(
+        true,
+        "La devolución ya fue canjeada, por favor verificar"
+      );
+    }
+    setDataState((prev) => {
+      const totalAfterDiscount = prev.total - data?.devolucion[0].total;
+      if (totalAfterDiscount < 0) {
+        resetDiscount(
+          true,
+          `Monto total de la devolución igual a ${formatter.format(
+            data?.devolucion[0].total
+          )}. El valor de la factura no puede ser menor que cero`
+        );
+      }
+      return {
+        ...prev,
+        totalAfterDiscount,
+        discount: 0,
+        devolucion: data?.devolucion[0]?._id,
+        devolucionLoading: false,
+        devolucionLoadingError: false,
+      };
+    });
   };
 
   return (
@@ -181,7 +203,7 @@ export default function CustomerDialog({
             fullWidth
             error={!!devolucionLoadingError ? true : false}
             helperText={
-              !!devolucionLoadingError ? "Devolución no encontrada " : ""
+              !!devolucionLoadingError ? devolucionLoadingErrorMsg : ""
             }
             InputProps={{
               endAdornment: devolucionLoading && (
@@ -189,7 +211,7 @@ export default function CustomerDialog({
               ),
             }}
             inputProps={{ maxLength: "20" }}
-            onBlur={handleOnBlur}
+            onBlur={handleOnBlurRefund}
             sx={{ mt: 2 }}
             value={codigoDevolucion}
             onChange={({ target }) => {
@@ -222,7 +244,7 @@ export default function CustomerDialog({
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
           <Button
-            disabled={devolucionLoading}
+            disabled={devolucionLoading || devolucionLoadingError}
             onClick={() => sendInvoice(sequenceDataResponse)}
             autoFocus
           >

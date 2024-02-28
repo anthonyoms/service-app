@@ -62,7 +62,7 @@ export const RefundsList = () => {
       field: "estado",
       headerName: "Estado",
       flex: 1,
-      renderCell: (params) => (params.row.canjeada ? "Activa" : "Anulada"),
+      renderCell: (params) => (params.row.canjeada ? "Canjeada" : "No Canjeada"),
     },
     {
       field: "action",
@@ -92,6 +92,7 @@ export const RefundsList = () => {
 
   const loadOrder = async () => {
     const { devolucion } = await getServiceApp(endpoints.devoluciones);
+    console.log(devolucion);
     setOrdenesData({
       loading: false,
       devolucionesData: devolucion,

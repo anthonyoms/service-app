@@ -6,7 +6,7 @@ import { infoLogout, infoStartLoading } from "./info";
 export const StartLogin = (correo, password) => {
   return async (dispatch) => {
     const body = await Login(correo, password);
-    if (!body.ok) {
+    if (!body?.ok) {
       Swal.fire("Error", body, "error");
       return;
     }
@@ -28,7 +28,7 @@ export const StartLogin = (correo, password) => {
 export const startChecking = () => {
   return async (dispatch) => {
     const body = await revalidarToken();
-    if (body.ok) {
+    if (!!body?.ok) {
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", new Date().getTime());
       dispatch(
