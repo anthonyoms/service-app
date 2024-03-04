@@ -34,6 +34,7 @@ export const Invoice = () => {
       subTotal: ordenDetalles.ordenCompra.subTotal,
       productos: ordenDetalles.productos,
       estado: ordenDetalles.ordenCompra.estado,
+      nota:"Prestar atención a la fecha de vencimiento",
       rightTitle: "Pedido a:",
     }));
   };

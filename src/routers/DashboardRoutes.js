@@ -30,6 +30,7 @@ import { SellInvoice } from "../pages/invoices/SellInvoice";
 import { Refunds } from "../pages/refunds/Refunds";
 import { RefundsList } from "../pages/refundsList/RefundsList";
 import { RefundsInvoice } from "../pages/invoices/RefundsInvoice";
+import { AddService } from "../pages/addService/AddService";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -82,6 +83,7 @@ export const DashboardRoutes = () => {
           <Route path="/services" element={<ServiceList />} />
           <Route path="/service/:serviceId" element={<Service />} />
           <Route path="/newservice" element={<NewService />} />
+          <Route path="/addservice" element={<AddService />} />
 
           {/*Orders routes */}
           <Route path="/orders" element={<OrderList />} />

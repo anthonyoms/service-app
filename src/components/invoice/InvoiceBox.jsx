@@ -15,7 +15,7 @@ const InvoiceBox = ({ cliente, dataInvoice }) => {
             <InvoiceDetail {...dataInvoice} />
           </tbody>
         </table>
-        <h5>Nota: Prestar atención a la fecha de vencimiento.</h5>
+        <h5>Nota: {dataInvoice?.nota}</h5>
         {dataInvoice?.vendedor && <h5>Vendedor: {dataInvoice.vendedor}</h5>}
       </div>
     </div>

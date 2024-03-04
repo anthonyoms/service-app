@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import "./newService.css";
 import useForm from "../../hooks/useForm";
-import {
-  getServiceApp,
-  postServiceApp,
-} from "../../services/serviceApp";
+import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import { MyBackdrop } from "../../components/ui/Backdrop";
@@ -108,7 +105,7 @@ export default function NewService() {
               variant="outlined"
               autoComplete="off"
               readOnly
-              value={codigo}
+              value={codigo || ""}
             />
           </div>
           <div className="addServiceItem">

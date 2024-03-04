@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import MyFab from "../../components/fab/MyFab";
 import { DataGrid, GridToolbar, esES } from "@mui/x-data-grid";
-import { getServiceApp } from "../../services/serviceApp";
+import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import moment from "moment";
 import { formatter } from "../../utils/constants/formatNumber";
 import { Link } from "react-router-dom";
 import { DeleteOutline } from "@material-ui/icons";
+import { dataValidation } from "../../utils/helpers/messages";
 
 export const RefundsList = () => {
   const [{ loading, devolucionesData }, setOrdenesData] = useState({
@@ -14,7 +15,11 @@ export const RefundsList = () => {
     devolucionesData: [],
   });
   const handleDelete = async (id) => {
-    console.log(id);
+    const dataResponse = await deleteServiceApp(id, endpoints.devoluciones);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+      loadRefunds();
+    }
   };
   const columns = [
     { field: "_id", headerName: "UID", flex: 1, hide: true },
@@ -30,7 +35,7 @@ export const RefundsList = () => {
       field: "canjeada",
       headerName: "Canjeada",
       flex: 1,
-      renderCell: (params) => (params.row.canjeada ? "si" : "no"),
+      renderCell: (params) => params.row.canjeada,
     },
     {
       field: "cliente",
@@ -62,7 +67,7 @@ export const RefundsList = () => {
       field: "estado",
       headerName: "Estado",
       flex: 1,
-      renderCell: (params) => (params.row.canjeada ? "Canjeada" : "No Canjeada"),
+      renderCell: (params) => params.row.estado,
     },
     {
       field: "action",
@@ -74,7 +79,7 @@ export const RefundsList = () => {
             <Link to={"/refundsinvoice/" + params.row._id} target="_blank">
               <button className="serviceListEdit">Ver</button>
             </Link>
-            {params.row.estado && (
+            {params.row.estado === "ACTIVA" && (
               <DeleteOutline
                 className="serviceListDelete"
                 onClick={() => handleDelete(params.row._id)}
@@ -87,15 +92,21 @@ export const RefundsList = () => {
   ];
 
   useEffect(() => {
-    loadOrder();
+    loadRefunds();
   }, []);
 
-  const loadOrder = async () => {
+  const loadRefunds = async () => {
     const { devolucion } = await getServiceApp(endpoints.devoluciones);
-    console.log(devolucion);
+    const devolucionesData = devolucion.map(({ canjeada, estado, ...data }) => {
+      return {
+        canjeada: canjeada ? "SI" : "NO",
+        estado: estado ? "ACTIVA" : "ANULADA",
+        ...data,
+      };
+    });
     setOrdenesData({
       loading: false,
-      devolucionesData: devolucion,
+      devolucionesData,
     });
   };
 

@@ -110,6 +110,12 @@ export default function CustomerDialog({
         "La devolución ya fue canjeada, por favor verificar"
       );
     }
+    if (!data?.devolucion[0]?.estado) {
+      return resetDiscount(
+        true,
+        "La devolución no esta diponible , por favor verificar"
+      );
+    }
     setDataState((prev) => {
       const totalAfterDiscount = prev.total - data?.devolucion[0].total;
       if (totalAfterDiscount < 0) {

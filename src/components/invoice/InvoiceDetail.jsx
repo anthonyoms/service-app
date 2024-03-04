@@ -8,6 +8,7 @@ const InvoiceDetail = ({
   total,
   descuento,
   totalAfterdiscount,
+  tieneDevolucion,
 }) => {
   return (
     <>
@@ -45,7 +46,7 @@ const InvoiceDetail = ({
         <td>{formatter.format(totalTax)}</td>
         <td>{formatter.format(total)}</td>
       </tr>
-      {descuento > 0 ? (
+      {descuento > 0 || tieneDevolucion > 0 ? (
         <>
           <tr>
             <td></td>
@@ -53,7 +54,7 @@ const InvoiceDetail = ({
             <td></td>
             <td></td>
             <td>Descuento:</td>
-            <td>{descuento} %</td>
+            <td>{descuento > 0 ? `${descuento}%` : `${formatter.format(tieneDevolucion)}`}</td>
           </tr>
           <tr>
             <td></td>

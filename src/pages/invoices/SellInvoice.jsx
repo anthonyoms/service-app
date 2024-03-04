@@ -6,6 +6,7 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { getIdUrl } from "../../utils/helpers/getIdUrl";
 import { dataValidation } from "../../utils/helpers/messages";
 import "../../assets/style/invoiceStyle.css";
+import { formatter } from "../../utils/constants/formatNumber";
 
 export const SellInvoice = () => {
   const configuration = useSelector((state) => state.info);
@@ -23,6 +24,7 @@ export const SellInvoice = () => {
     setDataInvoice((prevState) => ({
       ...prevState,
       descuento: factura?.discount,
+      tieneDevolucion: factura.devolucion.total,
       totalAfterdiscount: factura.totalAfterdiscount,
       vendedor: factura.usuario.nombre,
       ncf: factura.numeroComprobante,
@@ -57,6 +59,9 @@ export const SellInvoice = () => {
       ),
       estado: factura.estado,
       rightTitle: "Vendido a:",
+      nota: `Factura con descuento aplicado, devolución id: ${
+        factura.devolucion.id
+      } por un monto de ${formatter.format(factura.devolucion.total)}`,
     }));
   };
 

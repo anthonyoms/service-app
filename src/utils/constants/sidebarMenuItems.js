@@ -11,6 +11,7 @@ import {
   PeopleAlt,
   MonetizationOn,
   Refresh,
+  GroupAdd,
 } from "@material-ui/icons";
 
 export const home = {
@@ -70,6 +71,11 @@ export const ventas = {
       link: "/refunds",
       Icon: Refresh,
       sidebarItemName: "Devolución",
+    },
+    {
+      link: "/addservice",
+      Icon: GroupAdd,
+      sidebarItemName: "Servicios",
     },
   ],
 };

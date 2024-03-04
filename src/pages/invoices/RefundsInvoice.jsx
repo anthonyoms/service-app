@@ -60,6 +60,7 @@ export const RefundsInvoice = () => {
         })
       ),
       estado: devolucion.estado,
+      nota: "Prestar atención a la fecha de vencimiento",
       rightTitle: "Devuelto a:",
     }));
   };

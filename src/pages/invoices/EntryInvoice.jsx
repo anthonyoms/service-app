@@ -32,6 +32,7 @@ export const EntryInvoice = () => {
       subTotal: entrada.subTotal,
       productos: entrada.productos,
       estado: entrada.estado,
+      nota:"Prestar atención a la fecha de vencimiento",
       rightTitle: "Comprado a:",
     }));
   };
