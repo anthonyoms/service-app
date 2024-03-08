@@ -23,7 +23,7 @@ import {
 import { getServiceApp, postServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation, infoMsg } from "../../utils/helpers/messages";
-import { refundsSchema } from "../../schemas/refundsScreen";
+import { refundsSchema } from "../../schemas/yupShemas";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { InvoiceDatagrid } from "../sell/components/InvoiceDatagrid";
 import { AddBox, RemoveRedEyeSharp, Search, Send } from "@material-ui/icons";

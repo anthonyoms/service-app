@@ -14,3 +14,17 @@ export const refundsSchema = yup.object().shape({
     .matches(/^\d+$/, "Datos incorrectos, por favor escribir un número"),
   cliente: yup.string().required(errorMessage),
 });
+
+export const addressForm = yup.object().shape({
+  customer: yup.object().required(errorMessage),
+  province: yup.string().required(errorMessage),
+  municipality: yup.string().required(errorMessage),
+  sector: yup.string().required(errorMessage),
+  avenidaNumero: yup.string().required(errorMessage),
+  referencia: yup.string().required(errorMessage),
+  name: yup.string(),
+  cedula: yup.string(),
+});
+export const serviceForm = yup.object().shape({
+  service: yup.object().required(errorMessage),
+});

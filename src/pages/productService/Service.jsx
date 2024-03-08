@@ -119,6 +119,7 @@ export default function Service() {
           showImage={false}
           name={service?.nombre}
           data={{
+            id: service?.uid,
             Codigo: service?.codigo,
             Nombre: service?.nombre,
             "Precio Venta": formatter.format(service?.precio_venta),

@@ -50,14 +50,17 @@ export const data = [
 ];
 export const productData = [
   {
+    id:1,
     name: "Jan",
     Sales: 4000,
   },
   {
+    id:2,
     name: "Feb",
     Sales: 3000,
   },
   {
+    id:3,
     name: "Mar",
     Sales: 5000,
   },

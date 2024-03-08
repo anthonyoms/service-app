@@ -7,7 +7,7 @@ export default function WidgetProductDetail({ name, data, showImage = true }) {
   const elementToRender = [];
   for (const property in data) {
     elementToRender.push(
-      <div className="serviceInfoItem">
+      <div key={property} className="serviceInfoItem">
         <span className="serviceInfoKey">{property}:</span>
         &nbsp;
         <span className="serviceInfoValue">{`${data[property]}`}</span>
@@ -17,7 +17,7 @@ export default function WidgetProductDetail({ name, data, showImage = true }) {
   return (
     <div className="serviceTop">
       <div className="serviceTopLeft">
-        <Chart data={productData} dataKey="Sales" title="Sales Performance" />
+        <Chart  data={productData} dataKey="Sales" title="Sales Performance" />
       </div>
       <div className="serviceTopRight">
         <div className="serviceInfoTop">

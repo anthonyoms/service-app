@@ -12,6 +12,7 @@ import {
   MonetizationOn,
   Refresh,
   GroupAdd,
+  PostAdd,
 } from "@material-ui/icons";
 
 export const home = {
@@ -74,8 +75,8 @@ export const ventas = {
     },
     {
       link: "/addservice",
-      Icon: GroupAdd,
-      sidebarItemName: "Servicios",
+      Icon: PostAdd,
+      sidebarItemName: "Contrato de servicio",
     },
   ],
 };
