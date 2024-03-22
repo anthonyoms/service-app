@@ -130,6 +130,7 @@ export const AddressForm = forwardRef(
                 name="province"
                 label="Provincia"
                 fullWidth
+                inputProps={{ maxLength: "25" }}
                 variant="standard"
                 value={values.province}
                 error={!!errors.province && !!touched.province}
@@ -146,6 +147,7 @@ export const AddressForm = forwardRef(
                 name="municipality"
                 label="Municipio*"
                 fullWidth
+                inputProps={{ maxLength: "25" }}
                 variant="standard"
                 value={values.municipality}
                 error={!!errors.municipality && !!touched.municipality}
@@ -165,6 +167,7 @@ export const AddressForm = forwardRef(
                 name="sector"
                 label="Sector"
                 fullWidth
+                inputProps={{ maxLength: "20" }}
                 variant="standard"
                 value={values.sector}
                 error={!!errors.sector && !!touched.sector}
@@ -183,6 +186,7 @@ export const AddressForm = forwardRef(
                 label="Calle / Numero"
                 fullWidth
                 variant="standard"
+                inputProps={{ maxLength: "20" }}
                 value={values.avenidaNumero}
                 error={!!errors.avenidaNumero && !!touched.avenidaNumero}
                 helperText={
@@ -201,6 +205,7 @@ export const AddressForm = forwardRef(
                 name="referencia"
                 label="Referencia"
                 fullWidth
+                inputProps={{ maxLength: "20" }}
                 variant="standard"
                 value={values.referencia}
                 error={!!errors.referencia && !!touched.referencia}

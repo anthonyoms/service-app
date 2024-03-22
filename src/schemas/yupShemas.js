@@ -27,4 +27,8 @@ export const addressForm = yup.object().shape({
 });
 export const serviceForm = yup.object().shape({
   service: yup.object().required(errorMessage),
+  description: yup.string(),
+  installingPrice: yup.string(),
+  price: yup.string(),
+  billing: yup.string(),
 });

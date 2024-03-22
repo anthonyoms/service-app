@@ -17,12 +17,13 @@ import { useState } from "react";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { useRef } from "react";
 import { useCallback } from "react";
-import AddServiceForm from "./AddServiceForm";
+import { AddServiceForm } from "./AddServiceForm";
 
-const steps = ["Dirección", "Payment details", "Review your order"];
+const steps = ["Dirección", "Servicio a contratar", "Revise su orden"];
 
 export default function Checkout() {
   const addressAndContactFormRef = useRef(null);
+  const addServiceFormRef = useRef(null);
   const [disabledButton, setDisabledButton] = useState(false);
   const initialState = {
     loading: false,
@@ -38,6 +39,10 @@ export default function Checkout() {
       referencia: "",
       name: "",
       cedula: "",
+      description: "",
+      installingPrice: "",
+      price: "",
+      billing: "",
     },
   };
 
@@ -99,18 +104,31 @@ export default function Checkout() {
         );
       case 1:
         return (
-          <AddServiceForm serviceData={services} generalData={generalData} />
+          <AddServiceForm
+            ref={addServiceFormRef}
+            setDisableButtom={changeDisabledButton}
+            serviceData={services}
+            generalData={generalData}
+            onSuccess={setGeneralDataAndAdvance}
+          />
         );
       case 2:
-        return <Review />;
+        return  <Review generalData={generalData}/>;
       default:
         throw new Error("Unknown step");
     }
   }
 
   const handleNext = () => {
-    if (activeStep === 0) {
-      addressAndContactFormRef.current?.submit();
+    switch (activeStep) {
+      case 0:
+        addressAndContactFormRef.current?.submit();
+        break;
+      case 1:
+        addServiceFormRef.current?.submit();
+        break;
+      default:
+        break;
     }
   };
 

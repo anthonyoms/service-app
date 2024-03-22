@@ -1,83 +1,86 @@
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
+import * as React from "react";
+import Typography from "@mui/material/Typography";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Grid from "@mui/material/Grid";
+import { formatter } from "../../utils/constants/formatNumber";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
-const products = [
-  {
-    name: 'Product 1',
-    desc: 'A nice thing',
-    price: '$9.99',
-  },
-  {
-    name: 'Product 2',
-    desc: 'Another thing',
-    price: '$3.45',
-  },
-  {
-    name: 'Product 3',
-    desc: 'Something else',
-    price: '$6.51',
-  },
-  {
-    name: 'Product 4',
-    desc: 'Best thing of all',
-    price: '$14.11',
-  },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
-
-export default function Review() {
+export default function Review({ generalData }) {
+  console.log(generalData);
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Order summary
+        Resumen del pedido
       </Typography>
-      <List  disablePadding>
-          <ListItem sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={"Servicio"} secondary={"Servicio de internet"} />
-            <Typography variant="body2">{100}</Typography>
-          </ListItem>
+      <List disablePadding>
+        <ListItem sx={{ py: 0, px: 0 }}>
+          <ListItemText primary={"Precio Servicio"} secondary={"Renta Fija"} />
+          <Typography variant="body2">
+            {formatter.format(generalData.service.precio_venta)}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 0, px: 0 }}>
+          <ListItemText
+            primary={"Precio Instalación"}
+            secondary={generalData.service.descripcion}
+          />
+          <Typography variant="body2">
+            {formatter.format(generalData.service.precio_instalacion)}
+          </Typography>
+        </ListItem>
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="Total:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $34.06
+            {formatter.format(
+              Number(generalData.service.precio_instalacion) +
+                Number(generalData.service.precio_venta)
+            )}
           </Typography>
         </ListItem>
       </List>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Shipping
+            Datos Generales
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+          <Typography gutterBottom>{generalData.name}</Typography>
+          <Typography gutterBottom>{generalData.cedula}</Typography>
+          <Typography
+            gutterBottom
+          >{`${generalData.province}, ${generalData.municipality}, ${generalData.sector}, ${generalData.avenidaNumero}`}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Payment details
+            Detalle de pago
           </Typography>
           <Grid container>
-            {payments.map((payment) => (
-              <React.Fragment key={payment.name}>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.name}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.detail}</Typography>
-                </Grid>
-              </React.Fragment>
-            ))}
+            <React.Fragment>
+              <Grid item xs={6}>
+                <Typography gutterBottom>Facturación:</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography gutterBottom>
+                  {generalData.service.periodoFacturacion}
+                </Typography>
+              </Grid>
+            </React.Fragment>
+            <Link
+              to={`/invoice/contract?data=${encodeURIComponent(
+                JSON.stringify({
+                  name: generalData.name,
+                  cedula: generalData.cedula,
+                  service: generalData.service,
+                })
+              )}`}
+              target="_black"
+            >
+              <Button variant="contained" color="info">
+                Generar Contrato
+              </Button>
+            </Link>
           </Grid>
         </Grid>
       </Grid>
