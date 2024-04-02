@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Publish, Save } from "@material-ui/icons";
+import {  Save } from "@material-ui/icons";
 import "./service.css";
 import WidgetProductDetail from "../../components/widgetProductDetail/WidgetProductDetail";
 import { useEffect, useState } from "react";
@@ -18,8 +18,6 @@ import {
 } from "@mui/material";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { NumericFormat } from "react-number-format";
-import MyFab from "../../components/fab/MyFab";
-
 export default function Service() {
   const [{ service, loading }, setService] = useState({
     service: null,

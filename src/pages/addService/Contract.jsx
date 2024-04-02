@@ -83,6 +83,7 @@ export const Contract = () => {
         los siguientes términos:
         <br />- Tipo de servicio y caracteristicas:{" "}
         {objeto?.service?.nombre.toLowerCase()}
+        <br />- Periodo donde no puede ser cancelado el servicio: 18 Meses.
       </p>
       <h2 style={{ fontSize: "20px", fontWeight: "bold", marginTop: "20px" }}>
         3. Pago y Facturación

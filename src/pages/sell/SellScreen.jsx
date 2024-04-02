@@ -191,15 +191,32 @@ export const SellScreen = () => {
         ),
         productsData: validDataProduct.productos,
         lastInvoiceNumber: invocieDataResponse?.total + 1,
-        sequenceDataResponse: `B010000000${
-          sequenceDataResponse.secuencial.length + 1
-        }`,
+        sequenceDataResponse: generarSecuencia(
+          "B01",
+          Number(
+            partirCadena(
+              sequenceDataResponse?.secuencial?.[0].numeroComprobante
+            )
+          ) + 1
+        ),
         secuencialLoading: false,
         loading: false,
       }));
     }
   };
 
+  const generarSecuencia = (tipoSecuencia, numero) => {
+    const secuencial = numero.toString().padStart(8, "0"); // Asegura que el número tenga 8 dígitos
+    return `${tipoSecuencia}${secuencial}`;
+  };
+
+  const partirCadena = (cadena) => {
+    const match = cadena.match(/(?:B01|B02)?0*(\d{1,8})$/); // Encuentra los últimos 8 dígitos después de B01 o B02
+    if (match) {
+      return match[1]; // Devuelve los últimos 8 dígitos
+    }
+    return ""; // Si no se encuentra ningún número, devuelve una cadena vacía
+  };
   return (
     <>
       <MyBackdrop loading={loading} />

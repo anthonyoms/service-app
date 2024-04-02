@@ -2,9 +2,7 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, InputLabel, MenuItem, Select } from "@mui/material";
 import { useFormik } from "formik";
 import { serviceForm } from "../../schemas/yupShemas";
 import { formatter } from "../../utils/constants/formatNumber";
@@ -86,6 +84,34 @@ export const AddServiceForm = React.forwardRef(
               />
             )}
           />
+        </Grid>
+        <Grid item xs={12} mb={2}>
+          <InputLabel id="demo-simple-select-label-comprobante">
+            Tipo Comprobante
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label-comprobante"
+            id="demo-simple-select-comprobante"
+            label="Tipo Comprobante"
+            name="comprobante"
+            onChange={(e, params) => {
+              handleChange({
+                ...e,
+                target: {
+                  ...e.target,
+                  name: "comprobante",
+                  value: !!params ? params.props.value : null,
+                },
+              });
+            }}
+            value={values.comprobante}
+            onBlur={handleBlur}
+            variant="standard"
+            fullWidth
+          >
+            <MenuItem value={"B01"}>Valor Fiscal</MenuItem>
+            <MenuItem value={"B02"}>Factura de Consumo</MenuItem>
+          </Select>
         </Grid>
         <Grid item xs={12} sm={6} mb={2}>
           <TextField

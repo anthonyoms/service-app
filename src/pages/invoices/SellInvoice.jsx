@@ -24,19 +24,19 @@ export const SellInvoice = () => {
     setDataInvoice((prevState) => ({
       ...prevState,
       descuento: factura?.discount,
-      tieneDevolucion: factura.devolucion.total,
-      totalAfterdiscount: factura.totalAfterdiscount,
+      tieneDevolucion: factura?.devolucion?.total,
+      totalAfterdiscount: factura?.totalAfterdiscount,
       vendedor: factura.usuario.nombre,
       ncf: factura.numeroComprobante,
       tipoPago: factura.tipoPago,
       creada: factura.fechaEmision,
       vence: factura.fechaVencimiento,
-      numero: factura.id,
+      numero: factura?.id,
       suplidorOcliente: {
         ...factura.cliente,
         cedula_rnc: factura.cliente.cedula,
       },
-      total: factura.total,
+      total: factura?.total,
       totalTax: factura.itbis,
       subTotal: factura.subTotal,
       productos: factura.productos.map(
@@ -59,9 +59,11 @@ export const SellInvoice = () => {
       ),
       estado: factura.estado,
       rightTitle: "Vendido a:",
-      nota: `Factura con descuento aplicado, devolución id: ${
-        factura.devolucion.id
-      } por un monto de ${formatter.format(factura.devolucion.total)}`,
+      nota: !!factura?.devolucion?.id
+        ? `Factura con descuento aplicado, devolución id: ${
+            factura?.devolucion?.id
+          } por un monto de ${formatter.format(factura?.devolucion?.total)}`
+        : "Prestar atención a la fecha de vencimiento",
     }));
   };
 

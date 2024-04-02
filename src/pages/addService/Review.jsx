@@ -7,9 +7,36 @@ import Grid from "@mui/material/Grid";
 import { formatter } from "../../utils/constants/formatNumber";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import { postServiceApp } from "../../services/serviceApp";
+import { endpoints } from "../../utils/constants/endpoints";
+import { dataValidation } from "../../utils/helpers/messages";
 
-export default function Review({ generalData }) {
-  console.log(generalData);
+export const Review = React.forwardRef(({ generalData }, ref) => {
+  const { handleSubmit } = useFormik({
+    initialValues: generalData,
+    onSubmit: async (values) => {
+      const payload = {
+        cliente: values.customer.uid,
+        servicio: values.service.uid,
+        provincia: values.province,
+        municipio: values.municipality,
+        sector: values.sector,
+        calle: values.avenidaNumero,
+        referencia: values.referencia,
+        tipoComprobante: values.comprobante,
+      };
+      const isSaveInvoice = await postServiceApp(
+        payload,
+        endpoints.contratoDeServicio
+      );
+      const { contratoDeServicio } = dataValidation(isSaveInvoice);
+      console.log(contratoDeServicio);
+    },
+  });
+  React.useImperativeHandle(ref, () => ({
+    submit: () => handleSubmit(),
+  }));
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -67,6 +94,16 @@ export default function Review({ generalData }) {
                 </Typography>
               </Grid>
             </React.Fragment>
+            <React.Fragment>
+              <Grid item xs={6}>
+                <Typography gutterBottom>Tipo de factura:</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography gutterBottom>
+                  {generalData.comprobante.codigo}
+                </Typography>
+              </Grid>
+            </React.Fragment>
             <Link
               to={`/invoice/contract?data=${encodeURIComponent(
                 JSON.stringify({
@@ -86,4 +123,4 @@ export default function Review({ generalData }) {
       </Grid>
     </React.Fragment>
   );
-}
+});

@@ -14,7 +14,6 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { StartLogin } from "../../actions/auth";
-import Loading from "../../components/ui/Loading";
 import { CircularProgress } from "@mui/material";
 
 function Copyright(props) {

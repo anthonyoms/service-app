@@ -42,17 +42,25 @@ export default function CustomerDialog({
       endpoints.secuencial + `?tipoComprobante=${value}`
     );
 
-    const nuevaCadena = `${value}${sequenceDataResponse.substring(3)}`;
-    const cadenaFinal = `${nuevaCadena.substring(
-      0,
-      nuevaCadena.length - String(secuencial.length + 1).length
-    )}${String(secuencial.length + 1)}`;
+    const newSecuencial = partirCadena(secuencial[0].numeroComprobante);
+
     setDataState((data) => ({
       ...data,
-      sequenceDataResponse: cadenaFinal,
+      sequenceDataResponse: generarSecuencia(value, Number(newSecuencial) + 1),
     }));
   };
 
+  const generarSecuencia = (tipoSecuencia, numero) => {
+    const secuencial = numero.toString().padStart(8, "0"); // Asegura que el número tenga 8 dígitos
+    return `${tipoSecuencia}${secuencial}`;
+  };
+  const partirCadena = (cadena) => {
+    const match = cadena.match(/(?:B01|B02)?0*(\d{1,8})$/); // Encuentra los últimos 8 dígitos después de B01 o B02
+    if (match) {
+      return match[1]; // Devuelve los últimos 8 dígitos
+    }
+    return ""; // Si no se encuentra ningún número, devuelve una cadena vacía
+  };
   const handlePayType = ({ target }) => {
     setDataState((data) => {
       return {

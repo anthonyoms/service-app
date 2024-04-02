@@ -8,8 +8,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { AddressForm } from "./AddressForm";
-import PaymentForm from "./AddServiceForm";
-import Review from "./Review";
+import {Review} from "./Review";
 import { getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
@@ -24,6 +23,7 @@ const steps = ["Dirección", "Servicio a contratar", "Revise su orden"];
 export default function Checkout() {
   const addressAndContactFormRef = useRef(null);
   const addServiceFormRef = useRef(null);
+  const reviewRef = useRef(null);
   const [disabledButton, setDisabledButton] = useState(false);
   const initialState = {
     loading: false,
@@ -32,6 +32,7 @@ export default function Checkout() {
     generalData: {
       customer: null,
       service: null,
+      comprobante: "B01",
       province: "",
       municipality: "",
       sector: "",
@@ -113,7 +114,7 @@ export default function Checkout() {
           />
         );
       case 2:
-        return  <Review generalData={generalData}/>;
+        return <Review ref={reviewRef} generalData={generalData} />;
       default:
         throw new Error("Unknown step");
     }
@@ -126,6 +127,9 @@ export default function Checkout() {
         break;
       case 1:
         addServiceFormRef.current?.submit();
+        break;
+      case 2:
+        reviewRef.current?.submit();
         break;
       default:
         break;
@@ -182,7 +186,9 @@ export default function Checkout() {
                   type="submit"
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? "Place order" : "Next"}
+                  {activeStep === steps.length - 1
+                    ? "Terminar Contrato"
+                    : "Siguiente"}
                 </Button>
               </Box>
             </React.Fragment>

@@ -11,7 +11,6 @@ import {
   PeopleAlt,
   MonetizationOn,
   Refresh,
-  GroupAdd,
   PostAdd,
 } from "@material-ui/icons";
 

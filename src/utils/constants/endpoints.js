@@ -13,4 +13,5 @@ export const endpoints = {
   secuencial: "/secuencial",
   generica: "/generica",
   devoluciones: "/devoluciones",
+  contratoDeServicio: "/contrato",
 };
