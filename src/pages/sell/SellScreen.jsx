@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./sellScreen.css";
 import { Navigate } from "react-router-dom";
 import { Box, Fab, Tooltip } from "@mui/material";
@@ -85,10 +85,6 @@ export const SellScreen = () => {
     setDataState,
   ] = useState(initialState);
 
-  useEffect(() => {
-    loadCustomers();
-  }, []);
-
   const handleSendInvoice = () => {
     if (!invoiceCustomer.cedula) {
       return infoMsg(
@@ -162,7 +158,7 @@ export const SellScreen = () => {
     return <Navigate to={"/"} replace={true} />;
   };
 
-  const loadCustomers = async () => {
+  const loadCustomers = useCallback (async () => {
     const [
       customersDataResponse,
       productsDataResponse,
@@ -203,7 +199,7 @@ export const SellScreen = () => {
         loading: false,
       }));
     }
-  };
+  }, []);
 
   const generarSecuencia = (tipoSecuencia, numero) => {
     const secuencial = numero.toString().padStart(8, "0"); // Asegura que el número tenga 8 dígitos
@@ -217,6 +213,12 @@ export const SellScreen = () => {
     }
     return ""; // Si no se encuentra ningún número, devuelve una cadena vacía
   };
+
+  
+  useEffect(() => {
+    loadCustomers();
+  }, [loadCustomers]);
+
   return (
     <>
       <MyBackdrop loading={loading} />

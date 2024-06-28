@@ -12,6 +12,7 @@ import {
   MonetizationOn,
   Refresh,
   PostAdd,
+  SearchOutlined,
 } from "@material-ui/icons";
 
 export const home = {
@@ -77,5 +78,16 @@ export const ventas = {
       Icon: PostAdd,
       sidebarItemName: "Contrato de servicio",
     },
+  ],
+};
+
+export const consultas = {
+  title: "Consultas",
+  listItem: [
+    {
+      link: "/searchcontract",
+      Icon: SearchOutlined,
+      sidebarItemName: "Buscar Contratos",
+    }
   ],
 };
