@@ -1,3 +1,3 @@
-export const getIdUrl = () => {
-  return window.location.pathname.split("/")[2];
+export const getIdUrl = (splitBy = 2) => {
+  return window.location.pathname.split("/")[splitBy];
 };

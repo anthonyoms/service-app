@@ -20,7 +20,7 @@ export const RefundsInvoice = () => {
     const dataResponse = await getServiceApp(`${endpoints.devoluciones}/${id}`);
     const { devolucion } = dataValidation(dataResponse, false);
     const { uidHijo } = devolucion.tipo;
-    const { item_text } = devolucion.tipo.colecciongenerica.items.find(
+    const { item_text } = devolucion.tipo.colecciongenerica?.items.find(
       ({ _id }) => _id === uidHijo
     );
     setDataRefunds((prevState) => ({
@@ -42,13 +42,13 @@ export const RefundsInvoice = () => {
       subTotal: devolucion.subTotal,
       productos: devolucion.productosDevueltos.map(
         ({
-          cantidadRequerida,
+          cantidadDevuelta,
           itbisProducto,
           subTotalProducto,
           totalProducto,
           producto,
         }) => ({
-          cantidadRequerida: cantidadRequerida,
+          cantidadRequerida: cantidadDevuelta,
           totalTax: itbisProducto,
           totalPrice: subTotalProducto,
           total: totalProducto,

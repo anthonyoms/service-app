@@ -1,3 +1,26 @@
+.rowPagoNo {
+  background: linear-gradient(45deg, #e63946, #8b0000);
+  color: white; /* Color del texto */
+  /* Otros estilos opcionales */
+  border-radius: 8px; /* Bordes redondeados */
+  transition: all 0.3s ease; /* Transición suave */
+}
+.rowPagoNo:hover {
+  filter: brightness(1.2); /* Aumentar brillo al pasar el ratón */
+}
+
+.rowPagoSuccess {
+  background: linear-gradient(45deg, #4caf50, #087f23);
+  color: white; /* Color del texto */
+  /* Otros estilos opcionales */
+  border-radius: 8px; /* Bordes redondeados */
+  transition: all 0.3s ease; /* Transición suave */
+}
+
+.rowPagoSuccess:hover {
+  filter: brightness(1.2); /* Aumentar brillo al pasar el ratón */
+}
+
 .product {
   flex: 4;
   padding: 20px;

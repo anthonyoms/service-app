@@ -34,6 +34,7 @@ import { AddService } from "../pages/addService/AddService";
 import { Contract } from "../pages/addService/Contract";
 import { SearchContract } from "../pages/searchs/SearchContract";
 import { ContractDetail } from "../pages/contractDetail/ContractDetail";
+import { ServiceInvoice } from "../pages/invoices/ServiceInvoice";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -45,6 +46,7 @@ export const DashboardRoutes = () => {
         <Route path="/sellinvoice/:invoiceId" element={<SellInvoice />} />
         <Route path="/refundsinvoice/:refundId" element={<RefundsInvoice />} />
         <Route path="/invoice/contract" element={<Contract/>} />
+        <Route path="/serviceinvoice/:serviceId/:InvoiceId" element={<ServiceInvoice/>} />
       </Routes>
     );
   }

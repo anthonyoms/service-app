@@ -37,45 +37,66 @@ export const ContractDetail = () => {
 
   const handleDelete = async () => {};
 
+  const handleChangeColorRow = (pago, fechaLimiteDePago) => {
+    if (pago === "SI") {
+      return "rowPagoSuccess";
+    }
+    const today = moment().format("DD/MM/YYYY");
+    // Comparar las fechas
+    if (
+      moment(today, "DD/MM/YYYY").isAfter(
+        moment(fechaLimiteDePago, "DD/MM/YYYY")
+      ) &&
+      pago === "NO"
+    ) {
+      return "rowPagoNo";
+    }
+  };
+
   const getGeneratedInvoice = () => {
     const hoy = new Date();
+    let generatedInvoice =
+      contract?.facturas.filter(
+        (comprobante) => new Date(comprobante.fechaCorte) < hoy
+      ) || [];
 
-    let generatedInvoice = contract?.facturas.filter(comprobante => new Date(comprobante.fechaCorte) < hoy) || [];
-
-    generatedInvoice = generatedInvoice.map(data => {
-        return {
-            ...data,
-            total: formatter.format(data.total),
-            fechaEmision: moment.utc(data.fechaEmision).format('DD/MM/YYYY'),
-            fechaCorte: moment.utc(data.fechaCorte).format('DD/MM/YYYY'),
-            fechaLimitePago: moment.utc(data.fechaLimitePago).format('DD/MM/YYYY'),
-        }
-    })
+    generatedInvoice = generatedInvoice.map((data) => {
+      return {
+        ...data,
+        total: formatter.format(data.total),
+        fechaEmision: moment.utc(data.fechaEmision).format("DD/MM/YYYY"),
+        fechaCorte: moment.utc(data.fechaCorte).format("DD/MM/YYYY"),
+        fechaLimitePago: moment.utc(data.fechaLimitePago).format("DD/MM/YYYY"),
+        pago: data.pago ? "SI" : "NO",
+      };
+    });
 
     return generatedInvoice;
-
   };
 
   const columns = [
     { field: "uid", headerName: "ID", hide: true, flex: 1 },
     { field: "id", headerName: "ID", flex: 1 },
     { field: "total", headerName: "Total", flex: 1 },
-    { field: "fechaEmision", headerName: "Fecha Emisión", flex: 1 },
-    { field: "fechaCorte", headerName: "Fecha Corte", flex: 1 },
-    { field: "fechaLimitePago", headerName: "Pagar antes de", flex: 1 },
+    {
+      field: "fechaEmision",
+      headerName: "Fecha Emisión",
+      flex: 1,
+      type: "date",
+    },
+    { field: "fechaCorte", headerName: "Fecha Corte", flex: 1, type: "date" },
+    {
+      field: "fechaLimitePago",
+      headerName: "Pagar antes de",
+      type: "date",
+      flex: 1,
+    },
     { field: "numeroComprobante", headerName: "Comprobante", flex: 1 },
     {
-        field: "pago",
-        headerName: "Pago",
-        flex: 1,
-        renderCell: (params) => {
-          return (
-            <div className="categoryListItem">
-              {params.row.pago }
-            </div>
-          );
-        },
-      },
+      field: "pago",
+      headerName: "Pago",
+      flex: 1,
+    },
     {
       field: "action",
       headerName: "Acciones",
@@ -83,8 +104,11 @@ export const ContractDetail = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row.uid}>
-              <button className="productListEdit">Ver Factura</button>
+            <Link
+              to={`/serviceinvoice/${contract?.uid}/${params.row._id}`}
+                target="_blank"
+            >
+              <button className="productListView">Ver Factura</button>
             </Link>
             {params.row.estado && (
               <DeleteOutline
@@ -139,7 +163,9 @@ export const ContractDetail = () => {
                 </span>
               </div>
               <div className="productInfoItem">
-                <span className="productInfoKey">Precio Instalación:&nbsp;</span>
+                <span className="productInfoKey">
+                  Precio Instalación:&nbsp;
+                </span>
                 <span className="productInfoValue">
                   {formatter.format(contract?.servicio.precio_instalacion)}
                 </span>
@@ -161,7 +187,7 @@ export const ContractDetail = () => {
                 <span className="productInfoValue">{contract?.provincia}</span>
               </div>
               <div className="productInfoItem">
-                <span className="productInfoKey">Municipio %:&nbsp;</span>
+                <span className="productInfoKey">Municipio:&nbsp;</span>
                 <span className="productInfoValue">{contract?.municipio}</span>
               </div>
               <div className="productInfoItem">
@@ -201,6 +227,9 @@ export const ContractDetail = () => {
             loading={loading}
             filterMode="client"
             density="comfortable"
+            getRowClassName={(params) =>
+              handleChangeColorRow(params.row.pago, params.row.fechaLimitePago)
+            }
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
           />
         </div>
