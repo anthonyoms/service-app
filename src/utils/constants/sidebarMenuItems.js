@@ -13,6 +13,8 @@ import {
   Refresh,
   PostAdd,
   SearchOutlined,
+  FindInPage,
+  FindInPageOutlined,
 } from "@material-ui/icons";
 
 export const home = {
@@ -88,6 +90,11 @@ export const consultas = {
       link: "/searchcontract",
       Icon: SearchOutlined,
       sidebarItemName: "Buscar Contratos",
-    }
+    },
+    {
+      link: "/buscarfactura",
+      Icon: FindInPageOutlined,
+      sidebarItemName: "Buscar Facturas",
+    },
   ],
 };

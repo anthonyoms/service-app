@@ -14,6 +14,7 @@ const InvoiceHead = ({
   rightTitle,
   tipoPago,
   ncf,
+  anulada,
 }) => {
   return (
     <>
@@ -44,6 +45,12 @@ const InvoiceHead = ({
                   ) : (
                     <>
                       <strong style={{ color: "red" }}>Estado: Anulada</strong>
+                      <br />
+                      {anulada && (
+                        <strong style={{ color: "red" }}>
+                          Fecha: {moment(anulada).format("DD/MM/YYYY")}
+                        </strong>
+                      )}
                     </>
                   )}
                 </td>

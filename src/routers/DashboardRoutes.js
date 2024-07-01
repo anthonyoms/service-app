@@ -35,6 +35,7 @@ import { Contract } from "../pages/addService/Contract";
 import { SearchContract } from "../pages/searchs/SearchContract";
 import { ContractDetail } from "../pages/contractDetail/ContractDetail";
 import { ServiceInvoice } from "../pages/invoices/ServiceInvoice";
+import { SearchInvoice } from "../pages/searchs/SearchInvoice";
 
 export const DashboardRoutes = () => {
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
@@ -45,8 +46,11 @@ export const DashboardRoutes = () => {
         <Route path="/entryinvoice/:invoiceId" element={<EntryInvoice />} />
         <Route path="/sellinvoice/:invoiceId" element={<SellInvoice />} />
         <Route path="/refundsinvoice/:refundId" element={<RefundsInvoice />} />
-        <Route path="/invoice/contract" element={<Contract/>} />
-        <Route path="/serviceinvoice/:serviceId/:InvoiceId" element={<ServiceInvoice/>} />
+        <Route path="/invoice/contract" element={<Contract />} />
+        <Route
+          path="/serviceinvoice/:serviceId/:InvoiceId"
+          element={<ServiceInvoice />}
+        />
       </Routes>
     );
   }
@@ -109,9 +113,13 @@ export const DashboardRoutes = () => {
 
           {/*Searchs*/}
           <Route path="/searchcontract" element={<SearchContract />} />
+          <Route path="/buscarfactura" element={<SearchInvoice />} />
 
           {/*Contract*/}
-          <Route path="/contractdetail/:contractId" element={<ContractDetail />} />
+          <Route
+            path="/contractdetail/:contractId"
+            element={<ContractDetail />}
+          />
 
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />

@@ -20,9 +20,11 @@ export default function FormDialog({ isOpen, setOpen, configuration }) {
     correo: "",
     direccion: "",
     itbis: 0,
+    mora: 0,
   });
 
-  const { cedula_rnc, nombre, telefono, correo, direccion, itbis } = formValues;
+  const { cedula_rnc, nombre, telefono, correo, direccion, itbis, mora } =
+    formValues;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -134,6 +136,19 @@ export default function FormDialog({ isOpen, setOpen, configuration }) {
             fullWidth
             variant="standard"
             value={itbis}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            id="mora"
+            name="mora"
+            label="Mora"
+            autoComplete="off"
+            required
+            inputProps={{ maxLength: "3" }}
+            fullWidth
+            variant="standard"
+            value={mora}
             onChange={handleInputChange}
           />
         </DialogContent>

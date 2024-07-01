@@ -60,6 +60,13 @@ export const ContractDetail = () => {
         (comprobante) => new Date(comprobante.fechaCorte) < hoy
       ) || [];
 
+    if (!!contract?.fechaCancelacion) {
+      generatedInvoice = generatedInvoice.filter(
+        (data) =>
+          new Date(data.fechaCorte) < new Date(contract.fechaCancelacion)
+      );
+    }
+
     generatedInvoice = generatedInvoice.map((data) => {
       return {
         ...data,
@@ -106,7 +113,7 @@ export const ContractDetail = () => {
           <>
             <Link
               to={`/serviceinvoice/${contract?.uid}/${params.row._id}`}
-                target="_blank"
+              target="_blank"
             >
               <button className="productListView">Ver Factura</button>
             </Link>

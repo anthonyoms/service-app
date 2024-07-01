@@ -4,6 +4,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
+import { useNavigate } from "react-router-dom";
 import { formatter } from "../../utils/constants/formatNumber";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -13,6 +14,7 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 
 export const Review = React.forwardRef(({ generalData }, ref) => {
+  const navigate = useNavigate();
   const { handleSubmit } = useFormik({
     initialValues: generalData,
     onSubmit: async (values) => {
@@ -31,7 +33,7 @@ export const Review = React.forwardRef(({ generalData }, ref) => {
         endpoints.contratoDeServicio
       );
       const { contratoDeServicio } = dataValidation(isSaveInvoice);
-      console.log(contratoDeServicio);
+      navigate("/contractdetail/" + contratoDeServicio.uid);
     },
   });
   React.useImperativeHandle(ref, () => ({

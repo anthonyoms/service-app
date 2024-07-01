@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { getServiceApp } from "../../services/serviceApp";
+import { deleteServiceApp, getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import MyFab from "../../components/fab/MyFab";
 import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid";
+import {
+  confirmActionMessage,
+  dataValidation,
+} from "../../utils/helpers/messages";
 
 export const SearchContract = () => {
-  const [{ loading, conrtactData }, setConrtactData] = useState({
+  const [{ loading, conrtactData: contractData }, setConrtactData] = useState({
     loading: true,
     conrtactData: [],
   });
@@ -23,19 +27,31 @@ export const SearchContract = () => {
   };
 
   const dataParaFiltro = () => {
-    return conrtactData.map(data => {
-        return {
-            ...data,
-            servicio: data.servicio.descripcion, 
-            cliente: data.cliente.cedula,
-            nombre: data.cliente.nombre,
-            estado: data.cliente.estado ? "Activo" : "Inactivo",
-            calle: data.calle,
-        };
+    return contractData.map((data) => {
+      return {
+        ...data,
+        servicio: data.servicio.descripcion,
+        cliente: data.cliente.cedula,
+        nombre: data.cliente.nombre,
+        estado: data?.estado ? "Activo" : "Inactivo",
+        calle: data.calle,
+      };
     });
   };
 
-  const handleDelete = async () => {};
+  const handleDelete = async (id) => {
+    const result = await confirmActionMessage();
+    if (result.isConfirmed) {
+      const dataResponse = await deleteServiceApp(
+        id,
+        endpoints.contratoDeServicio
+      );
+      const validData = dataValidation(dataResponse);
+      if (validData.ok) {
+        loadContract();
+      }
+    }
+  };
 
   useEffect(() => {
     loadContract();
@@ -44,11 +60,11 @@ export const SearchContract = () => {
   const columns = [
     { field: "uid", headerName: "uid", hide: true, flex: 1 },
     { field: "id", headerName: "id", flex: 1 },
-    { field: "servicio",  headerName: "Descripción", flex: 1 },
-    { field: "cliente",  headerName: "Cedula", flex: 1 },
-    { field: "nombre",  headerName: "Nombre", flex: 1 },
-    { field: "estado",  headerName: "Estado", flex: 1 },
-    { field: "calle",  headerName: "Calle", flex: 1 },
+    { field: "servicio", headerName: "Descripción", flex: 1 },
+    { field: "cliente", headerName: "Cedula", flex: 1 },
+    { field: "nombre", headerName: "Nombre", flex: 1 },
+    { field: "estado", headerName: "Estado", flex: 1 },
+    { field: "calle", headerName: "Calle", flex: 1 },
 
     {
       field: "action",
@@ -60,7 +76,7 @@ export const SearchContract = () => {
             <Link to={"/contractdetail/" + params.row.uid}>
               <button className="productListEdit">Ver Contrato</button>
             </Link>
-            {params.row.estado && (
+            {params.row.estado === "Activo" && (
               <DeleteOutline
                 className="productListDelete"
                 onClick={() => handleDelete(params.row.uid)}
@@ -71,7 +87,6 @@ export const SearchContract = () => {
       },
     },
   ];
-
 
   return (
     <div className="productList">
@@ -91,5 +106,5 @@ export const SearchContract = () => {
         />
       </div>
     </div>
-  )
+  );
 };

@@ -23,6 +23,7 @@ export const SellInvoice = () => {
     const { factura } = dataValidation(dataResponse, false);
     setDataInvoice((prevState) => ({
       ...prevState,
+      anulada:factura?.fehcaAnulada,
       descuento: factura?.discount,
       tieneDevolucion: factura?.devolucion?.total,
       totalAfterdiscount: factura?.totalAfterdiscount,
