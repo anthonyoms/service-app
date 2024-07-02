@@ -13,13 +13,18 @@ import {
   Refresh,
   PostAdd,
   SearchOutlined,
-  FindInPage,
   FindInPageOutlined,
+  Payment,
 } from "@material-ui/icons";
 
 export const home = {
   title: "Dashboard",
   listItem: [{ link: "/", Icon: Timeline, sidebarItemName: "Estadísticas" }],
+};
+
+export const customer = {
+  title: "Servicios",
+  listItem: [{ link: "/paymentservice", Icon: Payment, sidebarItemName: "Pago de Servicio" }],
 };
 
 export const seguridad = {

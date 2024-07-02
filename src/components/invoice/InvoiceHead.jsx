@@ -15,6 +15,7 @@ const InvoiceHead = ({
   tipoPago,
   ncf,
   anulada,
+  pagada,
 }) => {
   return (
     <>
@@ -36,9 +37,15 @@ const InvoiceHead = ({
                   <br />
                   {estado ? (
                     <>
-                      Creada: {moment(creada).format("DD/MM/YYYY")}
+                      {vence && (
+                        <>Vence: {moment.utc(vence).format("DD/MM/YYYY")}</>
+                      )}
                       <br />
-                      Vence: {moment(vence).format("DD/MM/YYYY")}
+                      Creada: {moment.utc(creada).format("DD/MM/YYYY")}
+                      <br />
+                      {pagada && (
+                        <>Pagada: {moment.utc(pagada).format("DD/MM/YYYY")}</>
+                      )}
                       <br />
                       {ncf && <>NCF: {ncf}</>}
                     </>

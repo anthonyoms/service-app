@@ -9,7 +9,7 @@ import moment from "moment";
 
 export const ServiceInvoice = () => {
   const configuration = useSelector((state) => state.info);
-  const [conrtactData, setConrtactData] = useState({
+  const [contractData, setContractData] = useState({
     type: "Factura de Servicio",
   });
 
@@ -20,7 +20,7 @@ export const ServiceInvoice = () => {
     const data = await getServiceApp(`${endpoints.contratoDeServicio}/${id}`);
     if (!data.ok) {
       dataValidation(data);
-      setConrtactData({ loading: false });
+      setContractData({ loading: false });
       return;
     }
 
@@ -83,13 +83,14 @@ export const ServiceInvoice = () => {
       });
     }
 
-    setConrtactData((prevState) => ({
+    setContractData((prevState) => ({
       ...prevState,
       estado: true,
       ncf: invoiceData?.numeroComprobante,
       tipoPago: invoiceData?.tipoPago,
       creada: moment.utc(invoiceData?.fechaCorte),
-      vence: moment.utc(invoiceData?.fechaLimitePago),
+      pagada: invoiceData?.fechaPagoCliente,
+      vence: null,
       numero: invoiceData?.id,
       suplidorOcliente: {
         ...data.contrato.cliente,
@@ -118,5 +119,5 @@ export const ServiceInvoice = () => {
     }));
   };
   loadContract();
-  return <InvoiceBox dataInvoice={conrtactData} cliente={configuration} />;
+  return <InvoiceBox dataInvoice={contractData} cliente={configuration} />;
 };

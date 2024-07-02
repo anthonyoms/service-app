@@ -36,8 +36,14 @@ import { SearchContract } from "../pages/searchs/SearchContract";
 import { ContractDetail } from "../pages/contractDetail/ContractDetail";
 import { ServiceInvoice } from "../pages/invoices/ServiceInvoice";
 import { SearchInvoice } from "../pages/searchs/SearchInvoice";
+import { useSelector } from "react-redux";
+import { CustomerSidebar } from "../components/sidebar/CustomerSidebar";
+import { PaymentService } from "../pages/customerService/PaymentService";
+import { PayServiceInvoice } from "../pages/customerService/PayServiceInvoice";
+import { Pay } from "../pages/customerService/Pay";
 
 export const DashboardRoutes = () => {
+  const { rol } = useSelector((state) => state.auth);
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
   if (isInvoice) {
     return (
@@ -52,6 +58,23 @@ export const DashboardRoutes = () => {
           element={<ServiceInvoice />}
         />
       </Routes>
+    );
+  }
+  if (rol === "CUSTOMER_ROLE") {
+    return (
+      <>
+        <Topbar />
+        <div className="container">
+          <CustomerSidebar />
+          <Routes>
+            <Route path="/paymentservice" element={<PaymentService />} />
+            <Route path="/paymentservice/:id" element={<PayServiceInvoice />} />
+            <Route path="/paymentservice/:id/:idForPay" element={<Pay />} />
+            {/*Not Found routes */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
+      </>
     );
   }
   return (
