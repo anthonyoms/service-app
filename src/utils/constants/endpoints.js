@@ -14,4 +14,5 @@ export const endpoints = {
   generica: "/generica",
   devoluciones: "/devoluciones",
   contratoDeServicio: "/contrato",
+  tickets: "/tickets",
 };

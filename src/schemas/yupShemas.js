@@ -32,3 +32,10 @@ export const serviceForm = yup.object().shape({
   price: yup.string(),
   billing: yup.string(),
 });
+
+export const ticketGeneratorForm = yup.object().shape({
+  customer: yup
+    .string()
+    .required(errorMessage)
+    .min(11, "Este campo debe tener como minimo 11 caracteres"),
+});

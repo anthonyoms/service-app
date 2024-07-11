@@ -24,7 +24,13 @@ export const home = {
 
 export const customer = {
   title: "Servicios",
-  listItem: [{ link: "/paymentservice", Icon: Payment, sidebarItemName: "Pago de Servicio" }],
+  listItem: [
+    {
+      link: "/paymentservice",
+      Icon: Payment,
+      sidebarItemName: "Pago de Servicio",
+    },
+  ],
 };
 
 export const seguridad = {
@@ -84,6 +90,17 @@ export const ventas = {
       link: "/addservice",
       Icon: PostAdd,
       sidebarItemName: "Contrato de servicio",
+    },
+  ],
+};
+
+export const Tickets = {
+  title: "Tickets",
+  listItem: [
+    {
+      link: "/service-manager",
+      Icon: ListAlt,
+      sidebarItemName: "Atender Tickets",
     },
   ],
 };

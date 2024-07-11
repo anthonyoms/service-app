@@ -41,11 +41,17 @@ import { CustomerSidebar } from "../components/sidebar/CustomerSidebar";
 import { PaymentService } from "../pages/customerService/PaymentService";
 import { PayServiceInvoice } from "../pages/customerService/PayServiceInvoice";
 import { Pay } from "../pages/customerService/Pay";
+import TicketPublicScreen from "../pages/ticket/TicketPublicScreen";
+import TicketGenerator from "../pages/ticket/TicketGenerator";
+import  Ticket  from "../pages/ticket/Ticket";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
   const isInvoice = window.location.pathname.split("/")[1].includes("invoice");
-  if (isInvoice) {
+  const isTicketPulic = window.location.pathname
+    .split("/")[1]
+    .includes("ticket");
+  if (isInvoice || isTicketPulic) {
     return (
       <Routes>
         <Route path="/invoice/:invoiceId" element={<Invoice />} />
@@ -53,10 +59,13 @@ export const DashboardRoutes = () => {
         <Route path="/sellinvoice/:invoiceId" element={<SellInvoice />} />
         <Route path="/refundsinvoice/:refundId" element={<RefundsInvoice />} />
         <Route path="/invoice/contract" element={<Contract />} />
+        <Route path="/ticket-public" element={<TicketPublicScreen />} />
+        <Route path="/ticket" element={<TicketGenerator />} />
         <Route
           path="/serviceinvoice/:serviceId/:InvoiceId"
           element={<ServiceInvoice />}
         />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     );
   }
@@ -144,6 +153,9 @@ export const DashboardRoutes = () => {
             element={<ContractDetail />}
           />
 
+          {/*Ticket*/}
+
+          <Route path="/service-manager" element={<Ticket />} />
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

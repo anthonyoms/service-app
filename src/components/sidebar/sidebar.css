@@ -4,21 +4,26 @@
   background-color: rgb(255, 255, 255);
   position: sticky;
   top: 50px;
+  overflow-y: auto;
+  /* Ocultar la barra de desplazamiento */
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none; /* Para IE y Edge */
 }
 
 .sidebarWrapper {
   padding: 20px;
-  color: rgb(77,94,108);
+  color: rgb(77, 94, 108);
 }
 
 .sidebarMenu {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .sidebarTitle {
-    font-size: 13px;
-    color: #808D9A;
+  font-size: 13px;
+  color: #808d9a;
 }
+
 .sidebarList {
   list-style: none;
   padding: 5px;
@@ -34,11 +39,11 @@
 
 .sidebarListItem.active,
 .sidebarListItem:hover {
-  background-color: rgb(240,247,255);
-  color: rgb(0,114,229);
+  background-color: rgb(240, 247, 255);
+  color: rgb(0, 114, 229);
 }
 
-.sidebarIcon{
-    margin-right: 5px;
-    font-size: 20px !important;
+.sidebarIcon {
+  margin-right: 5px;
+  font-size: 20px !important;
 }

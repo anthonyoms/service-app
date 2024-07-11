@@ -3,12 +3,15 @@ import {
   NotificationsNone,
   Settings,
   ExitToAppTwoTone,
+  ListAlt,
 } from "@material-ui/icons";
 import Tooltip from "@mui/material/Tooltip";
 import "./topbar.css";
 import { startLogout } from "../../actions/auth";
 import FormDialog from "../dialog/Dialog";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { AddCircleOutlineRounded } from "@mui/icons-material";
 
 export default function Topbar() {
   const dispatch = useDispatch();
@@ -32,6 +35,20 @@ export default function Topbar() {
             <span className="logo">{configuration.nombre}</span>
           </div>
           <div className="topRight">
+            <div className="topbarIconContainer">
+              <Tooltip title="Tickets">
+                <Link to={"/ticket"} target="_blank">
+                  <AddCircleOutlineRounded />
+                </Link>
+              </Tooltip>
+            </div>
+            <div className="topbarIconContainer">
+              <Tooltip title="Tickets">
+                <Link to={"/ticket-public"} target="_blank">
+                  <ListAlt />
+                </Link>
+              </Tooltip>
+            </div>
             <div className="topbarIconContainer">
               <NotificationsNone />
               <span className="topIconBadge">2</span>
