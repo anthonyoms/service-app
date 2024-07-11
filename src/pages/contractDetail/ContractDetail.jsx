@@ -233,7 +233,7 @@ export const ContractDetail = () => {
             getRowId={(e) => e.id}
             loading={loading}
             filterMode="client"
-            density="comfortable"
+            density="compact"
             getRowClassName={(params) =>
               handleChangeColorRow(params.row.pago, params.row.fechaLimitePago)
             }

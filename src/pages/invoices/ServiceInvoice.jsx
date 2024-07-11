@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { endpoints } from "../../utils/constants/endpoints";
 import { getServiceApp } from "../../services/serviceApp";
 import InvoiceBox from "../../components/invoice/InvoiceBox";
@@ -13,7 +13,7 @@ export const ServiceInvoice = () => {
     type: "Factura de Servicio",
   });
 
-  const loadContract = async () => {
+  const loadContract = useCallback(async () => {
     const id = getIdUrl();
     const invoiceId = getIdUrl(3);
 
@@ -23,6 +23,8 @@ export const ServiceInvoice = () => {
       setContractData({ loading: false });
       return;
     }
+
+    console.log(data);
 
     const invoiceData = data.contrato.facturas.find(
       (invoice) => invoice._id === invoiceId
@@ -82,6 +84,21 @@ export const ServiceInvoice = () => {
         },
       });
     }
+    if (!!invoiceData.mora) {
+      productos.push({
+        cantidadRequerida: "N/A",
+        totalTax: 0,
+        totalPrice: Number(invoiceData.mora),
+        total: Number(invoiceData.mora),
+        producto: {
+          totalProducto: Number(invoiceData.mora),
+          precio_compra: Number(invoiceData.mora),
+          _id: "001",
+          nombre: "Mora",
+          estado: true,
+        },
+      });
+    }
 
     setContractData((prevState) => ({
       ...prevState,
@@ -98,11 +115,17 @@ export const ServiceInvoice = () => {
       },
       total: isLate
         ? invoiceData?.total + Number(configuration.mora)
+        : !!invoiceData?.mora
+        ? invoiceData?.total + invoiceData?.mora
         : invoiceData?.total,
       totalTax: invoiceData?.itbis,
       subTotal: isLate
         ? invoiceData?.total +
           Number(configuration.mora) -
+          Number(invoiceData?.itbis)
+        : invoiceData?.mora
+        ? Number(invoiceData?.total) +
+          invoiceData.mora -
           Number(invoiceData?.itbis)
         : Number(invoiceData?.total) - Number(invoiceData?.itbis),
       productos,
@@ -117,7 +140,11 @@ export const ServiceInvoice = () => {
             }`,
       rightTitle: "Contratado a:",
     }));
-  };
-  loadContract();
+  }, [configuration.mora]);
+
+  useEffect(() => {
+    loadContract();
+  }, [loadContract]);
+
   return <InvoiceBox dataInvoice={contractData} cliente={configuration} />;
 };

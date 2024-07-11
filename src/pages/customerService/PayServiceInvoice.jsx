@@ -77,6 +77,9 @@ export const PayServiceInvoice = () => {
         fechaEmision: moment.utc(data.fechaEmision).format("DD/MM/YYYY"),
         fechaCorte: moment.utc(data.fechaCorte).format("DD/MM/YYYY"),
         fechaLimitePago: moment.utc(data.fechaLimitePago).format("DD/MM/YYYY"),
+        fechaPagoCliente: !!data.fechaPagoCliente
+          ? moment.utc(data.fechaPagoCliente).format("DD/MM/YYYY")
+          : null,
         pago: data.pago ? "SI" : "NO",
       };
     });
@@ -91,6 +94,12 @@ export const PayServiceInvoice = () => {
     {
       field: "fechaEmision",
       headerName: "Fecha Emisión",
+      flex: 1,
+      type: "date",
+    },
+    {
+      field: "fechaPagoCliente",
+      headerName: "Fecha Pago",
       flex: 1,
       type: "date",
     },
@@ -152,7 +161,7 @@ export const PayServiceInvoice = () => {
             getRowId={(e) => e.id}
             loading={loading}
             filterMode="client"
-            density="comfortable"
+            density="compact"
             getRowClassName={(params) =>
               handleChangeColorRow(params.row.pago, params.row.fechaLimitePago)
             }
