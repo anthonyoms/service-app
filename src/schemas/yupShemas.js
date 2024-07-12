@@ -39,3 +39,7 @@ export const ticketGeneratorForm = yup.object().shape({
     .required(errorMessage)
     .min(11, "Este campo debe tener como minimo 11 caracteres"),
 });
+export const desktopForm = yup.object().shape({
+  name: yup.string().required(errorMessage),
+  user: yup.object().required(errorMessage),
+});

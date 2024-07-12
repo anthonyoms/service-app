@@ -15,6 +15,7 @@ import {
   SearchOutlined,
   FindInPageOutlined,
   Payment,
+  LaptopTwoTone,
 } from "@material-ui/icons";
 
 export const home = {
@@ -101,6 +102,11 @@ export const Tickets = {
       link: "/service-manager",
       Icon: ListAlt,
       sidebarItemName: "Atender Tickets",
+    },
+    {
+      link: "/desktop-manager",
+      Icon: LaptopTwoTone,
+      sidebarItemName: "Estaciones de trabajo",
     },
   ],
 };

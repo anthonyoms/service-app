@@ -15,4 +15,5 @@ export const endpoints = {
   devoluciones: "/devoluciones",
   contratoDeServicio: "/contrato",
   tickets: "/tickets",
+  desk: "/desk",
 };

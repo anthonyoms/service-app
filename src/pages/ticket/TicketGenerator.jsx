@@ -39,28 +39,21 @@ const TicketGenerator = () => {
     data: [],
     loading: true,
   });
-  const {
-    values,
-    errors,
-    touched,
-    isValid,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    setFieldValue,
-  } = useFormik({
-    initialValues: { customer: null },
-    validationSchema: ticketGeneratorForm,
-    onSubmit: async ({ customer }) => {
-      console.log(customer);
-      const isSaveTicket = await postServiceApp(
-        { customer },
-        endpoints.tickets
-      );
-      dataValidation(isSaveTicket);
-      loadLastTicket();
-    },
-  });
+  const { values, errors, touched,resetForm, handleChange, handleBlur, handleSubmit } =
+    useFormik({
+      initialValues: { customer: null },
+      validationSchema: ticketGeneratorForm,
+      onSubmit: async ({ customer }) => {
+        console.log(customer);
+        const isSaveTicket = await postServiceApp(
+          { customer },
+          endpoints.tickets
+        );
+        dataValidation(isSaveTicket);
+        resetForm();
+        loadLastTicket();
+      },
+    });
 
   useEffect(() => {
     loadLastTicket();
@@ -99,7 +92,7 @@ const TicketGenerator = () => {
                 label="Cedula Cliente"
                 variant="outlined"
                 required
-                value={values.customer}
+                value={values?.customer || ""}
                 error={!!errors.customer && !!touched.customer}
                 helperText={
                   !!errors.customer && !!touched.customer && errors.customer
