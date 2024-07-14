@@ -43,3 +43,8 @@ export const desktopForm = yup.object().shape({
   name: yup.string().required(errorMessage),
   user: yup.object().required(errorMessage),
 });
+export const UpdateDesktopForm = yup.object().shape({
+  name: yup.string().required(errorMessage),
+  user: yup.object().required(errorMessage),
+  estado: yup.boolean().required(errorMessage),
+});

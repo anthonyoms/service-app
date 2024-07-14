@@ -205,16 +205,13 @@ export default function NewUser() {
                   value={rol}
                   onChange={handleInputChange}
                 >
-                  {!location.pathname.includes("newcustomer") && (
-                    <>
-                      <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
-                      <MenuItem value={"TECNICO_MESA"}>
-                        Técnico mesa de ayuda
-                      </MenuItem>
-                      <MenuItem value={"CAJERO"}>Cajero</MenuItem>
-                      <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
-                    </>
-                  )}
+                  <MenuItem value={"ADMIN_ROLE"}>Administrador</MenuItem>
+                  <MenuItem value={"TECNICO_MESA"}>
+                    Técnico mesa de ayuda
+                  </MenuItem>
+                  <MenuItem value={"CAJERO"}>Cajero</MenuItem>
+                  <MenuItem value={"TECNICO"}>Tecnico</MenuItem>
+
                   <MenuItem value={"CUSTOMER_ROLE"}>Cliente</MenuItem>
                 </Select>
               </FormControl>

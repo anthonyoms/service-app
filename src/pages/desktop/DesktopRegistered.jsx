@@ -4,7 +4,11 @@ import { Autocomplete, Grid, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { desktopForm } from "../../schemas/yupShemas";
 import { endpoints } from "../../utils/constants/endpoints";
-import { getServiceApp, postServiceApp } from "../../services/serviceApp";
+import {
+  deleteServiceApp,
+  getServiceApp,
+  postServiceApp,
+} from "../../services/serviceApp";
 import { dataValidation } from "../../utils/helpers/messages";
 import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
@@ -14,6 +18,7 @@ import "../newCategory/newCategory.css";
 export const DesktopRegistered = () => {
   const [users, setUsers] = useState([]);
   const [desk, setDesk] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleOnchangeAutoComplete = (e, params) => {};
   const {
     values,
@@ -27,13 +32,15 @@ export const DesktopRegistered = () => {
     initialValues: { name: "", user: null },
     validationSchema: desktopForm,
     onSubmit: async ({ name, user }) => {
+      setLoading(true);
       const payload = { nombre: name, usuarioAsignado: user.correo };
       const isSaveDesktop = await postServiceApp(payload, endpoints.desk);
       const validData = dataValidation(isSaveDesktop);
       if (validData.ok) {
         resetForm();
       }
-      loadDesk();
+      await loadDesk();
+      setLoading(false);
     },
   });
 
@@ -47,6 +54,7 @@ export const DesktopRegistered = () => {
         `ESCRITORIO ${Number(validData?.desk?.length) + 1}`
       );
     }
+    setLoading(false);
   }, [setFieldValue]);
 
   const loadUser = async () => {
@@ -59,6 +67,7 @@ export const DesktopRegistered = () => {
         )
       );
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -68,6 +77,16 @@ export const DesktopRegistered = () => {
   useEffect(() => {
     loadDesk();
   }, [loadDesk]);
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    const dataResponse = await deleteServiceApp(id, endpoints.desk);
+    const validData = dataValidation(dataResponse);
+    if (validData.ok) {
+     await loadDesk();
+    }
+    setLoading(false);
+  };
 
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
@@ -100,11 +119,14 @@ export const DesktopRegistered = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/category/" + params.row.uid}>
+            <Link to={"/desktop-manager/" + params.row.uid}>
               <button className="categoryListEdit">Editar</button>
             </Link>
             {params.row.estado && (
-              <DeleteOutline className="categoryListDelete" />
+              <DeleteOutline
+                className="categoryListDelete"
+                onClick={() => handleDelete(params.row.uid)}
+              />
             )}
           </>
         );
@@ -114,7 +136,7 @@ export const DesktopRegistered = () => {
 
   return (
     <>
-      <MyBackdrop loading={false} />
+      <MyBackdrop loading={loading} />
 
       <div className="newCategory">
         <h1 className="addCategoryTitle">Estaciones de trabajo</h1>
@@ -182,9 +204,9 @@ export const DesktopRegistered = () => {
             pageSize={10}
             rowsPerPageOptions={[10]}
             getRowId={(e) => e.uid}
-            loading={false}
+            loading={loading}
             filterMode="client"
-            density="comfortable"
+            density="compact"
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
           />
         </div>
