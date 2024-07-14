@@ -35,25 +35,31 @@ const useStyles = makeStyles((theme) => ({
 const TicketGenerator = () => {
   const classes = useStyles();
 
-  const [{ lastTicket, loading }, setData] = useState({
+  const [{ lastTicket }, setData] = useState({
     data: [],
-    loading: true,
   });
-  const { values, errors, touched,resetForm, handleChange, handleBlur, handleSubmit } =
-    useFormik({
-      initialValues: { customer: null },
-      validationSchema: ticketGeneratorForm,
-      onSubmit: async ({ customer }) => {
-        console.log(customer);
-        const isSaveTicket = await postServiceApp(
-          { customer },
-          endpoints.tickets
-        );
-        dataValidation(isSaveTicket);
-        resetForm();
-        loadLastTicket();
-      },
-    });
+  const {
+    values,
+    errors,
+    touched,
+    resetForm,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useFormik({
+    initialValues: { customer: null },
+    validationSchema: ticketGeneratorForm,
+    onSubmit: async ({ customer }) => {
+      console.log(customer);
+      const isSaveTicket = await postServiceApp(
+        { customer },
+        endpoints.tickets
+      );
+      dataValidation(isSaveTicket);
+      resetForm();
+      loadLastTicket();
+    },
+  });
 
   useEffect(() => {
     loadLastTicket();
