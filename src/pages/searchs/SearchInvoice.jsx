@@ -33,7 +33,7 @@ export const SearchInvoice = () => {
       return {
         ...data,
         cedula: data?.cliente?.cedula,
-        fechaEmision: moment.utc(data.fechaEmision).format("DD/MM/YYYY"),
+        fechaEmision: moment.utc(data.fechaEmision).format(),
         estado: data?.estado ? "Activo" : "Inactivo",
         fechaVencimiento: moment
           .utc(data.fechaVencimiento)
@@ -71,6 +71,11 @@ export const SearchInvoice = () => {
       field: "fechaEmision",
       headerName: "Fecha Emisión",
       flex: 1,
+      renderCell: (params) => {
+        return (
+          moment.utc(params.row.fechaEmision).format("DD/MM/YYYY")
+        );
+      },
       type: "date",
     },
     { field: "fechaVencimiento", headerName: "Vence", flex: 1, type: "date" },

@@ -68,7 +68,7 @@ export const SetDesktop = () => {
     if (validData.ok) {
       setUsers(
         validData?.usuarios.filter(
-          (usuarios) => usuarios.rol === "TECNICO_MESA"
+          (usuarios) => usuarios.rol === "TECNICO_MESA" || usuarios.rol === "ADMIN_ROLE"
         )
       );
     }

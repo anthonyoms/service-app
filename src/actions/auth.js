@@ -19,6 +19,7 @@ export const StartLogin = (correo, password) => {
         nombre: body.nombre,
         rol: body.rol,
         img: body.img,
+        correo: body.correo
       })
     );
     dispatch(infoStartLoading());
@@ -37,6 +38,7 @@ export const startChecking = () => {
           nombre: body.nombre,
           rol: body.rol,
           img: body.img,
+          correo: body.correo
         })
       );
       dispatch(infoStartLoading());

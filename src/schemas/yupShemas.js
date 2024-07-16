@@ -48,3 +48,10 @@ export const UpdateDesktopForm = yup.object().shape({
   user: yup.object().required(errorMessage),
   estado: yup.boolean().required(errorMessage),
 });
+
+export const currentDesktopForm = yup.object().shape({
+  desktop: yup.string().required(errorMessage),
+  customer: yup.string().required(errorMessage),
+  description: yup.string().required(errorMessage),
+  tipoTicket: yup.string().required(errorMessage),
+});

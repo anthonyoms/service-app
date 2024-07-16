@@ -43,7 +43,7 @@ export default function SignIn() {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-    await dispatch(StartLogin(data.get("correo"), data.get("password")));
+    await dispatch(StartLogin(data.get("correo").trim(), data.get("password")));
     setLoading(false);
   };
   return (

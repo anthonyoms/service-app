@@ -6,6 +6,7 @@ import { dataValidation } from "../../utils/helpers/messages";
 import { endpoints } from "../../utils/constants/endpoints";
 import { useFormik } from "formik";
 import { ticketGeneratorForm } from "../../schemas/yupShemas";
+import { MyBackdrop } from "../../components/ui/Backdrop";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,8 +36,9 @@ const useStyles = makeStyles((theme) => ({
 const TicketGenerator = () => {
   const classes = useStyles();
 
-  const [{ lastTicket }, setData] = useState({
-    data: [],
+  const [{ lastTicket, loading }, setData] = useState({
+    lastTicket: 0,
+    loading: true,
   });
   const {
     values,
@@ -51,6 +53,7 @@ const TicketGenerator = () => {
     validationSchema: ticketGeneratorForm,
     onSubmit: async ({ customer }) => {
       console.log(customer);
+      setData((prev) => ({ ...prev, loading: true }));
       const isSaveTicket = await postServiceApp(
         { customer },
         endpoints.tickets
@@ -61,8 +64,17 @@ const TicketGenerator = () => {
     },
   });
 
+  const speak = () => {
+   
+    const utterance = new SpeechSynthesisUtterance("Hola");
+    utterance.lang = "es-ES"; // Establece el idioma
+    window.speechSynthesis.speak(utterance);
+  };
+  speak() 
+
   useEffect(() => {
     loadLastTicket();
+   
   }, []);
 
   const loadLastTicket = async () => {
@@ -75,6 +87,7 @@ const TicketGenerator = () => {
 
   return (
     <>
+      <MyBackdrop loading={loading} />
       <div className={classes.root}>
         <Paper elevation={3} className={classes.paper}>
           <Typography variant="h5" gutterBottom>
