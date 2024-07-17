@@ -64,17 +64,8 @@ const TicketGenerator = () => {
     },
   });
 
-  const speak = () => {
-   
-    const utterance = new SpeechSynthesisUtterance("Hola");
-    utterance.lang = "es-ES"; // Establece el idioma
-    window.speechSynthesis.speak(utterance);
-  };
-  speak() 
-
   useEffect(() => {
     loadLastTicket();
-   
   }, []);
 
   const loadLastTicket = async () => {

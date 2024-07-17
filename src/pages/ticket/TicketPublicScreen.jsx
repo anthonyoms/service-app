@@ -114,7 +114,8 @@ const TicketScreen = () => {
       if (type !== "on-working-changed") {
         return;
       }
-      console.log(payload);
+      console.log(payload[0]);
+      speak(payload[0]?.number, payload[0]?.handleAtDesk);
       setrecentTickets({
         recentTickets: payload?.slice(1),
         lastTicket: payload[0],
@@ -132,6 +133,16 @@ const TicketScreen = () => {
       ws.close();
     };
   }, []);
+
+  const speak = (numberTicket,desk) => {
+    const utterance = new SpeechSynthesisUtterance(
+      `tique ${numberTicket} por favor pasar a ${desk}`
+    );
+    utterance.lang = "es-MX"; // Establece el idioma
+
+    console.log(window.speechSynthesis.getVoices());
+    window.speechSynthesis.speak(utterance);
+  };
 
   const loadTickets = async () => {
     const dataResponse = await getServiceApp(endpoints.tickets + "/working-on");
@@ -166,14 +177,14 @@ const TicketScreen = () => {
                 gutterBottom
                 className={classes.textLarge}
               >
-                Ticket {lastTicket.number}
+                Ticket {lastTicket?.number}
               </Typography>
               <Typography
                 variant="body1"
                 color="textSecondary"
                 className={classes.textLarge}
               >
-                {lastTicket.handleAtDesk}
+                {lastTicket?.handleAtDesk}
               </Typography>
             </CardContent>
           </Card>

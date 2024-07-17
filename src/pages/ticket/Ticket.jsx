@@ -98,7 +98,6 @@ const Ticket = () => {
     ws.onopen = () => {
       console.log("Conectado al servidor WebSocket");
       // Ejemplo de enviar un mensaje al servidor cuando se abre la conexión
-      ws.send("Hola servidor, soy un cliente");
     };
 
     // Evento cuando llega un mensaje del servidor
@@ -107,7 +106,6 @@ const Ticket = () => {
       if (type !== "on-ticket-count-changed") {
         return;
       }
-
       setPending(payload);
     };
 
@@ -121,6 +119,7 @@ const Ticket = () => {
       ws.close();
     };
   }, []);
+
   const loadPendingTicket = async () => {
     const dataResponse = await getServiceApp(`${endpoints.tickets}/pending`);
     const validData = dataValidation(dataResponse, false);
