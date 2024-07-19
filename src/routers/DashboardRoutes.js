@@ -46,6 +46,7 @@ import TicketGenerator from "../pages/ticket/TicketGenerator";
 import Ticket from "../pages/ticket/Ticket";
 import { DesktopRegistered } from "../pages/desktop/DesktopRegistered";
 import { SetDesktop } from "../pages/desktop/SetDesktop";
+import { AddRequest } from "../pages/request/AddRequest";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -160,6 +161,10 @@ export const DashboardRoutes = () => {
           <Route path="/service-manager" element={<Ticket />} />
           <Route path="/desktop-manager" element={<DesktopRegistered />} />
           <Route path="/desktop-manager/:desktop" element={<SetDesktop />} />
+
+          {/*Request*/}
+          <Route path="/request-manager" element={<AddRequest />} />
+          
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

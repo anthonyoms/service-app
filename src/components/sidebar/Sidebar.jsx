@@ -8,6 +8,7 @@ import {
   ventas,
   consultas,
   Tickets,
+  request,
 } from "../../utils/constants/sidebarMenuItems";
 
 export const Sidebar = () => {
@@ -19,6 +20,7 @@ export const Sidebar = () => {
         <SidebarMenu {...inventario} />
         <SidebarMenu {...ventas} />
         <SidebarMenu {...Tickets} />
+        <SidebarMenu {...request} />
         <SidebarMenu {...consultas} />
       </div>
     </div>

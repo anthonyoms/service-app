@@ -55,3 +55,10 @@ export const currentDesktopForm = yup.object().shape({
   description: yup.string().required(errorMessage),
   tipoTicket: yup.string().required(errorMessage),
 });
+
+export const addRequest = yup.object().shape({
+  request: yup.string().required(errorMessage),
+  user: yup.object().required(errorMessage),
+  service: yup.object().required(errorMessage),
+  description: yup.string().required(errorMessage),
+});

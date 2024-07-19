@@ -111,6 +111,17 @@ export const Tickets = {
   ],
 };
 
+export const request = {
+  title: "Solicitudes",
+  listItem: [
+    {
+      link: "/request-manager",
+      Icon: PostAdd,
+      sidebarItemName: "Crear Solicitudes",
+    },
+  ],
+};
+
 export const consultas = {
   title: "Consultas",
   listItem: [
