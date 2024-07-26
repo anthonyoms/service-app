@@ -17,6 +17,7 @@ import {
   Payment,
   LaptopTwoTone,
 } from "@material-ui/icons";
+import { TaskAlt } from "@mui/icons-material";
 
 export const home = {
   title: "Dashboard",
@@ -118,6 +119,11 @@ export const request = {
       link: "/request-manager",
       Icon: PostAdd,
       sidebarItemName: "Crear Solicitudes",
+    },
+    {
+      link: "/request-list",
+      Icon: TaskAlt,
+      sidebarItemName: "Trabajar Solicitudes",
     },
   ],
 };

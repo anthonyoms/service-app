@@ -8,7 +8,10 @@ import { DataGrid, GridToolbar, esES } from "@mui/x-data-grid";
 import "../product/product.css";
 import "../productList/productList.css";
 import moment from "moment";
-import { confirmActionMessage, dataValidation } from "../../utils/helpers/messages";
+import {
+  confirmActionMessage,
+  dataValidation,
+} from "../../utils/helpers/messages";
 
 export const SearchInvoice = () => {
   const [{ loading, invoiceData }, setInvoiceData] = useState({
@@ -49,10 +52,7 @@ export const SearchInvoice = () => {
   const handleDelete = async (id) => {
     const result = await confirmActionMessage();
     if (result.isConfirmed) {
-      const dataResponse = await deleteServiceApp(
-        id,
-        endpoints.facturacion
-      );
+      const dataResponse = await deleteServiceApp(id, endpoints.facturacion);
       const validData = dataValidation(dataResponse);
       if (validData.ok) {
         loadInvoice();
@@ -64,7 +64,7 @@ export const SearchInvoice = () => {
     { field: "uid", headerName: "uid", hide: true, flex: 1 },
     { field: "id", headerName: "id", flex: 1 },
     { field: "cedula", headerName: "Cedula", flex: 1 },
-    { field: "total", type: "number", headerName: "Total", flex: 1 },
+    { field: "total", headerName: "Total", flex: 1 },
     { field: "tipoComprobante", headerName: "Comprobante", flex: 1 },
     { field: "tipoPago", headerName: "Tipo Pago", flex: 1 },
     {
@@ -72,9 +72,7 @@ export const SearchInvoice = () => {
       headerName: "Fecha Emisión",
       flex: 1,
       renderCell: (params) => {
-        return (
-          moment.utc(params.row.fechaEmision).format("DD/MM/YYYY")
-        );
+        return moment.utc(params.row.fechaEmision).format("DD/MM/YYYY");
       },
       type: "date",
     },

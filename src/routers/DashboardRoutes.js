@@ -47,6 +47,8 @@ import Ticket from "../pages/ticket/Ticket";
 import { DesktopRegistered } from "../pages/desktop/DesktopRegistered";
 import { SetDesktop } from "../pages/desktop/SetDesktop";
 import { AddRequest } from "../pages/request/AddRequest";
+import { RequestList } from "../pages/request/RequestList";
+import { RequestManager } from "../pages/request/RequestManager";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -164,6 +166,8 @@ export const DashboardRoutes = () => {
 
           {/*Request*/}
           <Route path="/request-manager" element={<AddRequest />} />
+          <Route path="/request-manager/:id" element={<RequestManager />} />
+          <Route path="/request-list" element={<RequestList />} />
           
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />

@@ -16,4 +16,5 @@ export const endpoints = {
   contratoDeServicio: "/contrato",
   tickets: "/tickets",
   desk: "/desk",
+  request: "/request",
 };

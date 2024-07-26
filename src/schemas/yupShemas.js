@@ -58,6 +58,7 @@ export const currentDesktopForm = yup.object().shape({
 
 export const addRequest = yup.object().shape({
   request: yup.string().required(errorMessage),
+  detail: yup.string().required(errorMessage),
   user: yup.object().required(errorMessage),
   service: yup.object().required(errorMessage),
   description: yup.string().required(errorMessage),
