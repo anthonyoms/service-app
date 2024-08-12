@@ -1,5 +1,5 @@
 import "../../components/featuredInfo/featuredInfo.css";
-import React from "react";
+import React, { useCallback } from "react";
 import { getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
@@ -10,21 +10,23 @@ import { Link } from "react-router-dom";
 import { DeleteOutline } from "@material-ui/icons";
 import moment from "moment";
 import { Tooltip } from "@mui/material";
+import { useSelector } from "react-redux";
 
 export const RequestList = () => {
+  const { rol, correo } = useSelector((state) => state.auth);
+
   const [total, setTotal] = useState(0);
   const [pendiente, setPendiente] = useState(0);
   const [completadas, setCompletadas] = useState(0);
   const [vencidas, setVencidas] = useState(0);
   const [solicitudes, setSolicitudes] = useState([]);
 
-  useEffect(() => {
-    loadPendingRequest();
-  }, []);
-
-  const loadPendingRequest = async () => {
+  const loadPendingRequest = useCallback(async () => {
     const dataResponse = await getServiceApp(`${endpoints.request}`);
-    const validData = dataValidation(dataResponse, false);
+    let validData = dataValidation(dataResponse, false);
+    if (rol !== "ADMIN_ROLE") {
+      validData.request = validData.request.filter((r) => r.tecnico === correo);
+    }
     if (validData.ok) {
       setTotal(validData.total);
       setPendiente(validData.pendientes);
@@ -32,7 +34,11 @@ export const RequestList = () => {
       setVencidas(validData.vencidas);
       setSolicitudes(validData.request);
     }
-  };
+  }, [rol, correo]);
+
+  useEffect(() => {
+    loadPendingRequest();
+  }, [loadPendingRequest]);
 
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
@@ -125,34 +131,36 @@ export const RequestList = () => {
 
   return (
     <div style={{ flex: 4 }}>
-      <div className="featured">
-        <div className="featuredItem">
-          <span className="featuredTitle">Total de Solicitudes</span>
-          <div className="featuredMoneyContainer">
-            <span className="featuredMoney">{total}</span>
+      {rol === "ADMIN_ROLE" && (
+        <div className="featured">
+          <div className="featuredItem">
+            <span className="featuredTitle">Total de Solicitudes</span>
+            <div className="featuredMoneyContainer">
+              <span className="featuredMoney">{total}</span>
+            </div>
+          </div>
+          <div className="featuredItem">
+            <span className="featuredTitle">Vencidas</span>
+            <div className="featuredMoneyContainer">
+              <span style={{ color: "red" }} className="featuredMoney">
+                {vencidas}
+              </span>
+            </div>
+          </div>
+          <div className="featuredItem">
+            <span className="featuredTitle">Pendientes</span>
+            <div className="featuredMoneyContainer">
+              <span className="featuredMoney">{pendiente}</span>
+            </div>
+          </div>
+          <div className="featuredItem">
+            <span className="featuredTitle">Completadas</span>
+            <div className="featuredMoneyContainer">
+              <span className="featuredMoney">{completadas}</span>
+            </div>
           </div>
         </div>
-        <div className="featuredItem">
-          <span className="featuredTitle">Vencidas</span>
-          <div className="featuredMoneyContainer">
-            <span style={{ color: "red" }} className="featuredMoney">
-              {vencidas}
-            </span>
-          </div>
-        </div>
-        <div className="featuredItem">
-          <span className="featuredTitle">Pendientes</span>
-          <div className="featuredMoneyContainer">
-            <span className="featuredMoney">{pendiente}</span>
-          </div>
-        </div>
-        <div className="featuredItem">
-          <span className="featuredTitle">Completadas</span>
-          <div className="featuredMoneyContainer">
-            <span className="featuredMoney">{completadas}</span>
-          </div>
-        </div>
-      </div>
+      )}
       <h1 style={{ marginTop: "50px" }}>Lista de solicitudes</h1>
       <div style={{ height: "60%", marginTop: "10px" }}>
         <DataGrid

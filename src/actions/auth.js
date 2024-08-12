@@ -2,6 +2,9 @@ import Swal from "sweetalert2";
 import { types } from "../utils/constants/types";
 import { Login, revalidarToken } from "../services/auth";
 import { infoLogout, infoStartLoading } from "./info";
+import { getServiceApp } from "../services/serviceApp";
+import { endpoints } from "../utils/constants/endpoints";
+import { dataValidation } from "../utils/helpers/messages";
 
 export const StartLogin = (correo, password) => {
   return async (dispatch) => {
@@ -13,13 +16,22 @@ export const StartLogin = (correo, password) => {
 
     localStorage.setItem("token", body.token);
     localStorage.setItem("token-init-date", new Date().getTime());
+
+    const dataResponse = await getServiceApp(
+      `${endpoints.message}?correo=${body.correo}`
+    );
+    const validData = dataValidation(dataResponse, false);
+    if (!!validData?.ok) {
+      body.msgCount = validData.total;
+    }
     dispatch(
       login({
         uid: body.uid,
         nombre: body.nombre,
         rol: body.rol,
         img: body.img,
-        correo: body.correo
+        correo: body.correo,
+        msg: body.msgCount,
       })
     );
     dispatch(infoStartLoading());
@@ -32,13 +44,21 @@ export const startChecking = () => {
     if (!!body?.ok) {
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", new Date().getTime());
+      const dataResponse = await getServiceApp(
+        `${endpoints.message}?correo=${body.correo}`
+      );
+      const validData = dataValidation(dataResponse, false);
+      if (!!validData?.ok) {
+        body.msgCount = validData.total;
+      }
       dispatch(
         login({
           uid: body.uid,
           nombre: body.nombre,
           rol: body.rol,
           img: body.img,
-          correo: body.correo
+          correo: body.correo,
+          msg: body.msgCount,
         })
       );
       dispatch(infoStartLoading());

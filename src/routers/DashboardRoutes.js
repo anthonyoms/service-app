@@ -49,6 +49,8 @@ import { SetDesktop } from "../pages/desktop/SetDesktop";
 import { AddRequest } from "../pages/request/AddRequest";
 import { RequestList } from "../pages/request/RequestList";
 import { RequestManager } from "../pages/request/RequestManager";
+import MessageList from "../pages/emails/MessageList";
+import EmailDetail from "../pages/emails/EmailDetail";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -168,6 +170,10 @@ export const DashboardRoutes = () => {
           <Route path="/request-manager" element={<AddRequest />} />
           <Route path="/request-manager/:id" element={<RequestManager />} />
           <Route path="/request-list" element={<RequestList />} />
+
+           {/*Emails*/}
+           <Route path="/emails-list" element={<MessageList />} />
+           <Route path="/email/:id" element={<EmailDetail />} />
           
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
