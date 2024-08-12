@@ -36,6 +36,7 @@ export const RequestList = () => {
 
   const columns = [
     { field: "uid", headerName: "ID", flex: 1, hide: true },
+    { field: "number", headerName: "ID", flex: 1 },
     {
       field: "tecnico",
       headerName: "Tecnico Asignado",
@@ -70,19 +71,36 @@ export const RequestList = () => {
         moment.utc(params.row.fechaEmision).format("DD/MM/YYYY"),
     },
     {
+      field: "completedWork",
+      headerName: "Fecha Completada",
+      flex: 1,
+      type: "date",
+      renderCell: (params) =>
+        moment.utc(params.row.completedWork).format("DD/MM/YYYY"),
+    },
+    {
+      field: "fechaVencimiento",
+      headerName: "Fecha Vencimiento",
+      flex: 1,
+      type: "date",
+      renderCell: (params) =>
+        moment.utc(params.row.fechaEmision).add(5, "days").format("DD/MM/YYYY"),
+    },
+    {
       field: "action",
       headerName: "Acciones",
       flex: 1,
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/request-manager/" + params.row.uid}>
-              <button className="categoryListEdit">Atender</button>
-            </Link>
-            {params.row.estado && (
-              <Tooltip title="Cancelar Solicitud">
-                <DeleteOutline className="categoryListDelete" />
-              </Tooltip>
+            {params?.row?.done === "No" ? (
+              <Link to={"/request-manager/" + params.row.uid}>
+                <button className="categoryListEdit">Atender</button>
+              </Link>
+            ) : (
+              <Link to={"/request-manager/" + params.row.uid}>
+                <button className="categoryListEdit">Ver</button>
+              </Link>
             )}
           </>
         );

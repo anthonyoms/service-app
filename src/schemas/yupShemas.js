@@ -63,3 +63,8 @@ export const addRequest = yup.object().shape({
   service: yup.object().required(errorMessage),
   description: yup.string().required(errorMessage),
 });
+
+export const updateRequest = yup.object().shape({
+  comentarioCierre: yup.string().required(errorMessage),
+  estado: yup.string().required(errorMessage),
+});

@@ -116,6 +116,7 @@ const TicketScreen = () => {
       }
       console.log(payload[0]);
       speak(payload[0]?.number, payload[0]?.handleAtDesk);
+      speak(payload[0]?.number, payload[0]?.handleAtDesk);
       setrecentTickets({
         recentTickets: payload?.slice(1),
         lastTicket: payload[0],
