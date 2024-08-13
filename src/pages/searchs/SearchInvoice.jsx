@@ -12,6 +12,7 @@ import {
   confirmActionMessage,
   dataValidation,
 } from "../../utils/helpers/messages";
+import { formatter } from "../../utils/constants/formatNumber";
 
 export const SearchInvoice = () => {
   const [{ loading, invoiceData }, setInvoiceData] = useState({
@@ -64,7 +65,14 @@ export const SearchInvoice = () => {
     { field: "uid", headerName: "uid", hide: true, flex: 1 },
     { field: "id", headerName: "id", flex: 1 },
     { field: "cedula", headerName: "Cedula", flex: 1 },
-    { field: "total", headerName: "Total", flex: 1 },
+    {
+      field: "total",
+      headerName: "Total",
+      renderCell: (params) => {
+        return formatter.format(params.row.total);
+      },
+      flex: 1,
+    },
     { field: "tipoComprobante", headerName: "Comprobante", flex: 1 },
     { field: "tipoPago", headerName: "Tipo Pago", flex: 1 },
     {

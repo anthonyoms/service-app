@@ -51,6 +51,7 @@ import { RequestList } from "../pages/request/RequestList";
 import { RequestManager } from "../pages/request/RequestManager";
 import MessageList from "../pages/emails/MessageList";
 import EmailDetail from "../pages/emails/EmailDetail";
+import { SellByProduct } from "../pages/report/SellByProduct";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -174,7 +175,10 @@ export const DashboardRoutes = () => {
            {/*Emails*/}
            <Route path="/emails-list" element={<MessageList />} />
            <Route path="/email/:id" element={<EmailDetail />} />
-          
+
+           {/*Report*/}
+           <Route path="/ventas-productos" element={<SellByProduct />} />
+
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

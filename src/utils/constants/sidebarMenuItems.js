@@ -17,7 +17,7 @@ import {
   Payment,
   LaptopTwoTone,
 } from "@material-ui/icons";
-import { TaskAlt } from "@mui/icons-material";
+import { SellTwoTone, TaskAlt } from "@mui/icons-material";
 
 export const home = {
   title: "Dashboard",
@@ -140,6 +140,16 @@ export const consultas = {
       link: "/buscarfactura",
       Icon: FindInPageOutlined,
       sidebarItemName: "Buscar Facturas",
+    },
+  ],
+};
+export const reportes = {
+  title: "Reportes",
+  listItem: [
+    {
+      link: "/ventas-productos",
+      Icon: SellTwoTone,
+      sidebarItemName: "Ventas por Productos",
     },
   ],
 };

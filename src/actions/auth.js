@@ -22,7 +22,7 @@ export const StartLogin = (correo, password) => {
     );
     const validData = dataValidation(dataResponse, false);
     if (!!validData?.ok) {
-      body.msgCount = validData.total;
+      body.msgCount = validData.unread;
     }
     dispatch(
       login({
@@ -49,7 +49,7 @@ export const startChecking = () => {
       );
       const validData = dataValidation(dataResponse, false);
       if (!!validData?.ok) {
-        body.msgCount = validData.total;
+        body.msgCount = validData.unread;
       }
       dispatch(
         login({

@@ -10,6 +10,7 @@ import {
   dataValidation,
 } from "../../utils/helpers/messages";
 import moment from "moment";
+import { formatter } from "../../utils/constants/formatNumber";
 
 export default function OrderList() {
   const [{ loading, ordenesData }, setordenesData] = useState({
@@ -67,12 +68,18 @@ export default function OrderList() {
       field: "totalTax",
       headerName: "Impuestos",
       flex: 1,
+      renderCell: (params) => {
+        return formatter.format(params.row.totalTax);
+      },
       type: "number",
     },
     {
       field: "total",
       headerName: "Total",
       flex: 1,
+      renderCell: (params) => {
+        return formatter.format(params.row.total);
+      },
       type: "number",
     },
     {

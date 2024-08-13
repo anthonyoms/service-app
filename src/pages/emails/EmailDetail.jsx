@@ -16,8 +16,12 @@ import {
 import { getServiceApp } from "../../services/serviceApp";
 import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { startChecking } from "../../actions/auth";
 
 const EmailDetail = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [email, setEmails] = useState(null);
 
@@ -35,7 +39,10 @@ const EmailDetail = () => {
 
   useEffect(() => {
     loadMessage();
-  }, [loadMessage]);
+    return () => {
+      dispatch(startChecking());
+    };
+  }, [loadMessage, dispatch]);
 
   if (!email) {
     return <Typography variant="h6">Correo no encontrado</Typography>;
@@ -68,7 +75,7 @@ const EmailDetail = () => {
             {email.sender}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {new Date().toLocaleDateString()}
+            {moment(email.fechaEmision).format("DD/MM/YYYY HH:mm:ss")}
           </Typography>
         </Box>
         <Divider />
