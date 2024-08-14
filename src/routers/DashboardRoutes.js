@@ -52,6 +52,7 @@ import { RequestManager } from "../pages/request/RequestManager";
 import MessageList from "../pages/emails/MessageList";
 import EmailDetail from "../pages/emails/EmailDetail";
 import { SellByProduct } from "../pages/report/SellByProduct";
+import { CustomerReport } from "../pages/report/CustomerReport";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -172,12 +173,13 @@ export const DashboardRoutes = () => {
           <Route path="/request-manager/:id" element={<RequestManager />} />
           <Route path="/request-list" element={<RequestList />} />
 
-           {/*Emails*/}
-           <Route path="/emails-list" element={<MessageList />} />
-           <Route path="/email/:id" element={<EmailDetail />} />
+          {/*Emails*/}
+          <Route path="/emails-list" element={<MessageList />} />
+          <Route path="/email/:id" element={<EmailDetail />} />
 
-           {/*Report*/}
-           <Route path="/ventas-productos" element={<SellByProduct />} />
+          {/*Report*/}
+          <Route path="/ventas-productos" element={<SellByProduct />} />
+          <Route path="/reporte-clientes" element={<CustomerReport />} />
 
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />

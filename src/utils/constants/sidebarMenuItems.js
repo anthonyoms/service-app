@@ -16,6 +16,7 @@ import {
   FindInPageOutlined,
   Payment,
   LaptopTwoTone,
+  PeopleAltOutlined,
 } from "@material-ui/icons";
 import { SellTwoTone, TaskAlt } from "@mui/icons-material";
 
@@ -150,6 +151,11 @@ export const reportes = {
       link: "/ventas-productos",
       Icon: SellTwoTone,
       sidebarItemName: "Ventas por Productos",
+    },
+    {
+      link: "/reporte-clientes",
+      Icon: PeopleAltOutlined,
+      sidebarItemName: "Clientes",
     },
   ],
 };
