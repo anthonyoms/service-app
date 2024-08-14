@@ -158,7 +158,7 @@ export const SellScreen = () => {
     return <Navigate to={"/"} replace={true} />;
   };
 
-  const loadCustomers = useCallback (async () => {
+  const loadCustomers = useCallback(async () => {
     const [
       customersDataResponse,
       productsDataResponse,
@@ -214,7 +214,6 @@ export const SellScreen = () => {
     return ""; // Si no se encuentra ningún número, devuelve una cadena vacía
   };
 
-  
   useEffect(() => {
     loadCustomers();
   }, [loadCustomers]);

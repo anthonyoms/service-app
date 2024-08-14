@@ -18,4 +18,5 @@ export const endpoints = {
   desk: "/desk",
   request: "/request",
   message: "/message",
+  report: "/reportes",
 };

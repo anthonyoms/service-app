@@ -90,13 +90,15 @@ export default function CustomerDialog({
       devolucionLoading: false,
       devolucionLoadingError: error,
       devolucionLoadingErrorMsg: errorMsg,
+      codigoDevolucion: "",
+      devolucion: null,
     }));
   };
 
   const handleOnBlurRefund = async ({ target: { value } }) => {
     const errorMsg = "Codigo devolución no encontrado";
     if (!value) {
-      resetDiscount(true, "Campo requerido");
+      resetDiscount();
       return;
     }
     setDataState((prev) => ({

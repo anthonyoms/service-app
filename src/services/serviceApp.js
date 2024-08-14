@@ -34,6 +34,33 @@ const fetchServiceApp = async (endpoint, payload, method = httpMethods.Get) => {
   }
 };
 
+export const downloadFileServiceApp = async (endpoint, fieldName) => {
+  try {
+    const response = await serviceApp.get(endpoint, {
+      responseType: "blob", // Importante para manejar archivos binarios
+    });
+
+    // Crear un enlace para descargar el archivo
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", fieldName); // Nombre predeterminado del archivo
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    return { ok: true };
+  } catch (error) {
+    console.log(error.message);
+    const errors =
+      error?.response?.data?.msg ||
+      (error?.response?.data?.errors && error.response.data?.errors[0]?.msg) ||
+      error.message;
+    console.log(errors);
+    return { ok: false, errorMsg: errors };
+  }
+};
+
 export const getServiceApp = async (endpoint) => {
   const { data } = await fetchServiceApp(endpoint);
   return data;

@@ -68,3 +68,9 @@ export const updateRequest = yup.object().shape({
   comentarioCierre: yup.string().required(errorMessage),
   estado: yup.string().required(errorMessage),
 });
+
+export const reporteVentasProdusctos = yup.object().shape({
+  fechaDesde: yup.string().required(errorMessage),
+  fechaHasta: yup.string().required(errorMessage),
+  product: yup.object().required(errorMessage),
+});

@@ -11,6 +11,7 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import { useSelector } from "react-redux";
 import WebSocketClient from "websocket";
+import moment from "moment";
 
 const columns = [
   { field: "sender", headerName: "Remitente", width: 250 },
@@ -29,6 +30,12 @@ const columns = [
         )}
       </IconButton>
     ),
+  },
+  {
+    field: "fechaEmision",
+    headerName: "Fecha Emisión",
+    renderCell: (params) => moment(params.row.fechaEmision).format("DD/MM/YYYY HH:mm:ss"),
+    width: 500,
   },
 ];
 
