@@ -53,6 +53,7 @@ import MessageList from "../pages/emails/MessageList";
 import EmailDetail from "../pages/emails/EmailDetail";
 import { SellByProduct } from "../pages/report/SellByProduct";
 import { CustomerReport } from "../pages/report/CustomerReport";
+import { InvoiceServiceReport } from "../pages/report/InvoiceServiceReport";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -180,6 +181,7 @@ export const DashboardRoutes = () => {
           {/*Report*/}
           <Route path="/ventas-productos" element={<SellByProduct />} />
           <Route path="/reporte-clientes" element={<CustomerReport />} />
+          <Route path="/reporte-servicios" element={<InvoiceServiceReport />} />
 
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />

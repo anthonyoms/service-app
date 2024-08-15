@@ -123,12 +123,6 @@ export const PayServiceInvoice = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link
-              to={`/serviceinvoice/${contract?.uid}/${params.row._id}`}
-              target="_blank"
-            >
-              <button className="productListView">Ver Factura</button>
-            </Link>
             {params.row.pago === "NO" && (
               <Tooltip title="Pagar esta Factura">
                 <CreditCard
@@ -141,6 +135,12 @@ export const PayServiceInvoice = () => {
                 />
               </Tooltip>
             )}
+            <Link
+              to={`/serviceinvoice/${contract?.uid}/${params.row._id}`}
+              target="_blank"
+            >
+              <button className="productListView">Ver Factura</button>
+            </Link>
           </>
         );
       },

@@ -74,3 +74,8 @@ export const reporteVentasProdusctos = yup.object().shape({
   fechaHasta: yup.string().required(errorMessage),
   product: yup.object().required(errorMessage),
 });
+export const reporteVentasServicios = yup.object().shape({
+  fechaDesde: yup.string().required(errorMessage),
+  fechaHasta: yup.string().required(errorMessage),
+  servicio: yup.object().required(errorMessage),
+});
