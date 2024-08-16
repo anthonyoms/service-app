@@ -38,18 +38,31 @@ export const InvoiceServiceReport = () => {
     onSubmit: async (values) => {
       console.log(values);
       setLoading(true);
-      const dataResponse = await getServiceApp(
-        `${endpoints.report}/ventas-servicios/${
-          values.servicio.uid
-        }?fechaDesde=${moment(values.fechaDesde).format(
-          "YYYY-MM-DD"
-        )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
-      );
-      const validData = dataValidation(dataResponse, false);
-      if (validData.ok) {
-        console.log(validData);
-        setReportData(validData.facturas);
+      try {
+        const dataResponse = await getServiceApp(
+          `${endpoints.report}/ventas-servicios/${
+            values.servicio.uid
+          }?fechaDesde=${moment(values.fechaDesde).format(
+            "YYYY-MM-DD"
+          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
+        );
+        const validData = dataValidation(dataResponse, false);
+        if (validData.ok) {
+          console.log(validData);
+          setReportData(validData.facturas);
+        }
+        await downloadFileServiceApp(
+          `${endpoints.report}/ventas-servicios-download/${
+            values.servicio.uid
+          }?fechaDesde=${moment(values.fechaDesde).format(
+            "YYYY-MM-DD"
+          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
+          `reporte_ventas_servicio_${moment().format("YYYYMMDD_HHmmss")}.xlsx`
+        );
+      } catch (error) {
+        console.log(error);
       }
+
       setLoading(false);
     },
   });
@@ -241,7 +254,7 @@ export const InvoiceServiceReport = () => {
         >
           Generar Reporte
         </Button>
-        <div style={{ height: "60%", marginTop: "10px" }}>
+        <div style={{ height: "70%", marginTop: "10px" }}>
           <DataGrid
             rows={dataParaFiltro()}
             columns={columns}

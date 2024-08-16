@@ -38,28 +38,31 @@ export const SellByProduct = () => {
     validationSchema: reporteVentasProdusctos,
     onSubmit: async (values) => {
       setLoading(true);
-      const dataResponse = await getServiceApp(
-        `${endpoints.report}/ventas-productos/${
-          values.product.uid
-        }?fechaDesde=${moment(values.fechaDesde).format(
-          "YYYY-MM-DD"
-        )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
-      );
-      const validData = dataValidation(dataResponse, false);
-      if (validData.ok) {
-        console.log(validData);
-        setReportData(validData.facturas);
+      try {
+        const dataResponse = await getServiceApp(
+          `${endpoints.report}/ventas-productos/${
+            values.product.uid
+          }?fechaDesde=${moment(values.fechaDesde).format(
+            "YYYY-MM-DD"
+          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
+        );
+        const validData = dataValidation(dataResponse, false);
+        if (validData.ok) {
+          console.log(validData);
+          setReportData(validData.facturas);
+        }
+
+        await downloadFileServiceApp(
+          `${endpoints.report}/ventas-productos-download/${
+            values.product.uid
+          }?fechaDesde=${moment(values.fechaDesde).format(
+            "YYYY-MM-DD"
+          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
+          `reporte_ventas_${moment().format("YYYYMMDD_HHmmss")}.xlsx`
+        );
+      } catch (error) {
+        console.log(error);
       }
-
-      await downloadFileServiceApp(
-        `${endpoints.report}/ventas-productos-download/${
-          values.product.uid
-        }?fechaDesde=${moment(values.fechaDesde).format(
-          "YYYY-MM-DD"
-        )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
-        `reporte_ventas_${moment().format("YYYYMMDD_HHmmss")}.xlsx`
-      );
-
       setLoading(false);
     },
   });
@@ -218,7 +221,7 @@ export const SellByProduct = () => {
         >
           Generar Reporte
         </Button>
-        <div style={{ height: "60%", marginTop: "10px" }}>
+        <div style={{ height: "70%", marginTop: "10px" }}>
           <DataGrid
             rows={reportData}
             columns={columns}
