@@ -18,6 +18,7 @@ import {
   LaptopTwoTone,
   PeopleAltOutlined,
   Router,
+  Laptop,
 } from "@material-ui/icons";
 import { SellTwoTone, TaskAlt } from "@mui/icons-material";
 
@@ -162,6 +163,11 @@ export const reportes = {
       link: "/reporte-servicios",
       Icon: Router,
       sidebarItemName: "Ventas Por Servicios",
+    },
+    {
+      link: "/reporte-estacion",
+      Icon: Laptop,
+      sidebarItemName: "Estación de Trabajo",
     },
   ],
 };
