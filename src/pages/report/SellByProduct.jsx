@@ -15,57 +15,49 @@ import { endpoints } from "../../utils/constants/endpoints";
 import { dataValidation } from "../../utils/helpers/messages";
 import { MyBackdrop } from "../../components/ui/Backdrop";
 import { formatter } from "../../utils/constants/formatNumber";
-import { axios } from "axios/dist/axios";
 
 export const SellByProduct = () => {
   const [products, setProducts] = useState([]);
   const [reportData, setReportData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    resetForm,
-  } = useFormik({
-    initialValues: {
-      fechaDesde: moment(),
-      fechaHasta: moment(),
-      product: null,
-    },
-    validationSchema: reporteVentasProdusctos,
-    onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        const dataResponse = await getServiceApp(
-          `${endpoints.report}/ventas-productos/${
-            values.product.uid
-          }?fechaDesde=${moment(values.fechaDesde).format(
-            "YYYY-MM-DD"
-          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
-        );
-        const validData = dataValidation(dataResponse, false);
-        if (validData.ok) {
-          console.log(validData);
-          setReportData(validData.facturas);
-        }
+  const { values, errors, touched, handleChange, handleSubmit, setFieldValue } =
+    useFormik({
+      initialValues: {
+        fechaDesde: moment(),
+        fechaHasta: moment(),
+        product: null,
+      },
+      validationSchema: reporteVentasProdusctos,
+      onSubmit: async (values) => {
+        setLoading(true);
+        try {
+          const dataResponse = await getServiceApp(
+            `${endpoints.report}/ventas-productos/${
+              values.product.uid
+            }?fechaDesde=${moment(values.fechaDesde).format(
+              "YYYY-MM-DD"
+            )}&fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
+          );
+          const validData = dataValidation(dataResponse, false);
+          if (validData.ok) {
+            console.log(validData);
+            setReportData(validData.facturas);
+          }
 
-        await downloadFileServiceApp(
-          `${endpoints.report}/ventas-productos-download/${
-            values.product.uid
-          }?fechaDesde=${moment(values.fechaDesde).format(
-            "YYYY-MM-DD"
-          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
-          `reporte_ventas_${moment().format("YYYYMMDD_HHmmss")}.xlsx`
-        );
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-    },
-  });
+          await downloadFileServiceApp(
+            `${endpoints.report}/ventas-productos-download/${
+              values.product.uid
+            }?fechaDesde=${moment(values.fechaDesde).format(
+              "YYYY-MM-DD"
+            )}&fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
+            `reporte_ventas_${moment().format("YYYYMMDD_HHmmss")}.xlsx`
+          );
+        } catch (error) {
+          console.log(error);
+        }
+        setLoading(false);
+      },
+    });
 
   const loadProduct = useCallback(async () => {
     setLoading(true);

@@ -169,5 +169,10 @@ export const reportes = {
       Icon: Laptop,
       sidebarItemName: "Estación de Trabajo",
     },
+    {
+      link: "/reporte-solicitudes",
+      Icon: TaskAlt,
+      sidebarItemName: "Solicitudes",
+    },
   ],
 };

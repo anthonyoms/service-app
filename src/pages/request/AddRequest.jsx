@@ -186,7 +186,7 @@ export const AddRequest = () => {
                   }}
                   value={values.service}
                   getOptionLabel={(option) =>
-                    `${option.id} - ${option.cliente.cedula} - ${option.cliente.nombre} - ${option.calle} `
+                    `${option.id} - ${option.cliente.cedula} - ${option.cliente.nombre} - ${option.calle}`
                   }
                   size="small"
                   sx={{ mb: 2 }}

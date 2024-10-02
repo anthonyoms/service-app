@@ -44,7 +44,7 @@ export const InvoiceServiceReport = () => {
             values.servicio.uid
           }?fechaDesde=${moment(values.fechaDesde).format(
             "YYYY-MM-DD"
-          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
+          )}&fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`
         );
         const validData = dataValidation(dataResponse, false);
         if (validData.ok) {
@@ -56,7 +56,7 @@ export const InvoiceServiceReport = () => {
             values.servicio.uid
           }?fechaDesde=${moment(values.fechaDesde).format(
             "YYYY-MM-DD"
-          )}?fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
+          )}&fechaHasta=${moment(values.fechaHasta).format("YYYY-MM-DD")}`,
           `reporte_ventas_servicio_${moment().format("YYYYMMDD_HHmmss")}.xlsx`
         );
       } catch (error) {
