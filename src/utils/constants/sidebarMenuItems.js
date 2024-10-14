@@ -174,5 +174,10 @@ export const reportes = {
       Icon: TaskAlt,
       sidebarItemName: "Solicitudes",
     },
+    {
+      link: "/reporte-tickets",
+      Icon: ListAlt,
+      sidebarItemName: "Tickets",
+    },
   ],
 };

@@ -56,6 +56,7 @@ import { CustomerReport } from "../pages/report/CustomerReport";
 import { InvoiceServiceReport } from "../pages/report/InvoiceServiceReport";
 import { WorkStationReport } from "../pages/report/WorkStationReport";
 import { RequestReport } from "../pages/report/RequestReport";
+import { TicketReport } from "../pages/report/TicketReport";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -186,7 +187,7 @@ export const DashboardRoutes = () => {
           <Route path="/reporte-servicios" element={<InvoiceServiceReport />} />
           <Route path="/reporte-estacion" element={<WorkStationReport />} />
           <Route path="/reporte-solicitudes" element={<RequestReport />} />
-
+          <Route path="/reporte-tickets" element={<TicketReport />} />
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
