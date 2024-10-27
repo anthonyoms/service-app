@@ -21,9 +21,10 @@ export default function FormDialog({ isOpen, setOpen, configuration }) {
     direccion: "",
     itbis: 0,
     mora: 0,
+    encuesta:"",
   });
 
-  const { cedula_rnc, nombre, telefono, correo, direccion, itbis, mora } =
+  const { cedula_rnc, nombre, telefono, correo, direccion, itbis, mora, encuesta } =
     formValues;
 
   useEffect(() => {
@@ -149,6 +150,19 @@ export default function FormDialog({ isOpen, setOpen, configuration }) {
             fullWidth
             variant="standard"
             value={mora}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            id="encuesta"
+            name="encuesta"
+            label="Link Encuesta"
+            autoComplete="off"
+            required
+            inputProps={{ maxLength: "100" }}
+            fullWidth
+            variant="standard"
+            value={encuesta}
             onChange={handleInputChange}
           />
         </DialogContent>

@@ -29,10 +29,11 @@ export const RequestReport = () => {
       initialValues: {
         fechaDesde: moment(),
         fechaHasta: moment(),
-        statusRequest: "",
+        statusRequest: "Resuelto",
       },
       validationSchema: reporteSolicitudes,
       onSubmit: async (values) => {
+        setLoading(true);
         try {
           const dataResponse = await getServiceApp(
             `${endpoints.report}/reporte-solicitudes?fechaDesde=${moment(
@@ -49,6 +50,7 @@ export const RequestReport = () => {
         } catch (error) {
           console.log(error);
         }
+        setLoading(false);
       },
     });
 
@@ -74,8 +76,11 @@ export const RequestReport = () => {
     {
       field: "completedWork",
       headerName: "Fecha completado",
-      renderCell: (params) =>
-        {return params?.row?.done ? moment(params.row.completedWork).format("DD/MM/YYYY") : "No completado"},
+      renderCell: (params) => {
+        return params?.row?.done
+          ? moment(params.row.completedWork).format("DD/MM/YYYY")
+          : "No completado";
+      },
       flex: 1,
     },
     {
@@ -128,7 +133,11 @@ export const RequestReport = () => {
             onChange={(date) => {
               setFieldValue("fechaDesde", date ? date : moment()); // Actualiza el valor de Formik
             }}
-            maxDate={values.statusRequest === "Vencida" ? moment().subtract(5, 'days').toDate() : null}
+            maxDate={
+              values.statusRequest === "Vencida"
+                ? moment().subtract(5, "days").toDate()
+                : null
+            }
             renderInput={(params) => (
               <TextField
                 error={touched.fechaDesde && Boolean(errors.fechaDesde)}
@@ -147,7 +156,11 @@ export const RequestReport = () => {
             onChange={(date) => {
               setFieldValue("fechaHasta", date ? date : moment()); // Actualiza el valor de Formik
             }}
-            maxDate={values.statusRequest === "Vencida" ? moment().subtract(5, 'days').toDate() : null}
+            maxDate={
+              values.statusRequest === "Vencida"
+                ? moment().subtract(5, "days").toDate()
+                : null
+            }
             renderInput={(params) => (
               <TextField
                 error={touched.fechaHasta && Boolean(errors.fechaHasta)}

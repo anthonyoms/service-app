@@ -95,7 +95,7 @@ export const TicketReport = () => {
         ...data,
         start: moment(data.startWork).format("DD/MM/YYYY hh:mm:ss A"),
         end: moment(data.completedWork).format("DD/MM/YYYY hh:mm:ss A"),
-        usuario: data.usuario.correo,
+        usuario: data?.usuario?.correo,
         done: data?.done ? "Si" : "No",
       };
     });
