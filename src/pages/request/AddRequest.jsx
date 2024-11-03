@@ -72,7 +72,12 @@ export const AddRequest = () => {
     const { contratosDeServicio } = await getServiceApp(
       endpoints.contratoDeServicio
     );
-    setService(contratosDeServicio);
+    console.log(contratosDeServicio);
+    setService(
+      contratosDeServicio.filter(
+        (contratosDeServicio) => contratosDeServicio.estado === true
+      )
+    );
   };
 
   const loadUser = async () => {

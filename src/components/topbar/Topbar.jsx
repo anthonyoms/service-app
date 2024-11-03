@@ -20,7 +20,7 @@ export default function Topbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const { nombre, img, msg, correo } = useSelector((state) => state.auth);
+  const { nombre, img, msg, correo, rol } = useSelector((state) => state.auth);
   const configuration = useSelector((state) => state.info);
   const [openMessage, setOpenMessage] = React.useState(false);
   const [snippet, setSnippet] = React.useState("");
@@ -103,27 +103,33 @@ export default function Topbar() {
             <span className="logo">{configuration.nombre}</span>
           </div>
           <div className="topRight">
-            <div className="topbarIconContainer">
-              <Tooltip title="Tickets">
-                <Link to={"/ticket"} target="_blank">
-                  <AddCircleOutlineRounded />
-                </Link>
-              </Tooltip>
-            </div>
-            <div className="topbarIconContainer">
-              <Tooltip title="Tickets">
-                <Link to={"/ticket-public"} target="_blank">
-                  <ListAlt />
-                </Link>
-              </Tooltip>
-            </div>
+            {rol !== "CUSTOMER_ROLE" && (
+              <div className="topbarIconContainer">
+                <Tooltip title="Tickets">
+                  <Link to={"/ticket"} target="_blank">
+                    <AddCircleOutlineRounded />
+                  </Link>
+                </Tooltip>
+              </div>
+            )}
+            {rol !== "CUSTOMER_ROLE" && (
+              <div className="topbarIconContainer">
+                <Tooltip title="Tickets">
+                  <Link to={"/ticket-public"} target="_blank">
+                    <ListAlt />
+                  </Link>
+                </Tooltip>
+              </div>
+            )}
             <div className="topbarIconContainer">
               <NotificationsNone onClick={() => navigate("/emails-list")} />
               {msg > 0 && <span className="topIconBadge">{msg}</span>}
             </div>
-            <div className="topbarIconContainer">
-              <Settings onClick={() => handle()} />
-            </div>
+            {rol === "ADMIN_ROLE" && (
+              <div className="topbarIconContainer">
+                <Settings onClick={() => handle()} />
+              </div>
+            )}
             <div
               onClick={() => dispatch(startLogout())}
               className="topbarIconContainer"

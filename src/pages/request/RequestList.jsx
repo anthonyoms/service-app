@@ -24,7 +24,8 @@ export const RequestList = () => {
   const loadPendingRequest = useCallback(async () => {
     const dataResponse = await getServiceApp(`${endpoints.request}`);
     let validData = dataValidation(dataResponse, false);
-    if (rol !== "ADMIN_ROLE") {
+    console.log(rol);
+    if (rol !== "ADMIN_ROLE" && rol !== "TECNICO_MESA") {
       validData.request = validData.request.filter((r) => r.tecnico === correo);
     }
     if (validData.ok) {
@@ -131,36 +132,37 @@ export const RequestList = () => {
 
   return (
     <div style={{ flex: 4 }}>
-      {rol === "ADMIN_ROLE" && (
-        <div className="featured">
-          <div className="featuredItem">
-            <span className="featuredTitle">Total de Solicitudes</span>
-            <div className="featuredMoneyContainer">
-              <span className="featuredMoney">{total}</span>
+      {rol === "ADMIN_ROLE" ||
+        (rol === "TECNICO_MESA" && (
+          <div className="featured">
+            <div className="featuredItem">
+              <span className="featuredTitle">Total de Solicitudes</span>
+              <div className="featuredMoneyContainer">
+                <span className="featuredMoney">{total}</span>
+              </div>
+            </div>
+            <div className="featuredItem">
+              <span className="featuredTitle">Vencidas</span>
+              <div className="featuredMoneyContainer">
+                <span style={{ color: "red" }} className="featuredMoney">
+                  {vencidas}
+                </span>
+              </div>
+            </div>
+            <div className="featuredItem">
+              <span className="featuredTitle">Pendientes</span>
+              <div className="featuredMoneyContainer">
+                <span className="featuredMoney">{pendiente}</span>
+              </div>
+            </div>
+            <div className="featuredItem">
+              <span className="featuredTitle">Completadas</span>
+              <div className="featuredMoneyContainer">
+                <span className="featuredMoney">{completadas}</span>
+              </div>
             </div>
           </div>
-          <div className="featuredItem">
-            <span className="featuredTitle">Vencidas</span>
-            <div className="featuredMoneyContainer">
-              <span style={{ color: "red" }} className="featuredMoney">
-                {vencidas}
-              </span>
-            </div>
-          </div>
-          <div className="featuredItem">
-            <span className="featuredTitle">Pendientes</span>
-            <div className="featuredMoneyContainer">
-              <span className="featuredMoney">{pendiente}</span>
-            </div>
-          </div>
-          <div className="featuredItem">
-            <span className="featuredTitle">Completadas</span>
-            <div className="featuredMoneyContainer">
-              <span className="featuredMoney">{completadas}</span>
-            </div>
-          </div>
-        </div>
-      )}
+        ))}
       <h1 style={{ marginTop: "50px" }}>Lista de solicitudes</h1>
       <div style={{ height: "60%", marginTop: "10px" }}>
         <DataGrid

@@ -57,6 +57,10 @@ import { InvoiceServiceReport } from "../pages/report/InvoiceServiceReport";
 import { WorkStationReport } from "../pages/report/WorkStationReport";
 import { RequestReport } from "../pages/report/RequestReport";
 import { TicketReport } from "../pages/report/TicketReport";
+import { MesaSidebar } from "../components/sidebar/MesaSidebar";
+import UnauthorizedAccess from "../pages/Unauthorized/UnauthorizedAccess";
+import { TecnicoSidebar } from "../components/sidebar/TecnicoSidebar";
+import { CajeroSidebar } from "../components/sidebar/CajeroSidebar";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -67,6 +71,9 @@ export const DashboardRoutes = () => {
   if (isInvoice || isTicketPulic) {
     return (
       <Routes>
+        {/*Emails*/}
+        <Route path="/emails-list" element={<MessageList />} />
+        <Route path="/email/:id" element={<EmailDetail />} />
         <Route path="/invoice/:invoiceId" element={<Invoice />} />
         <Route path="/entryinvoice/:invoiceId" element={<EntryInvoice />} />
         <Route path="/sellinvoice/:invoiceId" element={<SellInvoice />} />
@@ -78,10 +85,59 @@ export const DashboardRoutes = () => {
           path="/serviceinvoice/:serviceId/:InvoiceId"
           element={<ServiceInvoice />}
         />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<UnauthorizedAccess />} />
       </Routes>
     );
   }
+  if (rol === "CAJERO") {
+    return (
+      <>
+        <Topbar />
+        <div className="container">
+          <CajeroSidebar />
+          <Routes>
+            <Route path="/myuser" element={<User />} />
+            {/*Customers routes */}
+            <Route path="/customers" element={<UserList />} />
+            <Route path="/newcustomer" element={<NewUser />} />
+            {/*Emails*/}
+            <Route path="/emails-list" element={<MessageList />} />
+            <Route path="/email/:id" element={<EmailDetail />} />
+            <Route path="/sell" element={<SellScreen />} />
+
+            {/*refunds*/}
+            <Route path="/refunds" element={<Refunds />} />
+            <Route path="/refundslist" element={<RefundsList />} />
+            <Route path="/addservice" element={<AddService />} />
+            <Route path="*" element={<UnauthorizedAccess />} />
+          </Routes>
+        </div>
+      </>
+    );
+  }
+  if (rol === "TECNICO") {
+    return (
+      <>
+        <Topbar />
+        <div className="container">
+          <TecnicoSidebar />
+          <Routes>
+            <Route path="/myuser" element={<User />} />
+            {/*Emails*/}
+            <Route path="/emails-list" element={<MessageList />} />
+            <Route path="/email/:id" element={<EmailDetail />} />
+            {/*Request*/}
+            <Route path="/request-manager" element={<AddRequest />} />
+            <Route path="/request-manager/:id" element={<RequestManager />} />
+            <Route path="/request-list" element={<RequestList />} />
+            {/*Not Found routes */}
+            <Route path="*" element={<UnauthorizedAccess />} />
+          </Routes>
+        </div>
+      </>
+    );
+  }
+
   if (rol === "CUSTOMER_ROLE") {
     return (
       <>
@@ -89,11 +145,66 @@ export const DashboardRoutes = () => {
         <div className="container">
           <CustomerSidebar />
           <Routes>
+            <Route path="/myuser" element={<User />} />
+            {/*Emails*/}
+            <Route path="/emails-list" element={<MessageList />} />
+            <Route path="/email/:id" element={<EmailDetail />} />
             <Route path="/paymentservice" element={<PaymentService />} />
             <Route path="/paymentservice/:id" element={<PayServiceInvoice />} />
             <Route path="/paymentservice/:id/:idForPay" element={<Pay />} />
             {/*Not Found routes */}
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<UnauthorizedAccess />} />
+          </Routes>
+        </div>
+      </>
+    );
+  }
+
+  if (rol === "TECNICO_MESA") {
+    return (
+      <>
+        <Topbar />
+        <div className="container">
+          <MesaSidebar />
+
+          <Routes>
+            {/*Emails*/}
+            <Route path="/emails-list" element={<MessageList />} />
+            <Route path="/email/:id" element={<EmailDetail />} />
+            {/*Request*/}
+            <Route path="/request-manager" element={<AddRequest />} />
+            <Route path="/request-manager/:id" element={<RequestManager />} />
+            <Route path="/request-list" element={<RequestList />} />
+            <Route path="/myuser" element={<User />} />
+            <Route path="/user/:userId" element={<User />} />
+
+            {/*Customers routes */}
+            <Route path="/customers" element={<UserList />} />
+            <Route path="/customer/:userId" element={<User />} />
+            <Route path="/newcustomer" element={<NewUser />} />
+            {/*Orders routes */}
+            <Route path="/sell" element={<SellScreen />} />
+
+            <Route path="/refunds" element={<Refunds />} />
+            <Route path="/refundslist" element={<RefundsList />} />
+
+            <Route path="/addservice" element={<AddService />} />
+
+            {/*Searchs*/}
+            <Route path="/searchcontract" element={<SearchContract />} />
+            <Route path="/buscarfactura" element={<SearchInvoice />} />
+            {/*Report*/}
+            <Route path="/ventas-productos" element={<SellByProduct />} />
+            <Route path="/reporte-clientes" element={<CustomerReport />} />
+            <Route
+              path="/reporte-servicios"
+              element={<InvoiceServiceReport />}
+            />
+            <Route path="/reporte-estacion" element={<WorkStationReport />} />
+            <Route path="/reporte-solicitudes" element={<RequestReport />} />
+            <Route path="/reporte-tickets" element={<TicketReport />} />
+            {/*Not Found routes */}
+            <Route path="*" element={<UnauthorizedAccess />} />
           </Routes>
         </div>
       </>
