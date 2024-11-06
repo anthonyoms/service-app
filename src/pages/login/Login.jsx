@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { LockOutlined } from "@material-ui/icons";
@@ -43,7 +43,7 @@ export default function SignIn() {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-    await dispatch(StartLogin(data.get("correo").trim(), data.get("password")));
+    dispatch(StartLogin(data.get("correo").trim(), data.get("password")));
     setLoading(false);
   };
   return (
@@ -119,8 +119,8 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link to="/login/signup" variant="body2">
+                  {"¿No tiene cuenta? Regístrese"}
                 </Link>
               </Grid>
             </Grid>

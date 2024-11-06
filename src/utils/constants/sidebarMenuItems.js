@@ -19,8 +19,9 @@ import {
   PeopleAltOutlined,
   Router,
   Laptop,
+  NoteAdd,
 } from "@material-ui/icons";
-import { SellTwoTone, TaskAlt } from "@mui/icons-material";
+import { Add, SellTwoTone, TaskAlt } from "@mui/icons-material";
 
 export const home = {
   title: "Dashboard",
@@ -34,6 +35,11 @@ export const customer = {
       link: "/paymentservice",
       Icon: Payment,
       sidebarItemName: "Pago de Servicio",
+    },
+    {
+      link: "/requestservice",
+      Icon: Add,
+      sidebarItemName: "Solicitar Servicio",
     },
   ],
 };

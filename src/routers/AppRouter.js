@@ -10,6 +10,7 @@ import { startChecking } from "../actions/auth";
 import Loading from "../components/ui/Loading";
 import SignIn from "../pages/login/Login";
 import { DashboardRoutes } from "./DashboardRoutes";
+import Signup from "../pages/signup/Signup";
 export const AppRouter = () => {
   const dispatch = useDispatch();
   const { checking, uid } = useSelector((state) => state.auth);
@@ -29,6 +30,7 @@ export const AppRouter = () => {
         ) : (
           <>
             <Route path="/login/signin" element={<SignIn />} />
+            <Route path="/login/signup" element={<Signup />} />
             <Route path="*" element={<Navigate to="/login/signin" />} />
           </>
         )}

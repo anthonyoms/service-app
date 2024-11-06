@@ -61,6 +61,7 @@ import { MesaSidebar } from "../components/sidebar/MesaSidebar";
 import UnauthorizedAccess from "../pages/Unauthorized/UnauthorizedAccess";
 import { TecnicoSidebar } from "../components/sidebar/TecnicoSidebar";
 import { CajeroSidebar } from "../components/sidebar/CajeroSidebar";
+import { RequestService } from "../request-service/RequestService";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -152,8 +153,9 @@ export const DashboardRoutes = () => {
             <Route path="/paymentservice" element={<PaymentService />} />
             <Route path="/paymentservice/:id" element={<PayServiceInvoice />} />
             <Route path="/paymentservice/:id/:idForPay" element={<Pay />} />
+            <Route path="/requestservice" element={<RequestService />} />
             {/*Not Found routes */}
-            <Route path="*" element={<UnauthorizedAccess />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
       </>

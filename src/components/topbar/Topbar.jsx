@@ -131,7 +131,10 @@ export default function Topbar() {
               </div>
             )}
             <div
-              onClick={() => dispatch(startLogout())}
+              onClick={() => {
+                window.history.replaceState({}, "");
+                dispatch(startLogout());
+              }}
               className="topbarIconContainer"
             >
               <Tooltip title="Salir">
