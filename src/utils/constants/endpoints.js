@@ -1,3 +1,5 @@
+import { Dashboard } from "@material-ui/icons";
+
 export const endpoints = {
   users: "/usuarios",
   services: "/servicios",
@@ -19,4 +21,5 @@ export const endpoints = {
   request: "/request",
   message: "/message",
   report: "/reportes",
+  dashboard: "/dashboard",
 };

@@ -1,41 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./featuredInfo.css";
-import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
+import { endpoints } from "../../utils/constants/endpoints";
+import { getServiceApp } from "../../services/serviceApp";
+import { dataValidation } from "../../utils/helpers/messages";
+import { formatter } from "../../utils/constants/formatNumber";
 
 export default function FeaturedInfo() {
+  const [{ sales, entry, userCount }, setData] = useState({
+    sales: 0,
+    entry: 0,
+    userCount: 0,
+  });
+
+  useEffect(() => {
+    loadDashboardInfo();
+  }, []);
+
+  const loadDashboardInfo = async () => {
+    const [dataResponse, dataResponseEntry, userCount] = await Promise.all([
+      getServiceApp(endpoints.dashboard + "/monthsales"),
+      getServiceApp(endpoints.dashboard + "/entrysales"),
+      getServiceApp(endpoints.dashboard + "/usercount"),
+    ]);
+
+    const validData = dataValidation(dataResponse, false);
+    const validDataEntry = dataValidation(dataResponseEntry, false);
+    const validDatauserCount = dataValidation(userCount, false);
+    if (validData.ok || validDataEntry.ok) {
+      setData({
+        sales: dataResponse?.sales,
+        entry: validDataEntry?.entry,
+        userCount: validDatauserCount?.usersCount,
+        loading: false,
+      });
+    }
+  };
   return (
     <div className="featured">
       <div className="featuredItem">
-        <span className="featuredTitle">Ravanue</span>
+        <span className="featuredTitle">Clientes</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">$2,415</span>
-          <span className="feacturedMoneyRate">
-            -11.4
-            <ArrowDownward className="featuredIcon negative" />
-          </span>
+          <span className="featuredMoney">{userCount}</span>
         </div>
-        <span className="featuredSub">Compared to last month</span>
       </div>
       <div className="featuredItem">
-        <span className="featuredTitle">Sales</span>
+        <span className="featuredTitle">Ventas</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">$6,415</span>
-          <span className="feacturedMoneyRate">
-            -1.4
-            <ArrowDownward className="featuredIcon negative" />
-          </span>
+          <span className="featuredMoney">{formatter.format(sales)}</span>
         </div>
-        <span className="featuredSub">Compared to last month</span>
       </div>
       <div className="featuredItem">
-        <span className="featuredTitle">Cost</span>
+        <span className="featuredTitle">Compras</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">$4,415</span>
-          <span className="feacturedMoneyRate">
-            +1.4 <ArrowUpward className="featuredIcon" />
-          </span>
+          <span className="featuredMoney">{formatter.format(entry)}</span>
         </div>
-        <span className="featuredSub">Compared to last month</span>
       </div>
     </div>
   );
