@@ -20,8 +20,21 @@ import {
   Router,
   Laptop,
   NoteAdd,
+  Money,
+  MoneyOff,
+  VerifiedUserRounded,
+  Person,
 } from "@material-ui/icons";
-import { Add, SellTwoTone, TaskAlt } from "@mui/icons-material";
+import {
+  Add,
+  MoneyOffCsred,
+  MoneySharp,
+  SellTwoTone,
+  SupervisedUserCircleSharp,
+  TaskAlt,
+  UnsubscribeSharp,
+} from "@mui/icons-material";
+import { useRadioGroup } from "@mui/material";
 
 export const home = {
   title: "Dashboard",
@@ -184,6 +197,16 @@ export const reportes = {
       link: "/reporte-tickets",
       Icon: ListAlt,
       sidebarItemName: "Tickets",
+    },
+    {
+      link: "/reporte-ventames",
+      Icon: MoneySharp,
+      sidebarItemName: "Ventas",
+    },
+    {
+      link: "/reporte-customerlate",
+      Icon: Person,
+      sidebarItemName: "Clientes en atraso",
     },
   ],
 };

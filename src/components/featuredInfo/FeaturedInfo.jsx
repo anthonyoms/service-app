@@ -24,6 +24,7 @@ export default function FeaturedInfo() {
     ]);
 
     const validData = dataValidation(dataResponse, false);
+    console.log(validData);
     const validDataEntry = dataValidation(dataResponseEntry, false);
     const validDatauserCount = dataValidation(userCount, false);
     if (validData.ok || validDataEntry.ok) {

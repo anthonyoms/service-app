@@ -62,6 +62,8 @@ import UnauthorizedAccess from "../pages/Unauthorized/UnauthorizedAccess";
 import { TecnicoSidebar } from "../components/sidebar/TecnicoSidebar";
 import { CajeroSidebar } from "../components/sidebar/CajeroSidebar";
 import { RequestService } from "../request-service/RequestService";
+import { MonthSalesReport } from "../pages/report/MonthSalesReport";
+import { CustomerLate } from "../pages/report/CustomerLate";
 
 export const DashboardRoutes = () => {
   const { rol } = useSelector((state) => state.auth);
@@ -301,6 +303,8 @@ export const DashboardRoutes = () => {
           <Route path="/reporte-estacion" element={<WorkStationReport />} />
           <Route path="/reporte-solicitudes" element={<RequestReport />} />
           <Route path="/reporte-tickets" element={<TicketReport />} />
+          <Route path="/reporte-ventames" element={<MonthSalesReport />} />
+          <Route path="/reporte-customerlate" element={<CustomerLate />} />
           {/*Not Found routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

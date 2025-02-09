@@ -90,3 +90,8 @@ export const reporteTicket = yup.object().shape({
   fechaDesde: yup.string().required(errorMessage),
   fechaHasta: yup.string().required(errorMessage),
 });
+
+export const reporteVentas = yup.object().shape({
+  fechaDesde: yup.string().required(errorMessage),
+  fechaHasta: yup.string().required(errorMessage),
+});
